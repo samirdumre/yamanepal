@@ -1,0 +1,50 @@
+import type { Media } from '@/payload-types'
+
+interface DestinationCardProps {
+  image: string | Media | number | null
+  name: string
+  packsCount: number
+}
+
+function StarRating() {
+  return (
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <svg key={i} className="w-6 h-6" fill="#FDC700" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ))}
+    </div>
+  )
+}
+
+export function DestinationCard({ image, name, packsCount }: DestinationCardProps) {
+  const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
+
+  return (
+    <div className="relative rounded-lg overflow-hidden h-96 w-full group cursor-pointer">
+      <div className="self-stretch h-96 rounded overflow-hidden flex-shrink-0 relative">
+        <img
+          alt={name}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+          src={imgSrc}
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 flex items-center justify-center">
+          <span className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/50" />
+      <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
+        <div className="w-64 flex flex-col items-start gap-2">
+          <StarRating />
+          <h3 className="font-['Inter',sans-serif] font-semibold text-2xl text-white">{name}</h3>
+        </div>
+        <div className="w-20 h-7 px-5 py-1.5 bg-[#0CB6D8] rounded-lg flex items-center justify-center">
+          <span className="font-['Inter',sans-serif] font-semibold text-base text-white whitespace-nowrap">
+            {packsCount} Packs
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}

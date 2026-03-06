@@ -1,0 +1,86 @@
+import {
+  Clock,
+  BarChart2,
+  Mountain,
+  Footprints,
+  CloudSun,
+  MapPin,
+  Home,
+  Utensils,
+  Users,
+} from 'lucide-react'
+import type { Trek, Category } from '@/payload-types'
+
+interface StatItemProps {
+  icon: React.ReactNode
+  label: string
+  value: string
+}
+
+function StatItem({ icon, label, value }: StatItemProps) {
+  return (
+    <div className="flex items-center gap-[14px]">
+      <div className="w-8 h-8 flex-shrink-0 text-[#0CB6D8] flex items-center justify-center">
+        {icon}
+      </div>
+      <div className="flex flex-col gap-0.5">
+        <span className="text-sm font-normal font-['Inter'] leading-5 text-slate-950 opacity-70">
+          {label}
+        </span>
+        <span className="text-base font-medium font-['Inter'] leading-5 text-slate-950">{value}</span>
+      </div>
+    </div>
+  )
+}
+
+interface TrekStatsCardProps {
+  trek: Trek
+}
+
+export function TrekStatsCard({ trek }: TrekStatsCardProps) {
+  const category = trek.category as Category | null | undefined
+  const activityType = category && typeof category === 'object' ? (category.title ?? null) : null
+
+  const stats: { icon: React.ReactNode; label: string; value: string | null | undefined }[] = [
+    { icon: <Clock className="w-8 h-8" />, label: 'Duration', value: trek.days },
+    { icon: <BarChart2 className="w-8 h-8" />, label: 'Difficulty Level', value: trek.difficulty },
+    {
+      icon: <Mountain className="w-8 h-8" />,
+      label: 'Max. Altitude/Elevation',
+      value: trek.maxAltitude,
+    },
+    { icon: <Footprints className="w-8 h-8" />, label: 'Activity Type', value: activityType },
+    { icon: <CloudSun className="w-8 h-8" />, label: 'Best Season', value: trek.bestSeason },
+    { icon: <MapPin className="w-8 h-8" />, label: 'Start/End Point', value: trek.startEndPoint },
+    {
+      icon: <Home className="w-8 h-8" />,
+      label: 'Accommodation',
+      value: trek.trekAccommodation,
+    },
+    {
+      icon: <Utensils className="w-8 h-8" />,
+      label: 'Meals (Included)',
+      value: trek.trekMeals,
+    },
+    { icon: <Users className="w-8 h-8" />, label: 'Group Size', value: trek.groupSize },
+  ]
+
+  const visibleStats = stats.filter((s) => s.value)
+
+  if (visibleStats.length === 0) return null
+
+  return (
+    <div className="w-full bg-[#DBEAFE] rounded-lg px-10 pt-10 pb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
+        {visibleStats.map((stat) => (
+          <StatItem
+            key={stat.label}
+            icon={stat.icon}
+            label={stat.label}
+            value={stat.value as string}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
