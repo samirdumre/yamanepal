@@ -88,7 +88,7 @@ export function Footer() {
                     href="mailto:info@yamatravel.com"
                     className="hover:text-white transition-colors"
                   >
-                    info@yamatravel.com
+                    yamanepal633@gmail.com
                   </a>
                 </p>
               </div>
