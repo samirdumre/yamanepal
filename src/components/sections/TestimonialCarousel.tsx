@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { gsap } from 'gsap'
-import { TestimonialCard } from '@/components/cards/TestimonialCard'
 import { SectionHeading } from '@/components/ui/SectionLabel'
 import type { Testimonial } from '@/payload-types'
 import ReviewCard from '../ui/ReviewCard'
@@ -120,7 +119,9 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
   useEffect(() => {
     if (cardW === 0) return
     buildAutoTween(0)
-    return () => tweenRef.current?.kill()
+    return () => {
+      tweenRef.current?.kill()
+    }
   }, [cardW, buildAutoTween])
 
   const pause = () => tweenRef.current?.pause()

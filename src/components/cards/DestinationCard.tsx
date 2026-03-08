@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Media } from '@/payload-types'
 
 interface DestinationCardProps {
@@ -24,9 +25,10 @@ export function DestinationCard({ image, name, packsCount }: DestinationCardProp
   return (
     <div className="relative rounded-lg overflow-hidden h-96 w-full group cursor-pointer">
       <div className="self-stretch h-96 rounded overflow-hidden flex-shrink-0 relative">
-        <img
+        <Image
+          fill
           alt={name}
-          className="absolute inset-0 w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+          className="object-cover group-hover:scale-103 transition-transform duration-300"
           src={imgSrc}
         />
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 flex items-center justify-center">

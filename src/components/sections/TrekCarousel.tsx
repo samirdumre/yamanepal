@@ -169,12 +169,12 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
                 style={{ width: cardW > 0 ? `${cardW}px` : `calc((100% - 40px) / 3)` }}
               >
                 <TrekCard
-                  image={trek.image}
+                  image={typeof trek.image === 'object' ? trek.image : null}
                   name={trek.name}
                   days={trek.days}
                   difficulty={trek.difficulty as 'Easy' | 'Moderate' | 'Hard'}
                   price={trek.price}
-                  slug={trek.slug}
+                  slug={trek.slug ?? ''}
                 />
               </div>
             ))}

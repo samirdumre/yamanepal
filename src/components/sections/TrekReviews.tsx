@@ -1,7 +1,9 @@
+import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import type { Trek, Media } from '@/payload-types'
 import RichText from '@/components/RichText'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { User } from 'lucide-react'
+import { ReviewImageGallery } from './ReviewImageGallery'
 
 type Review = NonNullable<Trek['reviews']>[number]
 
@@ -72,7 +74,7 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
               {review.reviewText && (
                 <div className="text-gray-700 text-base font-['Inter'] leading-6 [&_strong]:font-semibold [&_strong]:text-slate-950">
                   <RichText
-                    data={review.reviewText as any}
+                    data={review.reviewText as DefaultTypedEditorState}
                     enableGutter={false}
                     enableProse={false}
                     className="text-gray-700 text-base leading-6"
@@ -82,24 +84,15 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
 
               {/* Image gallery */}
               {images.length > 0 && (
-                <div className="flex gap-2 flex-wrap">
-                  {images.map((img, idx) => {
+                <ReviewImageGallery
+                  images={images.map((img, idx) => {
                     const media = img.image as Media
-                    const src = getMediaUrl(media.url)
-                    return (
-                      <div
-                        key={img.id ?? idx}
-                        className="w-32 h-24 rounded-[10px] overflow-hidden flex-shrink-0"
-                      >
-                        <img
-                          src={src}
-                          alt={media.alt ?? `Review photo ${idx + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )
+                    return {
+                      src: getMediaUrl(media.url),
+                      alt: media.alt ?? `Review photo ${idx + 1}`,
+                    }
                   })}
-                </div>
+                />
               )}
 
               {/* Divider + author */}

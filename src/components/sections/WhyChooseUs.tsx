@@ -1,6 +1,7 @@
 // components/WhyChooseUs.tsx
 
-import { SectionHeading } from "../ui/SectionLabel"
+import Image from 'next/image'
+import { SectionHeading } from '../ui/SectionLabel'
 
 // ─── SVG Paths ───────────────────────────────────────────────────────────────
 const svgPaths = {
@@ -27,9 +28,9 @@ const IMAGE_FAMILY_TRAVELERS = '/images/langtang_region.jpg'
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function Divider() {
-  return <div className="w-11 h-px bg-[#0CB6D8] shrink-0" />
-}
+// function Divider() {
+//   return <div className="w-11 h-px bg-[#0CB6D8] shrink-0" />
+// }
 
 function IconCircle({ children }: { children: React.ReactNode }) {
   return (
@@ -76,8 +77,8 @@ function ImageCard({
   className?: string
 }) {
   return (
-    <div className={`rounded-3xl overflow-hidden w-full shrink-0 ${className}`}>
-      <img src={src} alt={alt} className="w-full h-full object-cover" />
+    <div className={`relative rounded-3xl overflow-hidden w-full shrink-0 ${className}`}>
+      <Image fill src={src} alt={alt} className="object-cover" />
     </div>
   )
 }
@@ -97,12 +98,12 @@ export default function WhyChooseUs() {
         <h2 className="font-semibold text-4xl text-slate-950 text-[#020617] text-center tracking-[-0.8px]">
           Why Yama Nepal?
         </h2> */}
-          <SectionHeading
-                    align="center"
-                    label="Why Choose Us"
-                    labelPosition="both"
-                    title="Why Yama Nepal?"
-                  />
+        <SectionHeading
+          align="center"
+          label="Why Choose Us"
+          labelPosition="both"
+          title="Why Yama Nepal?"
+        />
       </div>
 
       {/* Content Grid */}
@@ -165,11 +166,12 @@ export default function WhyChooseUs() {
 
           {/* Center Column — Hero Image */}
           {/* 🖼️ IMAGE SLOT 2 — Hiker at scenic rock formation (hero/tall image) */}
-          <div className="flex-[0.80] rounded-3xl overflow-hidden shrink-0">
-            <img
+          <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0">
+            <Image
+              fill
               src={IMAGE_HIKER_SCENIC_ROCK}
               alt="Hiker at scenic rock formation"
-              className="w-full h-full object-cover"
+              className="object-cover"
             />
           </div>
 

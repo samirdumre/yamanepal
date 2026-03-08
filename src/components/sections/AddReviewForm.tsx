@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Star } from 'lucide-react'
+import { Button } from '../ui/button'
 
 interface AddReviewFormProps {
   trekId: number
@@ -125,7 +126,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                     onMouseLeave={() => setHoveredStar(0)}
                     onClick={() => setSelectedRating(n)}
                     aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
-                    className="focus:outline-none"
+                    className="focus:outline-none hover:cursor-pointer"
                   >
                     <Star
                       className={`w-7 h-7 transition-colors ${
@@ -191,13 +192,16 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
             )}
 
             {/* Submit */}
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               type="submit"
               disabled={status === 'loading'}
-              className="self-start bg-cyan-500 hover:bg-cyan-600 disabled:bg-cyan-300 text-white text-sm font-semibold font-['Inter'] px-6 py-2.5 rounded-lg transition-colors"
+              className="self-start"
             >
+              {' '}
               {status === 'loading' ? 'Submitting…' : 'Submit Review'}
-            </button>
+            </Button>
           </form>
         )}
       </div>

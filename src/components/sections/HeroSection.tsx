@@ -1,12 +1,28 @@
 'use client'
 
 import { Search } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 
-// ─── Hardcode your assets here ───────────────────────────────────────────────
 const HERO_IMAGE_SRC = '/images/hero1.jpg'
-const HERO_VIDEO_ID = 'https://youtu.be/lji8NyYSIrE?si=7SZxRdiMIF584rON' // ← replace with your YouTube video ID
-// ─────────────────────────────────────────────────────────────────────────────
+const HERO_VIDEO_ID = 'R_V9gKlZAZc'
+
+function extractYouTubeId(urlOrId: string): string {
+  const shortMatch = urlOrId.match(/youtu\.be\/([^?&]+)/)
+  if (shortMatch) return shortMatch[1]!
+  const longMatch = urlOrId.match(/[?&]v=([^?&]+)/)
+  if (longMatch) return longMatch[1]!
+  return urlOrId
+}
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface YTPlayer {
+  playVideo: () => void
+  seekTo: (seconds: number, allowSeekAhead?: boolean) => void
+  getDuration: () => number
+  getCurrentTime: () => number
+  getIframe: () => HTMLIFrameElement
+}
 
 declare global {
   interface Window {
@@ -16,18 +32,14 @@ declare global {
         opts: {
           videoId: string
           playerVars?: Record<string, number | string>
-          events?: { onReady?: (e: YTPlayerEvent) => void }
+          events?: {
+            onReady?: (e: { target: YTPlayer }) => void
+            onStateChange?: (e: { target: YTPlayer; data: number }) => void
+          }
         },
       ) => void
     }
     onYouTubeIframeAPIReady: () => void
-  }
-}
-
-interface YTPlayerEvent {
-  target: {
-    playVideo: () => void
-    getIframe: () => HTMLIFrameElement
   }
 }
 
@@ -38,38 +50,52 @@ interface HeroSectionProps {
 
 export function HeroSection({ headline, subheading }: HeroSectionProps) {
   const [isActive, setIsActive] = useState(false)
-  const hasInteracted = useRef(false)
+  const playerRef = useRef<YTPlayer | null>(null)
   const playerContainerRef = useRef<HTMLDivElement>(null)
+  const hasStartedRef = useRef(false)
+  const rewindTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  function activate() {
-    if (hasInteracted.current) return
-    hasInteracted.current = true
+  function scheduleRewind(player: YTPlayer) {
+    if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
+    const remaining = player.getDuration() - player.getCurrentTime()
+    if (remaining > 0.3) {
+      rewindTimerRef.current = setTimeout(
+        () => player.seekTo(0),
+        (remaining - 0.2) * 1000,
+      )
+    }
+  }
 
+  useEffect(() => {
     function createPlayer() {
-      if (!playerContainerRef.current) return
+      if (!playerContainerRef.current || playerRef.current) return
+      const videoId = extractYouTubeId(HERO_VIDEO_ID)
+
       new window.YT.Player(playerContainerRef.current, {
-        videoId: HERO_VIDEO_ID,
+        videoId,
         playerVars: {
-          autoplay: 1,
-          mute: 1,
-          loop: 1,
+          autoplay: 1,       // ← play immediately, no interaction needed
+          mute: 1,           // required for autoplay to work in all browsers
           controls: 0,
           disablekb: 1,
           playsinline: 1,
           rel: 0,
-          modestbranding: 1,
-          playlist: HERO_VIDEO_ID,
+          iv_load_policy: 3,
+          fs: 0,
+          cc_load_policy: 0,
+          enablejsapi: 1,
+          origin: window.location.origin,
         },
         events: {
           onReady: (e) => {
+            playerRef.current = e.target
+            // Belt-and-suspenders: call playVideo() in case autoplay was blocked
             e.target.playVideo()
-            // Make the injected iframe fill the container like object-fit: cover
             const iframe = e.target.getIframe()
             Object.assign(iframe.style, {
               position: 'absolute',
               top: '50%',
               left: '50%',
-              // 16:9 cover: whichever dimension is larger wins
               width: '100vw',
               height: '56.25vw',
               minHeight: '100%',
@@ -77,55 +103,73 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
               transform: 'translate(-50%, -50%)',
               pointerEvents: 'none',
             })
-            setIsActive(true)
+          },
+          onStateChange: (e) => {
+            if (e.data === 1) { // PLAYING
+              if (!hasStartedRef.current) {
+                hasStartedRef.current = true
+                setIsActive(true) // crossfade only when frames confirmed
+              }
+              scheduleRewind(e.target)
+            }
           },
         },
       })
     }
 
-    if (window.YT?.Player) {
-      createPlayer()
-    } else {
-      window.onYouTubeIframeAPIReady = createPlayer
-      const script = document.createElement('script')
-      script.src = 'https://www.youtube.com/iframe_api'
-      script.async = true
-      document.head.appendChild(script)
+    function loadAPI() {
+      if (window.YT?.Player) {
+        createPlayer()
+        return
+      }
+      const prevCallback = window.onYouTubeIframeAPIReady
+      window.onYouTubeIframeAPIReady = () => {
+        prevCallback?.()
+        createPlayer()
+      }
+      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const script = document.createElement('script')
+        script.src = 'https://www.youtube.com/iframe_api'
+        script.async = true
+        document.head.appendChild(script)
+      }
     }
-  }
+
+    // Load immediately on mount — fastest possible startup
+    loadAPI()
+
+    return () => {
+      if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
+    }
+  }, [])
 
   return (
-    <section
-      className="relative w-full h-[500px] md:h-[716px] flex items-start justify-center pt-32 md:pt-44"
-      onMouseEnter={activate}
-      onTouchStart={activate}
-    >
-      {/* Background layers */}
+    <section className="relative w-full h-[500px] md:h-[716px] flex items-start justify-center pt-32 md:pt-44">
       <div className="absolute inset-0 overflow-hidden">
-        {/* Static image — rendered immediately for a fast LCP */}
-        <img
+
+        {/* Static image — LCP element, stays visible until video is confirmed playing */}
+        <Image
+          fill
+          priority
           alt=""
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+          className={`object-cover transition-opacity duration-700 ${
             isActive ? 'opacity-0' : 'opacity-100'
           }`}
-          fetchPriority="high"
-          loading="eager"
           src={HERO_IMAGE_SRC}
         />
 
-        {/* YouTube player mounts here; crossfades in once the video is ready */}
+        {/* Video wrapper — crossfades in on first PLAYING state only */}
         <div
           className={`absolute inset-0 overflow-hidden transition-opacity duration-700 ${
             isActive ? 'opacity-100' : 'opacity-0'
           }`}
-          ref={playerContainerRef}
-        />
+        >
+          <div ref={playerContainerRef} className="absolute inset-0" />
+        </div>
 
-        {/* Dark overlay — sits above both layers */}
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
       </div>
 
-      {/* Foreground content */}
       <div className="relative z-10 w-full max-w-[1002px] flex flex-col items-center gap-10 px-5">
         <div className="w-full flex flex-col items-center gap-4">
           <h1 className="w-full font-['Inter',sans-serif] font-bold text-[36px] md:text-6xl text-white leading-tight">

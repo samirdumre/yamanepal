@@ -20,7 +20,7 @@ export const Treks: CollectionConfig = {
   access: { read: () => true },
   hooks: {
     beforeValidate: [
-      ({ data, operation }) => {
+      ({ data, operation: _operation }) => {
         if (data && !data.slug && data.name) {
           data.slug = toSlug(data.name)
         }
@@ -56,6 +56,49 @@ export const Treks: CollectionConfig = {
       admin: { description: 'Price in USD (numbers only, e.g. 1495)' },
     },
     {
+      name: 'groupPricing',
+      type: 'group',
+      label: 'Group Discount Pricing',
+      admin: {
+        description:
+          'Control the group discount table shown in the booking sidebar. Toggle it on/off and set a price for each tier.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Show group discount table in booking sidebar',
+          defaultValue: false,
+        },
+        {
+          name: 'tiers',
+          type: 'array',
+          label: 'Price Tiers',
+          maxRows: 10,
+          admin: {
+            description:
+              'Add as many tiers as needed. Each tier has a label (e.g. 1 pax, 2-4 pax) and a price per person.',
+            initCollapsed: false,
+          },
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Group Size Label',
+              required: true,
+              admin: { description: 'e.g. 1 pax, 2-4 pax' },
+            },
+            {
+              name: 'price',
+              type: 'number',
+              label: 'Price per Person (USD)',
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
@@ -68,12 +111,12 @@ export const Treks: CollectionConfig = {
     {
       name: 'gallery',
       type: 'array',
-      label: 'Hero Gallery (up to 3 photos)',
+      label: 'Hero Gallery (up to 10 photos)',
       minRows: 0,
-      maxRows: 3,
+      maxRows: 10,
       admin: {
         description:
-          'Upload up to 3 photos for the hero collage. First photo fills the large left slot; photos 2 & 3 stack on the right.',
+          'Upload up to 10 photos. The first 3 are shown in the hero collage; all photos are accessible in the lightbox when a visitor clicks any image.',
       },
       fields: [
         {
@@ -442,6 +485,28 @@ export const Treks: CollectionConfig = {
           ],
         },
       ],
+    },
+    {
+      name: 'showRecommended',
+      type: 'checkbox',
+      label: 'Show Recommended Packages',
+      defaultValue: false,
+      admin: {
+        description: 'Toggle the recommended packages section on/off for this trek',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'recommendedTreks',
+      type: 'relationship',
+      relationTo: 'treks',
+      hasMany: true,
+      maxRows: 3,
+      label: 'Recommended Packages',
+      admin: {
+        description: 'Up to 3 treks to show as recommendations below the reviews section',
+        condition: (data) => Boolean(data?.showRecommended),
+      },
     },
   ],
 }

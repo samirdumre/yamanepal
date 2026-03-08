@@ -22,7 +22,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
       {/* Intro paragraph */}
       {trek.addonsDescription && (
         <RichText
-          data={trek.addonsDescription as any}
+          data={trek.addonsDescription}
           enableGutter={false}
           enableProse={false}
           className="text-slate-950 text-base font-normal font-['Inter'] leading-6"
@@ -32,22 +32,20 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
       {/* Add-on items */}
       {hasAddons && (
         <ul className="flex flex-col gap-5">
-          {(trek.addons as { label: string; description: any; id?: string | null }[]).map(
-            (addon, i) => (
-              <li key={addon.id ?? i} className="flex items-start gap-[14px]">
-                <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0 mt-[5px]" />
-                <div className="text-slate-950 text-base font-['Inter'] leading-6">
-                  <span className="font-semibold">{addon.label} </span>
-                  <RichText
-                    data={addon.description as any}
-                    enableGutter={false}
-                    enableProse={false}
-                    className="inline font-normal"
-                  />
-                </div>
-              </li>
-            ),
-          )}
+          {(trek.addons ?? []).map((addon, i) => (
+            <li key={addon.id ?? i} className="flex items-start gap-[14px]">
+              <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0 mt-[5px]" />
+              <div className="text-slate-950 text-base font-['Inter'] leading-6">
+                <span className="font-semibold">{addon.label} </span>
+                <RichText
+                  data={addon.description}
+                  enableGutter={false}
+                  enableProse={false}
+                  className="inline font-normal"
+                />
+              </div>
+            </li>
+          ))}
         </ul>
       )}
 

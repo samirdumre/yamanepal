@@ -72,6 +72,31 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
     },
     {
+      name: 'tag',
+      type: 'text',
+      admin: {
+        description: 'e.g. "Everest Base Camp Trek", "Ask an Expert"',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'isFeatured',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Show as the large featured post on homepage',
+        position: 'sidebar',
+      },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -97,7 +122,6 @@ export const Posts: CollectionConfig<'posts'> = {
                 },
               }),
               label: false,
-              required: true,
             },
           ],
           label: 'Content',

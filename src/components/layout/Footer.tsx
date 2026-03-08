@@ -92,12 +92,8 @@ export function Footer() {
                   </a>
                 </p>
               </div>
-              <div className="w-[218px] h-[218px] mt-2">
-                <img
-                  alt="QR Contact"
-                  className="w-full h-full object-cover"
-                  src={IMAGES.qrContact}
-                />
+              <div className="relative w-[218px] h-[218px] mt-2">
+                <Image fill alt="QR Contact" className="object-cover" src={IMAGES.qrContact} />
               </div>
             </div>
 
@@ -147,10 +143,11 @@ export function Footer() {
               <div className="flex flex-col gap-4">
                 {contacts.map((contact) => (
                   <div key={contact.country} className="flex gap-3 items-center">
-                    <div className="w-16 h-16 rounded-full overflow-hidden shrink-0">
-                      <img
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0">
+                      <Image
+                        fill
                         alt={contact.name}
-                        className="w-full h-full object-cover"
+                        className="object-cover"
                         src={contact.avatar}
                       />
                     </div>
@@ -158,7 +155,7 @@ export function Footer() {
                       <p className="text-[#e2e8f0] text-[14px]" style={{ fontWeight: 600 }}>
                         {contact.country}
                       </p>
-                      <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-0.5 flex-wrap">
                         <span className="text-white text-[14px]" style={{ fontWeight: 600 }}>
                           {contact.name}
                         </span>

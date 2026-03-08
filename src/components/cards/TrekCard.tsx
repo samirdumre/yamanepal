@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Media } from '@/payload-types'
 
 interface TrekCardProps {
@@ -25,9 +26,10 @@ export function TrekCard({ image, name, days, difficulty, price, slug }: TrekCar
       <div className="w-100 h-full bg-white rounded-lg inline-flex flex-col justify-start items-start gap-4 group cursor-pointer">
         {/* Trek image */}
         <div className="self-stretch h-80 rounded overflow-hidden flex-shrink-0 relative">
-          <img
+          <Image
+            fill
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             src={imgSrc}
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 flex items-center justify-center">
@@ -51,7 +53,13 @@ export function TrekCard({ image, name, days, difficulty, price, slug }: TrekCar
               <span className="text-slate-950 text-base font-normal font-['Inter']">{days}</span>
               <div className="w-px h-5 bg-cyan-500 flex-shrink-0" />
               <div className="flex items-center gap-3">
-                <img alt={difficulty} className="w-8 h-5 object-contain flex-shrink-0" src={icon} />
+                <Image
+                  alt={difficulty}
+                  className="w-8 h-5 object-contain flex-shrink-0"
+                  src={icon}
+                  width={32}
+                  height={20}
+                />
                 <span className={`text-base font-normal font-['Inter'] ${color}`}>
                   {difficulty}
                 </span>

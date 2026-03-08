@@ -1,11 +1,11 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { Navbar } from '@/components/layout/Navbar'
-import { Footer } from '@/components/layout/Footer'
+// import { Navbar } from '@/components/layout/Navbar'
+// import { Footer } from '@/components/layout/Footer'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SectionHeading } from '@/components/ui/SectionLabel'
 import { DestinationCard } from '@/components/cards/DestinationCard'
-import { FeatureCard } from '@/components/cards/FeatureCard'
+// import { FeatureCard } from '@/components/cards/FeatureCard'
 import { TestimonialCarousel } from '@/components/sections/TestimonialCarousel'
 import { GallerySection } from '@/components/sections/GallerySection'
 import { TrekCarousel } from '@/components/sections/TrekCarousel'
@@ -14,97 +14,6 @@ import type { Trek, Destination, Testimonial, Post, Media } from '@/payload-type
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
-
-// SVG Icons (inlined — no more external SVG imports)
-function UsersIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path
-        d="M19.833 24.5v-2.333A4.667 4.667 0 0 0 15.167 17H5.833a4.667 4.667 0 0 0-4.666 4.667V24.5"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-      <circle
-        cx="10.5"
-        cy="10.5"
-        r="4.667"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-      <path
-        d="M26.833 24.5v-2.333a4.667 4.667 0 0 0-3.5-4.515M19.833 3.652a4.667 4.667 0 0 1 0 9.03"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-    </svg>
-  )
-}
-
-function HeadphonesIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path
-        d="M4.667 18.667v-4.667a9.333 9.333 0 1 1 18.666 0v4.667M4.667 18.667A2.333 2.333 0 0 0 7 21h1.167A2.333 2.333 0 0 0 10.5 18.667v-3.5A2.333 2.333 0 0 0 8.167 12.833H4.667v5.834ZM23.333 18.667A2.333 2.333 0 0 1 21 21h-1.167A2.333 2.333 0 0 1 17.5 18.667v-3.5a2.333 2.333 0 0 1 2.333-2.334h3.5v5.834Z"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-    </svg>
-  )
-}
-
-function CalendarIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path
-        d="M9.333 2.333V7M18.667 2.333V7"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-      <rect
-        x="2.333"
-        y="4.667"
-        width="23.333"
-        height="21"
-        rx="2"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-      <path
-        d="M3.5 11.667H24.5"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-    </svg>
-  )
-}
-
-function ShieldIcon() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path
-        d="M14 2.333L3.5 7v7c0 6.475 4.55 12.53 10.5 14 5.95-1.47 10.5-7.525 10.5-14V7L14 2.333Z"
-        stroke="white"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.333"
-      />
-    </svg>
-  )
-}
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
@@ -160,8 +69,21 @@ export default async function HomePage() {
       </section>
 
       {/* Explore Destinations */}
-      <section className="bg-[#e2e8f0] py-16">
-        <div className="max-w-[1320px] mx-auto px-5 md:px-10">
+      <section className="relative bg-[#e2e8f0] py-16 overflow-hidden">
+        {/* Grid Pattern Overlay */}
+        {/* <div
+          className="absolute opacity-72 inset-0 w-full h-full pointer-events-none"
+          style={{
+            backgroundImage: `
+        linear-gradient(to right, #94a3b820 1px, transparent 1px),
+        linear-gradient(to bottom, #94a3b820 1px, transparent 1px)
+      `,
+            backgroundSize: '32px 32px',
+          }}
+        /> */}
+
+        {/* Content */}
+        <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10">
           <SectionHeading
             align="center"
             label="Top Notch Destination"
@@ -199,8 +121,21 @@ export default async function HomePage() {
 
       {/* Trip of the Month */}
       {tripOfTheMonthTrek && (
-        <section className="bg-[#020617] w-full">
-          <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-16 md:py-20">
+        <section className="relative bg-[#020617] w-full overflow-hidden">
+          {/* Grid Pattern Overlay */}
+          <div
+            className="absolute inset-0 opacity-80 w-full h-full pointer-events-none"
+            style={{
+              backgroundImage: `
+          linear-gradient(to right, #ffffff12 1px, transparent 1px),
+          linear-gradient(to bottom, #ffffff12 1px, transparent 1px)
+        `,
+              backgroundSize: '32px 32px',
+            }}
+          />
+
+          {/* Content */}
+          <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10 py-16 md:py-20">
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
               <div className="relative rounded-lg overflow-hidden h-[258px] w-full lg:w-[522px] flex-shrink-0">
                 {tripImage?.url && (
@@ -272,11 +207,28 @@ export default async function HomePage() {
       )}
 
       {/* Gallery */}
-      <GallerySection images={galleryMedia.map((m: any) => m.url).filter(Boolean)} />
+      <GallerySection
+        images={galleryMedia.map((m) => m.url).filter((u): u is string => u != null)}
+      />
 
       {/* Testimonials */}
-      <section>
-        <TestimonialCarousel testimonials={testimonials as Testimonial[]} />
+      <section className="relative bg-[#e2e8f0] py-16 overflow-hidden">
+        {/* Grid Pattern Overlay */}
+        <div
+          className="absolute inset-0 opacity-72 w-full h-full pointer-events-none"
+          style={{
+            backgroundImage: `
+        linear-gradient(to right, #94a3b820 1px, transparent 1px),
+        linear-gradient(to bottom, #94a3b820 1px, transparent 1px)
+      `,
+            backgroundSize: '32px 32px',
+          }}
+        />
+
+        {/* Content stays on top */}
+        <div className="relative z-10">
+          <TestimonialCarousel testimonials={testimonials as Testimonial[]} />
+        </div>
       </section>
 
       {/* Blog Section */}
@@ -288,9 +240,10 @@ export default async function HomePage() {
             {featuredPost && (
               <div className="relative rounded-[10px] overflow-hidden h-[392px] lg:flex-1 cursor-pointer group">
                 {(featuredPost.image as Media)?.url && (
-                  <img
+                  <Image
+                    fill
                     alt={featuredPost.title}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                    className="object-cover group-hover:scale-103 transition-transform duration-300"
                     src={(featuredPost.image as Media).url!}
                   />
                 )}
@@ -312,11 +265,12 @@ export default async function HomePage() {
             <div className="flex flex-col gap-4 lg:w-[575px]">
               {sidePosts.map((post: Post) => (
                 <div key={post.id} className="flex items-center gap-3 cursor-pointer group">
-                  <div className="w-[160px] h-[120px] rounded-[10px] overflow-hidden flex-shrink-0">
+                  <div className="relative w-[160px] h-[120px] rounded-[10px] overflow-hidden flex-shrink-0">
                     {(post.image as Media)?.url && (
-                      <img
+                      <Image
+                        fill
                         alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         src={(post.image as Media).url!}
                       />
                     )}

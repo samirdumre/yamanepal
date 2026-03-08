@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Media } from '@/payload-types'
 
 interface FeatureCardProps {
@@ -35,8 +36,8 @@ interface ImageCardProps {
 export function ImageCard({ image, alt = '' }: ImageCardProps) {
   const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
   return (
-    <div className="rounded-3xl overflow-hidden h-[192px]">
-      <img alt={alt} className="w-full h-full object-cover" src={imgSrc} />
+    <div className="relative rounded-3xl overflow-hidden h-[192px]">
+      <Image fill alt={alt} className="object-cover" src={imgSrc} />
     </div>
   )
 }
