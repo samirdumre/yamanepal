@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     destinations: Destination;
+    regions: Region;
     testimonials: Testimonial;
     treks: Trek;
     users: User;
@@ -92,6 +93,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     destinations: DestinationsSelect<false> | DestinationsSelect<true>;
+    regions: RegionsSelect<false> | RegionsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     treks: TreksSelect<false> | TreksSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -756,6 +758,28 @@ export interface Destination {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions".
+ */
+export interface Region {
+  id: number;
+  name: string;
+  /**
+   * Auto-generated from the region name. Can be customised.
+   */
+  slug?: string | null;
+  /**
+   * Optional. Shown on the region listing page.
+   */
+  description?: string | null;
+  /**
+   * Optional hero image for the region listing page.
+   */
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
@@ -825,13 +849,21 @@ export interface Trek {
    */
   category?: (number | null) | Category;
   /**
+   * The geographic region this trek belongs to (e.g. Everest Region, Annapurna Region).
+   */
+  region?: (number | null) | Region;
+  /**
    * Show in Best Seller section on homepage
    */
   isBestSeller?: boolean | null;
   /**
-   * Show in Last Minute Deals section on homepage
+   * Enable to show this trek in the Best Last Minute Deals section on the homepage
    */
   isLastMinuteDeal?: boolean | null;
+  /**
+   * Sale price shown on the card. Only visible when Discount is enabled.
+   */
+  discountedPrice?: number | null;
   description?: string | null;
   /**
    * Auto-generated from name. Override manually if needed.
@@ -1360,6 +1392,10 @@ export interface PayloadLockedDocument {
         value: number | Destination;
       } | null)
     | ({
+        relationTo: 'regions';
+        value: number | Region;
+      } | null)
+    | ({
         relationTo: 'testimonials';
         value: number | Testimonial;
       } | null)
@@ -1695,6 +1731,18 @@ export interface DestinationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regions_select".
+ */
+export interface RegionsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials_select".
  */
 export interface TestimonialsSelect<T extends boolean = true> {
@@ -1736,8 +1784,10 @@ export interface TreksSelect<T extends boolean = true> {
   rating?: T;
   reviewCount?: T;
   category?: T;
+  region?: T;
   isBestSeller?: T;
   isLastMinuteDeal?: T;
+  discountedPrice?: T;
   description?: T;
   slug?: T;
   overview?: T;
@@ -2134,6 +2184,59 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Regions shown in the "Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.
+   */
+  trekkingDropdownRegions?:
+    | {
+        region: number | Region;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Fallback flat list — only used when no Regions are configured above. Add/remove/reorder here.
+   */
+  trekkingDropdownItems?:
+    | {
+        trek: number | Trek;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Treks displayed in the "Top Treks" navigation dropdown. Add/remove/reorder here.
+   */
+  topTreksDropdownItems?:
+    | {
+        trek: number | Trek;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Links displayed in the "Travel Info" navigation dropdown.
+   */
+  travelInfoDropdownItems?:
+    | {
+        label: string;
+        /**
+         * Use a relative path (e.g. /travel-info/visas) or full URL.
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Links displayed in the "Company" navigation dropdown.
+   */
+  companyDropdownItems?:
+    | {
+        label: string;
+        /**
+         * Use a relative path (e.g. /about-yama-nepal) or full URL.
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2203,6 +2306,38 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  trekkingDropdownRegions?:
+    | T
+    | {
+        region?: T;
+        id?: T;
+      };
+  trekkingDropdownItems?:
+    | T
+    | {
+        trek?: T;
+        id?: T;
+      };
+  topTreksDropdownItems?:
+    | T
+    | {
+        trek?: T;
+        id?: T;
+      };
+  travelInfoDropdownItems?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  companyDropdownItems?:
+    | T
+    | {
+        label?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;

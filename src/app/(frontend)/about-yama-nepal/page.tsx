@@ -71,7 +71,7 @@ export default function About() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10 lg:px-0 py-6">
+      <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-4">
           <span className=" text-[#0cb6d8] text-[14px]">Home</span>

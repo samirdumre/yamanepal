@@ -25,6 +25,8 @@ export function RecommendedTreks({ treks }: Props) {
             difficulty={trek.difficulty}
             price={trek.price}
             slug={trek.slug ?? ''}
+            discountedPrice={trek.discountedPrice}
+            isLastMinuteDeal={trek.isLastMinuteDeal}
           />
         ))}
       </div>

@@ -9,6 +9,7 @@ import { Destinations } from './collections/Destinations'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts/index'
+import { Regions } from './collections/Regions'
 import { Testimonials } from './collections/Testimonials'
 import { Treks } from './collections/Treks'
 import { Users } from './collections/Users'
@@ -68,7 +69,7 @@ export default buildConfig({
     },
     push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Destinations, Testimonials, Treks, Users],
+  collections: [Pages, Posts, Media, Categories, Destinations, Regions, Testimonials, Treks, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, Homepage],
   plugins,

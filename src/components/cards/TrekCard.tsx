@@ -9,6 +9,8 @@ interface TrekCardProps {
   difficulty: 'Easy' | 'Moderate' | 'Hard'
   price: number
   slug: string
+  discountedPrice?: number | null
+  isLastMinuteDeal?: boolean | null
 }
 
 const difficultyConfig = {
@@ -17,9 +19,19 @@ const difficultyConfig = {
   Hard: { icon: '/images/hard.png', color: 'text-red-500' },
 }
 
-export function TrekCard({ image, name, days, difficulty, price, slug }: TrekCardProps) {
+export function TrekCard({
+  image,
+  name,
+  days,
+  difficulty,
+  price,
+  slug,
+  discountedPrice,
+  isLastMinuteDeal,
+}: TrekCardProps) {
   const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
   const { icon, color } = difficultyConfig[difficulty] ?? difficultyConfig.Moderate
+  const showDiscount = discountedPrice != null && discountedPrice < price
 
   return (
     <Link href={`/treks/${slug}`} className="block">
@@ -37,6 +49,12 @@ export function TrekCard({ image, name, days, difficulty, price, slug }: TrekCar
               Explore
             </span>
           </div>
+          {/* Deal badge */}
+          {isLastMinuteDeal && (
+            <span className="absolute top-3 left-3 bg-cyan-500 text-white text-xs font-semibold px-2 py-1 rounded">
+              Deal
+            </span>
+          )}
         </div>
 
         {/* Card body */}
@@ -68,7 +86,18 @@ export function TrekCard({ image, name, days, difficulty, price, slug }: TrekCar
 
             {/* Price */}
             <div className="inline-flex justify-start items-center gap-3">
-              <span className="text-cyan-500 text-2xl font-bold font-['Inter']">US ${price}</span>
+              {showDiscount ? (
+                <>
+                  <span className="text-cyan-500 text-2xl font-bold font-['Inter']">
+                    US ${discountedPrice}
+                  </span>
+                  <span className="text-slate-400 text-base font-normal font-['Inter'] line-through">
+                    US ${price}
+                  </span>
+                </>
+              ) : (
+                <span className="text-cyan-500 text-2xl font-bold font-['Inter']">US ${price}</span>
+              )}
             </div>
           </div>
         </div>

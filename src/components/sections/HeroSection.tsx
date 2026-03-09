@@ -1,8 +1,10 @@
 'use client'
 
-import { Search } from 'lucide-react'
+import { Search, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useDebounce } from '@/utilities/useDebounce'
 
 const HERO_IMAGE_SRC = '/images/hero1.jpg'
 const HERO_VIDEO_ID = 'R_V9gKlZAZc'
@@ -43,6 +45,15 @@ declare global {
   }
 }
 
+interface TrekResult {
+  id: number
+  name: string
+  days: string
+  description: string | null
+  slug: string | null
+  imageUrl: string | null
+}
+
 interface HeroSectionProps {
   headline: string
   subheading: string
@@ -55,14 +66,60 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
   const hasStartedRef = useRef(false)
   const rewindTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // ─── Search state ──────────────────────────────────────────────────────────
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<TrekResult[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const searchWrapperRef = useRef<HTMLDivElement>(null)
+
+  const debouncedQuery = useDebounce(query, 300)
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setResults([])
+      setIsOpen(false)
+      return
+    }
+
+    let cancelled = false
+    setIsLoading(true)
+
+    fetch(`/api/treks/search?q=${encodeURIComponent(debouncedQuery)}`)
+      .then((res) => res.json())
+      .then((data: TrekResult[]) => {
+        if (!cancelled) {
+          setResults(data)
+          setIsOpen(true)
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [debouncedQuery])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleMouseDown(e: MouseEvent) {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleMouseDown)
+    return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [])
+
+  // ─── YouTube player ────────────────────────────────────────────────────────
   function scheduleRewind(player: YTPlayer) {
     if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
     const remaining = player.getDuration() - player.getCurrentTime()
     if (remaining > 0.3) {
-      rewindTimerRef.current = setTimeout(
-        () => player.seekTo(0),
-        (remaining - 0.2) * 1000,
-      )
+      rewindTimerRef.current = setTimeout(() => player.seekTo(0), (remaining - 0.2) * 1000)
     }
   }
 
@@ -74,8 +131,8 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       new window.YT.Player(playerContainerRef.current, {
         videoId,
         playerVars: {
-          autoplay: 1,       // ← play immediately, no interaction needed
-          mute: 1,           // required for autoplay to work in all browsers
+          autoplay: 1, // ← play immediately, no interaction needed
+          mute: 1, // required for autoplay to work in all browsers
           controls: 0,
           disablekb: 1,
           playsinline: 1,
@@ -105,7 +162,8 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
             })
           },
           onStateChange: (e) => {
-            if (e.data === 1) { // PLAYING
+            if (e.data === 1) {
+              // PLAYING
               if (!hasStartedRef.current) {
                 hasStartedRef.current = true
                 setIsActive(true) // crossfade only when frames confirmed
@@ -146,7 +204,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
   return (
     <section className="relative w-full h-[500px] md:h-[716px] flex items-start justify-center pt-32 md:pt-44">
       <div className="absolute inset-0 overflow-hidden">
-
         {/* Static image — LCP element, stays visible until video is confirmed playing */}
         <Image
           fill
@@ -179,13 +236,87 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
             {subheading}
           </p>
         </div>
-        <div className="h-10 pl-4 pr-5 py-1.5 bg-white rounded-lg flex items-center gap-3 w-full max-w-[630px]">
-          <Search className="w-6 h-6 flex-shrink-0 text-slate-950/30" />
-          <input
-            className="flex-1 font-['Inter',sans-serif] text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
-            placeholder="Search Trips..."
-            type="text"
-          />
+
+        {/* Search bar + dropdown */}
+        <div ref={searchWrapperRef} className="relative w-full max-w-[630px]">
+          <div className="h-10 pl-4 pr-5 py-1.5 bg-white rounded-lg flex items-center gap-3">
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 flex-shrink-0 text-slate-950/30 animate-spin" />
+            ) : (
+              <Search className="w-6 h-6 flex-shrink-0 text-slate-950/30" />
+            )}
+            <input
+              className="flex-1 font-['Inter',sans-serif] text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
+              placeholder="Search Trips..."
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => {
+                if (results.length > 0) setIsOpen(true)
+              }}
+            />
+          </div>
+
+          {/* Dropdown */}
+          {isOpen && (
+            <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-xl overflow-hidden z-50 max-h-[480px] overflow-y-auto">
+              <div className="px-4 pt-3 pb-1">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  All Trips
+                </span>
+              </div>
+
+              {results.length === 0 ? (
+                <div className="px-4 py-6 text-center text-sm text-slate-500">
+                  No results found.
+                </div>
+              ) : (
+                <ul>
+                  {results.map((trek) => (
+                    <li key={trek.id}>
+                      <Link
+                        href={`/treks/${trek.slug ?? ''}`}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <div className="relative w-12 h-12 flex-shrink-0 rounded-md overflow-hidden bg-slate-100">
+                          {trek.imageUrl ? (
+                            <Image
+                              src={trek.imageUrl}
+                              alt={trek.name}
+                              fill
+                              className="object-cover"
+                              sizes="48px"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-slate-200" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-slate-900 truncate">
+                            {trek.name}
+                            {trek.days ? (
+                              <span className="font-normal text-slate-500">
+                                {' '}
+                                - {trek.days} Days
+                              </span>
+                            ) : null}
+                          </p>
+                          {trek.description && (
+                            <p className="text-xs text-slate-500 truncate">
+                              {trek.description.length > 90
+                                ? trek.description.slice(0, 90) + '…'
+                                : trek.description}
+                            </p>
+                          )}
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>

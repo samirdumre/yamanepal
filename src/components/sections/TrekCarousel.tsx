@@ -175,6 +175,8 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
                   difficulty={trek.difficulty as 'Easy' | 'Moderate' | 'Hard'}
                   price={trek.price}
                   slug={trek.slug ?? ''}
+                  discountedPrice={trek.discountedPrice}
+                  isLastMinuteDeal={trek.isLastMinuteDeal}
                 />
               </div>
             ))}

@@ -15,7 +15,15 @@ export const Treks: CollectionConfig = {
   slug: 'treks',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'days', 'difficulty', 'price', 'isBestSeller', 'isLastMinuteDeal'],
+    defaultColumns: [
+      'name',
+      'region',
+      'days',
+      'difficulty',
+      'price',
+      'isBestSeller',
+      'isLastMinuteDeal',
+    ],
   },
   access: { read: () => true },
   hooks: {
@@ -151,6 +159,16 @@ export const Treks: CollectionConfig = {
       },
     },
     {
+      name: 'region',
+      type: 'relationship',
+      relationTo: 'regions',
+      admin: {
+        description:
+          'The geographic region this trek belongs to (e.g. Everest Region, Annapurna Region).',
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'isBestSeller',
       type: 'checkbox',
       defaultValue: false,
@@ -160,7 +178,20 @@ export const Treks: CollectionConfig = {
       name: 'isLastMinuteDeal',
       type: 'checkbox',
       defaultValue: false,
-      admin: { description: 'Show in Last Minute Deals section on homepage' },
+      label: 'Discount / Last Minute Deal',
+      admin: {
+        description:
+          'Enable to show this trek in the Best Last Minute Deals section on the homepage',
+      },
+    },
+    {
+      name: 'discountedPrice',
+      type: 'number',
+      label: 'Discounted Price (USD)',
+      admin: {
+        description: 'Sale price shown on the card. Only visible when Discount is enabled.',
+        condition: (data) => Boolean(data?.isLastMinuteDeal),
+      },
     },
     {
       name: 'description',
