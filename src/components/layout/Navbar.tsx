@@ -45,7 +45,7 @@ function TrekDropdown({ items }: { items: TrekkingDropdownItem[] }) {
   if (items.length === 0) return null
   return (
     <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[260px]">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
+      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {items.map((trek) => (
           <NextLink
             key={trek.slug}
@@ -67,7 +67,7 @@ function TrekRegionDropdown({ groups }: { groups: TrekRegionGroup[] }) {
   if (groups.length === 0) return null
   return (
     <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[240px]">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
+      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {groups.map((group) => (
           <NextLink
             key={group.regionSlug}
@@ -86,7 +86,7 @@ function LinkDropdown({ items }: { items: LinkDropdownItem[] }) {
   if (items.length === 0) return null
   return (
     <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[220px]">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
+      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {items.map((item) => (
           <NextLink
             key={item.url}

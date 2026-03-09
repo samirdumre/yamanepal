@@ -71,6 +71,7 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
+    inquiries: Inquiry;
     regions: Region;
     testimonials: Testimonial;
     treks: Trek;
@@ -91,6 +92,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     regions: RegionsSelect<false> | RegionsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     treks: TreksSelect<false> | TreksSelect<true>;
@@ -739,6 +741,24 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Booking inquiries submitted via the trek pages.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  trekName?: string | null;
+  fullName: string;
+  email: string;
+  phone: string;
+  noOfTravellers: number;
+  message: string;
+  status?: ('new' | 'read' | 'replied') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "regions".
  */
@@ -1370,6 +1390,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'inquiries';
+        value: number | Inquiry;
+      } | null)
+    | ({
         relationTo: 'regions';
         value: number | Region;
       } | null)
@@ -1692,6 +1716,21 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  trekName?: T;
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  noOfTravellers?: T;
+  message?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

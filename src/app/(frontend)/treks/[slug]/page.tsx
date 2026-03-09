@@ -375,7 +375,11 @@ export default async function TrekDetailPage({ params }: PageProps) {
           {/* Right: Booking Sidebar */}
           {/* Right: Booking Sidebar */}
           <div className="w-[300px] flex-shrink-0 mt-12 self-start">
-            <BookingSidebar price={trek.price} groupPricing={trek.groupPricing} />
+            <BookingSidebar
+              price={trek.price}
+              trekName={trek.name}
+              groupPricing={trek.groupPricing}
+            />
           </div>
         </div>
         {/* Recommended Packages */}

@@ -52,7 +52,7 @@ export async function seedHomepage({
 
   await Promise.allSettled([
     payload.db.deleteMany({ collection: 'treks', req, where: {} }),
-    payload.db.deleteMany({ collection: 'destinations', req, where: {} }),
+    payload.db.deleteMany({ collection: 'regions', req, where: {} }),
     payload.db.deleteMany({ collection: 'testimonials', req, where: {} }),
     payload.db.deleteMany({ collection: 'posts', req, where: {} }),
     payload.db.deleteMany({ collection: 'media', req, where: {} }),
@@ -444,61 +444,61 @@ export async function seedHomepage({
     }),
   ])
 
-  payload.logger.info('— [seed-homepage] Seeding destinations...')
+  payload.logger.info('— [seed-homepage] Seeding regions...')
 
   await Promise.all([
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Kathmandu Valley',
+        name: 'Everest Region',
+        slug: 'everest-region',
         image: dest1Img.id,
-        packsCount: 12,
-        region: 'Bagmati Province',
+        description: "Home to the world's highest peak and legendary trekking routes.",
       },
     }),
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Pokhara',
+        name: 'Annapurna Region',
+        slug: 'annapurna-region',
         image: dest2Img.id,
-        packsCount: 8,
-        region: 'Gandaki Province',
+        description: "Nepal's most popular trekking circuit with diverse landscapes.",
       },
     }),
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Chitwan',
+        name: 'Langtang Region',
+        slug: 'langtang-region',
         image: dest3Img.id,
-        packsCount: 5,
-        region: 'Bagmati Province',
+        description: 'The Valley of Glaciers, just a short drive from Kathmandu.',
       },
     }),
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Lumbini',
+        name: 'Manaslu Region',
+        slug: 'manaslu-region',
         image: dest4Img.id,
-        packsCount: 4,
-        region: 'Lumbini Province',
+        description: "Remote circuit around the world's eighth highest mountain.",
       },
     }),
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Nagarkot',
+        name: 'Mustang Region',
+        slug: 'mustang-region',
         image: dest5Img.id,
-        packsCount: 6,
-        region: 'Bagmati Province',
+        description: 'The forbidden kingdom — ancient Tibetan culture on a high plateau.',
       },
     }),
     payload.create({
-      collection: 'destinations',
+      collection: 'regions',
       data: {
-        name: 'Bandipur',
+        name: 'Kanchenjunga Region',
+        slug: 'kanchenjunga-region',
         image: dest6Img.id,
-        packsCount: 3,
-        region: 'Gandaki Province',
+        description: "Pristine wilderness at the foot of the world's third highest mountain.",
       },
     }),
   ])

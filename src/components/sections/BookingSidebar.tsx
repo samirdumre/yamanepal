@@ -1,22 +1,27 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { TalkToExpert } from './TalkToExpert'
+import { BookingFormModal } from './BookingFormModal'
 import type { Trek } from '@/payload-types'
 import { Button } from '../ui/button'
 
 interface BookingSidebarProps {
   price: number
+  trekName: string
   groupPricing?: Trek['groupPricing']
   expertQrSrc?: string
 }
 
 export function BookingSidebar({
   price,
+  trekName,
   groupPricing,
   expertQrSrc: _expertQrSrc,
 }: BookingSidebarProps) {
   const [tableOpen, setTableOpen] = useState(true)
+  const [modalOpen, setModalOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -113,16 +118,19 @@ export function BookingSidebar({
 
           {/* CTA buttons */}
           <div className="flex flex-col gap-2 justify-center">
-            <Button variant="primary" size="md">
-              BOOK NOW
-            </Button>
-            <Button variant="outline" size="md">
+            <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
               INQUIRE NOW
             </Button>
+            {/* <Link href="/contact-yama-nepal">
+              <Button variant="outline" size="md" className="w-full">
+                INQUIRE NOW
+              </Button>
+            </Link> */}
           </div>
         </div>
       </div>
       <TalkToExpert qrSrc={'/images/shantamagar.jpeg'} />
+      <BookingFormModal open={modalOpen} onClose={() => setModalOpen(false)} trekName={trekName} />
     </div>
   )
 }
