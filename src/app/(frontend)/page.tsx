@@ -4,16 +4,17 @@ import config from '@payload-config'
 // import { Footer } from '@/components/layout/Footer'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SectionHeading } from '@/components/ui/SectionLabel'
-import { DestinationCard } from '@/components/cards/DestinationCard'
+import { RegionCard } from '@/components/cards/DestinationCard'
 // import { FeatureCard } from '@/components/cards/FeatureCard'
 import { TestimonialCarousel } from '@/components/sections/TestimonialCarousel'
 import { GallerySection } from '@/components/sections/GallerySection'
 import { TrekCarousel } from '@/components/sections/TrekCarousel'
 import { Button } from '@/components/ui/button'
-import type { Trek, Destination, Testimonial, Post, Media } from '@/payload-types'
+import type { Trek, Region, Testimonial, Post, Media } from '@/payload-types'
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
@@ -21,19 +22,29 @@ export default async function HomePage() {
   // Fetch all data in parallel
   const [
     { docs: bestSellerTreks },
-    { docs: destinations },
+    { docs: regions },
     { docs: lastMinuteDeals },
     { docs: testimonials },
     homepage,
     { docs: galleryMedia },
+    { docs: allTreks },
   ] = await Promise.all([
     payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
-    payload.find({ collection: 'destinations', limit: 6 }),
+    payload.find({ collection: 'regions', limit: 6 }),
     payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
     payload.find({ collection: 'testimonials', limit: 3 }),
     payload.findGlobal({ slug: 'homepage', depth: 2 }),
     payload.find({ collection: 'media', limit: 11 }),
+    payload.find({ collection: 'treks', depth: 0, limit: 1000 }),
   ])
+
+  const regionTrekCounts = new Map<number | string, number>()
+  for (const trek of allTreks) {
+    const regionId = typeof trek.region === 'object' ? trek.region?.id : trek.region
+    if (regionId != null) {
+      regionTrekCounts.set(regionId, (regionTrekCounts.get(regionId) ?? 0) + 1)
+    }
+  }
 
   const tripOfTheMonthTrek = homepage?.tripOfTheMonth?.trek as Trek | null
   const tripImage = tripOfTheMonthTrek?.image as Media | null
@@ -92,12 +103,13 @@ export default async function HomePage() {
             title="Explore Excellent Destination"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8 mb-6">
-            {destinations.map((dest: Destination) => (
-              <DestinationCard
-                key={dest.id}
-                image={dest.image}
-                name={dest.name}
-                packsCount={dest.packsCount}
+            {regions.map((region: Region) => (
+              <RegionCard
+                key={region.id}
+                image={region.image ?? null}
+                name={region.name}
+                slug={region.slug ?? ''}
+                trekCount={regionTrekCounts.get(region.id) ?? 0}
               />
             ))}
           </div>
@@ -198,9 +210,11 @@ export default async function HomePage() {
                 <p className="font-['Inter',sans-serif] text-[14px] text-white leading-[22px]">
                   {homepage?.tripOfTheMonth?.description}
                 </p>
-                <Button variant="primary" className="w-fit mt-2">
-                  View Trip
-                </Button>
+                <Link href={`/treks/${tripOfTheMonthTrek.slug ?? ''}`} className="w-fit">
+                  <Button variant="primary" className="w-fit mt-2">
+                    View Trip
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

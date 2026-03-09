@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Media } from '@/payload-types'
 
-interface DestinationCardProps {
+interface RegionCardProps {
   image: string | Media | number | null
   name: string
-  packsCount: number
+  slug: string
+  trekCount: number
 }
 
 function StarRating() {
@@ -19,11 +21,14 @@ function StarRating() {
   )
 }
 
-export function DestinationCard({ image, name, packsCount }: DestinationCardProps) {
+export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
   const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
 
   return (
-    <div className="relative rounded-lg overflow-hidden h-96 w-full group cursor-pointer">
+    <Link
+      href={`/regions/${slug}`}
+      className="relative rounded-lg overflow-hidden h-96 w-full group cursor-pointer block"
+    >
       <div className="self-stretch h-96 rounded overflow-hidden flex-shrink-0 relative">
         <Image
           fill
@@ -43,10 +48,10 @@ export function DestinationCard({ image, name, packsCount }: DestinationCardProp
         </div>
         <div className="w-20 h-7 px-5 py-1.5 bg-[#0CB6D8] rounded-lg flex items-center justify-center">
           <span className="font-['Inter',sans-serif] font-semibold text-base text-white whitespace-nowrap">
-            {packsCount} Packs
+            {trekCount} Packs
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

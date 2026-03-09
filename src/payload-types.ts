@@ -71,7 +71,6 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
-    destinations: Destination;
     regions: Region;
     testimonials: Testimonial;
     treks: Trek;
@@ -92,7 +91,6 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
-    destinations: DestinationsSelect<false> | DestinationsSelect<true>;
     regions: RegionsSelect<false> | RegionsSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     treks: TreksSelect<false> | TreksSelect<true>;
@@ -742,22 +740,6 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "destinations".
- */
-export interface Destination {
-  id: number;
-  name: string;
-  image: number | Media;
-  /**
-   * e.g. 5 → displays as "5 Packs"
-   */
-  packsCount: number;
-  region?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "regions".
  */
 export interface Region {
@@ -1388,10 +1370,6 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
-        relationTo: 'destinations';
-        value: number | Destination;
-      } | null)
-    | ({
         relationTo: 'regions';
         value: number | Region;
       } | null)
@@ -1714,18 +1692,6 @@ export interface CategoriesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "destinations_select".
- */
-export interface DestinationsSelect<T extends boolean = true> {
-  name?: T;
-  image?: T;
-  packsCount?: T;
-  region?: T;
   updatedAt?: T;
   createdAt?: T;
 }
