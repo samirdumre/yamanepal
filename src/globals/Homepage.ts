@@ -52,5 +52,16 @@ export const Homepage: GlobalConfig = {
       type: 'text',
       defaultValue: 'Deals and Discounts',
     },
+    {
+      name: 'featuredBlogs',
+      type: 'relationship',
+      relationTo: 'posts',
+      hasMany: true,
+      maxRows: 4,
+      label: 'Featured Blogs',
+      admin: {
+        description: 'Pick up to 4 blogs to display in the homepage blog section.',
+      },
+    },
   ],
 }

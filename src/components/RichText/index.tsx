@@ -38,12 +38,13 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  horizontalRule: () => <hr className="border-t border-[#e2e8f0] my-6" />,
   blocks: {
     banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,
     mediaBlock: ({ node }) => (
       <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
+        className="w-full my-6"
+        imgClassName="w-full"
         {...node.fields}
         captionClassName="mx-auto max-w-[48rem]"
         enableGutter={false}

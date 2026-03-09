@@ -2286,6 +2286,10 @@ export interface Homepage {
   };
   bestSellerSectionLabel?: string | null;
   lastMinuteSectionLabel?: string | null;
+  /**
+   * Pick up to 4 blogs to display in the homepage blog section.
+   */
+  featuredBlogs?: (number | Post)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2387,6 +2391,7 @@ export interface HomepageSelect<T extends boolean = true> {
       };
   bestSellerSectionLabel?: T;
   lastMinuteSectionLabel?: T;
+  featuredBlogs?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

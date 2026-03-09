@@ -24,13 +24,13 @@ const contacts = [
   {
     country: 'NEPAL',
     name: 'Shanta Magar',
-    phone: '+977 9866937865',
+    phone: '+977-9866937865',
     avatar: IMAGES.avatarNepal,
   },
   {
     country: 'JAPAN',
-    name: 'Nisesh Magar',
-    phone: '+81 9866937865',
+    name: 'Bimal Magar',
+    phone: '+080-96321073',
     avatar: IMAGES.avatarJapan,
   },
 ]

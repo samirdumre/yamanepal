@@ -7,10 +7,12 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
-import type { Post } from '@/payload-types'
+import type { Media } from '@/payload-types'
 
-import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
@@ -51,29 +53,63 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  const heroImage = (post.heroImage ?? post.image) as Media | null
+
   return (
-    <article className="pt-16 pb-16">
+    <article className="bg-white w-full font-['Inter',sans-serif]">
       <PageClient />
-
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
-
       {draft && <LivePreviewListener />}
 
-      <PostHero post={post} />
+      {/* Hero Image */}
+      <div className="w-full h-[567px] overflow-hidden relative">
+        {heroImage?.url ? (
+          <Image fill alt={post.title} className="object-cover" src={heroImage.url} priority />
+        ) : (
+          <div className="w-full h-full bg-[#e2e8f0]" />
+        )}
+      </div>
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          {post.content && (
-            <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          )}
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
+      {/* Content */}
+      <div className="max-w-[898px] mx-auto px-5 md:px-10 py-6 md:pb-16">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-1 mb-6 flex-wrap">
+          <Link href="/" className="text-[#0cb6d8] text-[14px] hover:underline">
+            Home
+          </Link>
+          <ChevronRight className="size-5 text-[#0cb6d8]" />
+          <Link href="/posts" className="text-[#0cb6d8] text-[14px] hover:underline">
+            Blogs
+          </Link>
+          <ChevronRight className="size-5 text-[#0cb6d8]" />
+          <span className="text-[#020617] text-[14px]">{post.title}</span>
         </div>
+
+        {/* Tag */}
+        {post.tag && (
+          <div className="bg-[rgba(226,232,240,0.56)] rounded-full px-4 py-[3px] w-fit mb-4">
+            <span className="text-[14px] text-[#020617]">{post.tag}</span>
+          </div>
+        )}
+
+        {/* Title */}
+        <h1 className="text-[#020617] text-[28px] md:text-[36px] font-semibold tracking-[-0.8px] mb-8">
+          {post.title}
+        </h1>
+
+        {/* Rich Text Content */}
+        {post.content && (
+          <div className="text-[#020617] text-[17px] leading-[30px]">
+            <RichText data={post.content} enableGutter={false} />
+          </div>
+        )}
+
+        {/* Related Posts */}
+        {post.relatedPosts && post.relatedPosts.length > 0 && (
+          <div className="mt-16 pt-10 border-t border-[#e2e8f0]">
+            <RelatedPosts docs={post.relatedPosts.filter((post) => typeof post === 'object')} />
+          </div>
+        )}
       </div>
     </article>
   )

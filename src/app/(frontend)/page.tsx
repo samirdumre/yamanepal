@@ -24,7 +24,6 @@ export default async function HomePage() {
     { docs: destinations },
     { docs: lastMinuteDeals },
     { docs: testimonials },
-    { docs: blogPosts },
     homepage,
     { docs: galleryMedia },
   ] = await Promise.all([
@@ -32,16 +31,18 @@ export default async function HomePage() {
     payload.find({ collection: 'destinations', limit: 6 }),
     payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
     payload.find({ collection: 'testimonials', limit: 3 }),
-    payload.find({ collection: 'posts', limit: 4 }),
-    payload.findGlobal({ slug: 'homepage' }),
+    payload.findGlobal({ slug: 'homepage', depth: 2 }),
     payload.find({ collection: 'media', limit: 11 }),
   ])
 
   const tripOfTheMonthTrek = homepage?.tripOfTheMonth?.trek as Trek | null
   const tripImage = tripOfTheMonthTrek?.image as Media | null
 
-  const featuredPost = blogPosts.find((p: Post) => p.isFeatured) ?? blogPosts[0]
-  const sidePosts = blogPosts.filter((p: Post) => p.id !== featuredPost?.id).slice(0, 3)
+  const blogPosts = (homepage?.featuredBlogs ?? []).filter(
+    (p): p is Post => typeof p === 'object',
+  ) as Post[]
+  const featuredPost = blogPosts[0] ?? null
+  const sidePosts = blogPosts.slice(1, 4)
 
   const difficultyConfig = {
     Easy: { icon: '/images/easy.png', color: 'text-green-500' },

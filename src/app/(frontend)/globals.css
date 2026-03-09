@@ -222,3 +222,34 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+/* ---- Blog Rich Text Overrides ---- */
+.payload-richtext p,
+.payload-richtext li,
+.payload-richtext td {
+  font-size: 17px;
+  line-height: 30px;
+  color: #020617;
+}
+
+.payload-richtext h1,
+.payload-richtext h2,
+.payload-richtext h3,
+.payload-richtext h4,
+.payload-richtext h5,
+.payload-richtext h6,
+.payload-richtext strong,
+.payload-richtext b {
+  color: #020617;
+}
+
+.payload-richtext hr {
+  border-color: #e2e8f0;
+  border-top-width: 1px;
+}
+
+.payload-richtext img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
