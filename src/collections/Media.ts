@@ -4,10 +4,14 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { processUploadedImage } from '@/hooks/processUploadedImage'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   access: { read: () => true },
+  admin: {
+    group: 'Content',
+  },
   fields: [
     {
       name: 'alt',
@@ -26,6 +30,9 @@ export const Media: CollectionConfig = {
       }),
     },
   ],
+  hooks: {
+    beforeOperation: [processUploadedImage],
+  },
   upload: {
     imageSizes: [
       {

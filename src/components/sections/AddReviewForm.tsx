@@ -17,6 +17,24 @@ const RATING_LABELS: Record<number, string> = {
   5: 'Excellent',
 }
 
+type FormErrors = {
+  rating?: string
+  reviewerName?: string
+  reviewText?: string
+}
+
+function validate(selectedRating: number, reviewerName: string, reviewText: string): FormErrors {
+  const errors: FormErrors = {}
+  if (!selectedRating) errors.rating = 'Please select a star rating.'
+  const name = reviewerName.trim()
+  if (!name || name.length < 2 || name.length > 100)
+    errors.reviewerName = 'Name must be between 2 and 100 characters.'
+  const text = reviewText.trim()
+  if (!text || text.length < 10 || text.length > 2000)
+    errors.reviewText = 'Review must be between 10 and 2000 characters.'
+  return errors
+}
+
 export function AddReviewForm({ trekId }: AddReviewFormProps) {
   const router = useRouter()
   const [hoveredStar, setHoveredStar] = useState(0)
@@ -25,26 +43,19 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
   const [reviewText, setReviewText] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [errors, setErrors] = useState<FormErrors>({})
 
   const activeStar = hoveredStar || selectedRating
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setErrorMsg('')
-
-    if (!selectedRating) {
-      setErrorMsg('Please select a star rating.')
+    const validationErrors = validate(selectedRating, reviewerName, reviewText)
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
       return
     }
-    if (!reviewerName.trim()) {
-      setErrorMsg('Please enter your name.')
-      return
-    }
-    if (!reviewText.trim()) {
-      setErrorMsg('Please write your review.')
-      return
-    }
-
+    setErrors({})
     setStatus('loading')
 
     try {
@@ -71,6 +82,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
       setReviewText('')
       setSelectedRating(0)
       setHoveredStar(0)
+      setErrors({})
       // Refresh server component data to show the new review
       router.refresh()
     } catch {
@@ -124,7 +136,10 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                     type="button"
                     onMouseEnter={() => setHoveredStar(n)}
                     onMouseLeave={() => setHoveredStar(0)}
-                    onClick={() => setSelectedRating(n)}
+                    onClick={() => {
+                      setSelectedRating(n)
+                      setErrors((prev) => ({ ...prev, rating: undefined }))
+                    }}
                     aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
                     className="focus:outline-none hover:cursor-pointer"
                   >
@@ -143,6 +158,9 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                   </span>
                 )}
               </div>
+              {errors.rating && (
+                <p className="text-red-500 text-xs mt-1 font-['Inter']">{errors.rating}</p>
+              )}
             </div>
 
             {/* Name */}
@@ -157,11 +175,17 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                 id="reviewer-name"
                 type="text"
                 value={reviewerName}
-                onChange={(e) => setReviewerName(e.target.value)}
+                onChange={(e) => {
+                  setReviewerName(e.target.value)
+                  setErrors((prev) => ({ ...prev, reviewerName: undefined }))
+                }}
                 placeholder="e.g. John Smith"
                 maxLength={100}
                 className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950 font-['Inter'] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition"
               />
+              {errors.reviewerName && (
+                <p className="text-red-500 text-xs mt-1 font-['Inter']">{errors.reviewerName}</p>
+              )}
             </div>
 
             {/* Review text */}
@@ -175,7 +199,10 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
               <textarea
                 id="review-text"
                 value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
+                onChange={(e) => {
+                  setReviewText(e.target.value)
+                  setErrors((prev) => ({ ...prev, reviewText: undefined }))
+                }}
                 placeholder="Share your experience on this trek..."
                 rows={5}
                 maxLength={2000}
@@ -184,6 +211,9 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
               <span className="text-gray-400 text-xs font-['Inter'] text-right">
                 {reviewText.length}/2000
               </span>
+              {errors.reviewText && (
+                <p className="text-red-500 text-xs font-['Inter']">{errors.reviewText}</p>
+              )}
             </div>
 
             {/* Error */}

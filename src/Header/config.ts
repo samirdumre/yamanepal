@@ -1,30 +1,16 @@
 import type { GlobalConfig } from 'payload'
 
-import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 
 export const Header: GlobalConfig = {
   slug: 'header',
+  admin: {
+    description: 'Manage navigation menus and dropdown items.',
+  },
   access: {
     read: () => true,
   },
   fields: [
-    {
-      name: 'navItems',
-      type: 'array',
-      fields: [
-        link({
-          appearances: false,
-        }),
-      ],
-      maxRows: 6,
-      admin: {
-        initCollapsed: true,
-        components: {
-          RowLabel: '@/Header/RowLabel#RowLabel',
-        },
-      },
-    },
     {
       name: 'trekkingDropdownRegions',
       type: 'array',
@@ -40,25 +26,6 @@ export const Header: GlobalConfig = {
           name: 'region',
           type: 'relationship',
           relationTo: 'regions',
-          required: true,
-        },
-      ],
-    },
-    {
-      name: 'trekkingDropdownItems',
-      type: 'array',
-      label: 'Trekking Dropdown Items (flat fallback)',
-      maxRows: 30,
-      admin: {
-        description:
-          'Fallback flat list — only used when no Regions are configured above. Add/remove/reorder here.',
-        initCollapsed: true,
-      },
-      fields: [
-        {
-          name: 'trek',
-          type: 'relationship',
-          relationTo: 'treks',
           required: true,
         },
       ],

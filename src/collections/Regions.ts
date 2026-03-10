@@ -13,6 +13,7 @@ function toSlug(str: string): string {
 export const Regions: CollectionConfig = {
   slug: 'regions',
   admin: {
+    group: 'Trekking',
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug'],
   },

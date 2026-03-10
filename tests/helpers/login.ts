@@ -11,7 +11,7 @@ export interface LoginOptions {
 }
 
 /**
- * Logs the user into the admin panel via the login page.
+ * Logs the user into the admin panel via the login page
  */
 export async function login({
   page,

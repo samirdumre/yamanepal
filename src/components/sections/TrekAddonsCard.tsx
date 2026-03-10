@@ -60,8 +60,8 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
       {hasSteps && (
         <ul className="flex flex-col gap-4">
           {(trek.addonsSteps as string[]).map((step, i) => (
-            <li key={i} className="flex items-center gap-[14px]">
-              <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0" />
+            <li key={i} className="flex items-start gap-[14px]">
+              <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0  mt-[5px]" />
               <span className="text-slate-950 text-base font-normal font-['Inter'] leading-6">
                 {step}
               </span>

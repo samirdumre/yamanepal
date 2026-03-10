@@ -1,11 +1,8 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-// import { Navbar } from '@/components/layout/Navbar'
-// import { Footer } from '@/components/layout/Footer'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SectionHeading } from '@/components/ui/SectionLabel'
 import { RegionCard } from '@/components/cards/DestinationCard'
-// import { FeatureCard } from '@/components/cards/FeatureCard'
 import { TestimonialCarousel } from '@/components/sections/TestimonialCarousel'
 import { GallerySection } from '@/components/sections/GallerySection'
 import { TrekCarousel } from '@/components/sections/TrekCarousel'
@@ -227,16 +224,18 @@ export default async function HomePage() {
       />
 
       {/* Testimonials */}
-      <section className="relative bg-[#e2e8f0] py-16 overflow-hidden">
-        {/* Grid Pattern Overlay */}
+      <section className="relative bg-gradient-to-b from-[#dbeafe] to-white py-16 overflow-hidden">
+        {/* Grid Pattern Overlay — fades out going down via mask */}
         <div
-          className="absolute inset-0 opacity-72 w-full h-full pointer-events-none"
+          className="absolute inset-0 w-full h-full pointer-events-none"
           style={{
             backgroundImage: `
         linear-gradient(to right, #94a3b820 1px, transparent 1px),
         linear-gradient(to bottom, #94a3b820 1px, transparent 1px)
       `,
             backgroundSize: '32px 32px',
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
           }}
         />
 
@@ -307,7 +306,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* <Footer /> */}
     </div>
   )
 }

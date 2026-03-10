@@ -2164,46 +2164,19 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Manage navigation menus and dropdown items.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
   id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
   /**
    * Regions shown in the "Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.
    */
   trekkingDropdownRegions?:
     | {
         region: number | Region;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Fallback flat list — only used when no Regions are configured above. Add/remove/reorder here.
-   */
-  trekkingDropdownItems?:
-    | {
-        trek: number | Trek;
         id?: string | null;
       }[]
     | null;
@@ -2246,6 +2219,8 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
+ * Manage footer navigation links.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
@@ -2275,6 +2250,8 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Hero section, trip of the month, and featured content.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage".
  */
@@ -2303,30 +2280,10 @@ export interface Homepage {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
   trekkingDropdownRegions?:
     | T
     | {
         region?: T;
-        id?: T;
-      };
-  trekkingDropdownItems?:
-    | T
-    | {
-        trek?: T;
         id?: T;
       };
   topTreksDropdownItems?:

@@ -175,7 +175,17 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
                         : `calc((100% - ${GAP * (visibleCount - 1)}px) / ${visibleCount})`,
                   }}
                 >
-                  <ReviewCard text={t.quote} author={t.name} location={t.location} />
+                  <ReviewCard
+                    text={t.quote}
+                    author={t.name}
+                    location={t.location}
+                    avatarSrc={
+                      t.avatar && typeof t.avatar === 'object'
+                        ? (t.avatar.url ?? undefined)
+                        : undefined
+                    }
+                    avatarAlt={t.avatar && typeof t.avatar === 'object' ? t.avatar.alt : t.name}
+                  />
                 </div>
               ))}
             </div>

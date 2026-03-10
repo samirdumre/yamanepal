@@ -91,7 +91,7 @@ export default async function RegionPage({ params }: PageProps) {
         {regionImage?.url ? (
           <img
             alt={region.name}
-            className="absolute w-full h-full object-cover"
+            className="absolute w-full h-full object-cover object-center"
             src={regionImage.url}
           />
         ) : (

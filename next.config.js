@@ -19,6 +19,14 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      ...(process.env.R2_PUBLIC_URL
+        ? [
+            {
+              hostname: new URL(process.env.R2_PUBLIC_URL).hostname,
+              protocol: 'https',
+            },
+          ]
+        : []),
     ],
   },
   webpack: (webpackConfig) => {

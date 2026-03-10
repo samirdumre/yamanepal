@@ -14,6 +14,7 @@ function toSlug(str: string): string {
 export const Treks: CollectionConfig = {
   slug: 'treks',
   admin: {
+    group: 'Trekking',
     useAsTitle: 'name',
     defaultColumns: [
       'name',
@@ -494,6 +495,7 @@ export const Treks: CollectionConfig = {
             { label: 'Lunch', value: 'lunch' },
             { label: 'Dinner', value: 'dinner' },
           ],
+          admin: { hidden: true },
         },
         {
           name: 'accommodation',

@@ -5,6 +5,9 @@ import { revalidateFooter } from './hooks/revalidateFooter'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
+  admin: {
+    description: 'Manage footer navigation links.',
+  },
   access: {
     read: () => true,
   },

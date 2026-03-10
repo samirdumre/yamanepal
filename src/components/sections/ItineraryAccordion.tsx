@@ -11,12 +11,14 @@ interface ItineraryAccordionProps {
 }
 
 export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
-  const [openDay, setOpenDay] = useState<number | null>(null)
+  const [openDays, setOpenDays] = useState<Set<number>>(
+    () => new Set(itinerary.map((item) => item.day)),
+  )
 
   return (
     <div className="flex flex-col">
       {itinerary.map((item, index) => {
-        const isOpen = openDay === item.day
+        const isOpen = openDays.has(item.day)
         const isLast = index === itinerary.length - 1
 
         const photos = (item.photos ?? [])
@@ -37,11 +39,17 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
               {/* Clickable header */}
               <button
                 className="w-full flex items-start justify-between gap-4 text-left group hover:cursor-pointer"
-                onClick={() => setOpenDay(isOpen ? null : item.day)}
+                onClick={() =>
+                  setOpenDays((prev) => {
+                    const next = new Set(prev)
+                    isOpen ? next.delete(item.day) : next.add(item.day)
+                    return next
+                  })
+                }
               >
                 <p className="text-lg font-medium leading-7">
-                  <span className="text-gray-700">Day {item.day}: </span>
-                  <span className="text-gray-800">{item.title}</span>
+                  <span className="text-gray-700 font-medium">Day {item.day}: </span>
+                  <span className="text-gray-800 font-medium">{item.title}</span>
                 </p>
                 <span
                   className={`flex-shrink-0 mt-1 text-gray-400 group-hover:text-gray-600 transition-all duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
@@ -58,14 +66,11 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                   <div className="mt-3 space-y-4">
                     <ConvertRichText
                       data={item.description}
-                      className="font-normal text-[16px] text-[#020617] leading-7"
+                      className="font-normal text-[16px] text-slate-700 leading-7"
                     />
 
                     {/* Meta pills */}
-                    {(item.elevation ||
-                      item.distance ||
-                      (item.meals?.length ?? 0) > 0 ||
-                      item.accommodation) && (
+                    {(item.elevation || item.distance || item.accommodation || true) && (
                       <div className="flex flex-wrap gap-2">
                         {item.elevation && (
                           <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
@@ -93,14 +98,10 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                             <span className="text-xs text-gray-700">{item.distance}</span>
                           </div>
                         )}
-                        {item.meals && item.meals.length > 0 && (
-                          <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
-                            <Utensils className="w-3.5 h-3.5 text-blue-400" />
-                            <span className="text-xs text-gray-700 capitalize">
-                              {item.meals.join(', ')}
-                            </span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
+                          <Utensils className="w-3.5 h-3.5 text-blue-400" />
+                          <span className="text-xs text-gray-700">Meals Included</span>
+                        </div>
                         {item.accommodation && (
                           <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
                             <Home className="w-3.5 h-3.5 text-blue-400" />
@@ -114,7 +115,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                     {photos.length > 0 && (
                       <div className="flex gap-2">
                         {photos.map((url, i) => (
-                          <div key={i} className="relative flex-1 h-36">
+                          <div key={i} className="relative w-1/3 flex-shrink-0 h-36">
                             <Image
                               fill
                               src={url}

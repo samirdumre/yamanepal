@@ -32,17 +32,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   const headerData = (await getCachedGlobal('header', 1)()) as HeaderType
 
-  const mapTrekItems = (items: HeaderType['trekkingDropdownItems']): TrekkingDropdownItem[] =>
-    (items ?? []).flatMap((item) => {
-      const trek = item.trek
-      if (typeof trek === 'object' && trek !== null) {
-        return [{ name: trek.name, slug: trek.slug ?? '', days: trek.days }]
-      }
-      return []
-    })
-
-  const trekkingItems = mapTrekItems(headerData?.trekkingDropdownItems)
-  const topTreksItems = mapTrekItems(headerData?.topTreksDropdownItems)
+  const topTreksItems = (headerData?.topTreksDropdownItems ?? []).flatMap((item) => {
+    const trek = item.trek
+    if (typeof trek === 'object' && trek !== null) {
+      return [{ name: trek.name, slug: trek.slug ?? '', days: trek.days }]
+    }
+    return []
+  })
 
   // Build region-grouped dropdown from trekkingDropdownRegions
   const regionEntries = (headerData?.trekkingDropdownRegions ?? []).filter(
@@ -101,7 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Navbar
-            trekkingItems={trekkingItems}
+            trekkingItems={[]}
             trekkingRegionGroups={trekkingRegionGroups}
             topTreksItems={topTreksItems}
             travelInfoItems={travelInfoItems}

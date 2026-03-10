@@ -4,6 +4,7 @@ import { authenticated } from '@/access/authenticated'
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
   admin: {
+    group: 'Customer',
     useAsTitle: 'fullName',
     defaultColumns: ['fullName', 'email', 'trekName', 'status', 'createdAt'],
     description: 'Booking inquiries submitted via the trek pages.',

@@ -17,6 +17,10 @@ interface FormFields {
   message: string
 }
 
+type FormErrors = Partial<Record<keyof FormFields, string>>
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 const INITIAL: FormFields = {
   fullName: '',
   email: '',
@@ -25,8 +29,29 @@ const INITIAL: FormFields = {
   message: '',
 }
 
+function validate(fields: FormFields): FormErrors {
+  const errors: FormErrors = {}
+  const name = fields.fullName.trim()
+  if (!name || name.length < 2 || name.length > 100)
+    errors.fullName = 'Full name must be between 2 and 100 characters.'
+  const emailTrimmed = fields.email.trim()
+  if (!emailTrimmed || !EMAIL_REGEX.test(emailTrimmed) || emailTrimmed.length > 254)
+    errors.email = 'Please enter a valid email address.'
+  const phone = fields.phone.trim()
+  if (!phone || phone.length < 7 || phone.length > 20)
+    errors.phone = 'Please enter a valid phone number.'
+  const travellers = Number(fields.noOfTravellers)
+  if (!fields.noOfTravellers || !Number.isInteger(travellers) || travellers < 1 || travellers > 200)
+    errors.noOfTravellers = 'Please enter a number of travellers between 1 and 200.'
+  const msg = fields.message.trim()
+  if (!msg || msg.length < 10 || msg.length > 2000)
+    errors.message = 'Message must be between 10 and 2000 characters.'
+  return errors
+}
+
 export function BookingFormModal({ open, onClose, trekName }: BookingFormModalProps) {
   const [fields, setFields] = useState<FormFields>(INITIAL)
+  const [errors, setErrors] = useState<FormErrors>({})
   const [honeypot, setHoneypot] = useState('')
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -35,6 +60,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
   // Focus first input when modal opens; restore scroll lock
   useEffect(() => {
     if (!open) return
+    setErrors({})
     document.body.style.overflow = 'hidden'
     const timer = setTimeout(() => firstInputRef.current?.focus(), 50)
     return () => {
@@ -54,11 +80,18 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
   }, [open, onClose])
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setFields((prev) => ({ ...prev, [name]: value }))
+    setErrors((prev) => ({ ...prev, [name]: undefined }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const validationErrors = validate(fields)
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
     setStatus('submitting')
     setErrorMsg('')
 
@@ -143,11 +176,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
               <p className="text-gray-500 text-sm">
                 Thank you for reaching out. Our team will get back to you shortly.
               </p>
-              <Button
-                variant="primary"
-                onClick={onClose}
-                className="mt-2 hover:cursor-pointer"
-              >
+              <Button variant="primary" onClick={onClose} className="mt-2 hover:cursor-pointer">
                 Close
               </Button>
             </div>
@@ -168,59 +197,78 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
               <div className="flex flex-col gap-4">
                 {/* Row 1: Full Name + Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    ref={firstInputRef}
-                    className={inputClass}
-                    type="text"
-                    name="fullName"
-                    placeholder="Full Name*"
-                    required
-                    value={fields.fullName}
-                    onChange={handleChange}
-                  />
-                  <input
-                    className={inputClass}
-                    type="email"
-                    name="email"
-                    placeholder="E-mail*"
-                    required
-                    value={fields.email}
-                    onChange={handleChange}
-                  />
+                  <div>
+                    <input
+                      ref={firstInputRef}
+                      className={inputClass}
+                      type="text"
+                      name="fullName"
+                      placeholder="Full Name*"
+                      required
+                      value={fields.fullName}
+                      onChange={handleChange}
+                    />
+                    {errors.fullName && (
+                      <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+                    )}
+                  </div>
+                  <div>
+                    <input
+                      className={inputClass}
+                      type="email"
+                      name="email"
+                      placeholder="E-mail*"
+                      required
+                      value={fields.email}
+                      onChange={handleChange}
+                    />
+                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                  </div>
                 </div>
 
                 {/* Row 2: Mobile + No of Travellers */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    className={inputClass}
-                    type="tel"
-                    name="phone"
-                    placeholder="Mobile*"
-                    required
-                    value={fields.phone}
-                    onChange={handleChange}
-                  />
-                  <input
-                    className={inputClass}
-                    type="number"
-                    name="noOfTravellers"
-                    placeholder="No of Travellers*"
-                    min={1}
-                    required
-                    value={fields.noOfTravellers}
-                    onChange={handleChange}
-                  />
+                  <div>
+                    <input
+                      className={inputClass}
+                      type="tel"
+                      name="phone"
+                      placeholder="Mobile*"
+                      required
+                      value={fields.phone}
+                      onChange={handleChange}
+                    />
+                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                  </div>
+                  <div>
+                    <input
+                      className={inputClass}
+                      type="number"
+                      name="noOfTravellers"
+                      placeholder="No of Travellers*"
+                      min={1}
+                      required
+                      value={fields.noOfTravellers}
+                      onChange={handleChange}
+                    />
+                    {errors.noOfTravellers && (
+                      <p className="text-red-500 text-xs mt-1">{errors.noOfTravellers}</p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Message */}
-                <textarea
-                  className={`${inputClass} resize-y min-h-[120px]`}
-                  name="message"
-                  placeholder="Message*"
-                  required
-                  value={fields.message}
-                  onChange={handleChange}
-                />
+                <div>
+                  <textarea
+                    className={`${inputClass} resize-y min-h-[120px]`}
+                    name="message"
+                    placeholder="Message*"
+                    required
+                    value={fields.message}
+                    onChange={handleChange}
+                  />
+                  {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                </div>
 
                 {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
 

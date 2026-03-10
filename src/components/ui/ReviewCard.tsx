@@ -28,7 +28,7 @@ export default function ReviewCard({
   text,
   author,
   location = '',
-  avatarSrc = '/images/test1.jpg',
+  avatarSrc,
   avatarAlt = `${author} profile photo`,
   avatarSize = 48,
   className = '',
@@ -59,9 +59,7 @@ export default function ReviewCard({
         </div>
 
         {/* Review text */}
-        <p className="mt-2 text-base leading-normal font-sans font-normal text-neutral-800">
-          {text}
-        </p>
+        <p className="mt-2 text-base leading-normal font-sans font-normal text-slate-700">{text}</p>
 
         {/* Author */}
         <div className="mt-6 flex items-center gap-3">
@@ -69,13 +67,17 @@ export default function ReviewCard({
             className="relative overflow-hidden rounded-full ring-2 ring-white shadow shrink-0"
             style={{ width: avatarSize, height: avatarSize }}
           >
-            <Image
-              src={avatarSrc}
-              alt={avatarAlt}
-              fill
-              className="object-cover"
-              sizes={`${avatarSize}px`}
-            />
+            {avatarSrc ? (
+              <Image
+                src={avatarSrc}
+                alt={avatarAlt}
+                fill
+                className="object-cover"
+                sizes={`${avatarSize}px`}
+              />
+            ) : (
+              <div className="w-full h-full bg-slate-200" />
+            )}
           </div>
           <div>
             <div className="text-lg font-heading font-medium leading-tight text-neutral-900">

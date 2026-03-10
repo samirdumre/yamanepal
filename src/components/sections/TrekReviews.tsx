@@ -7,7 +7,6 @@ import { ReviewImageGallery } from './ReviewImageGallery'
 
 type Review = NonNullable<Trek['reviews']>[number]
 
-// Format an ISO date string as "11th Jan 2026"
 function formatReviewDate(iso: string): string {
   const d = new Date(iso)
   if (isNaN(d.getTime())) return ''
@@ -72,12 +71,12 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
             >
               {/* Review text */}
               {review.reviewText && (
-                <div className="text-gray-700 text-base font-['Inter'] leading-6 [&_strong]:font-semibold [&_strong]:text-slate-950">
+                <div className="text-slate-700 text-xs font-['Inter'] leading-4 [&_strong]:font-semibold [&_strong]:text-slate-950">
                   <RichText
                     data={review.reviewText as DefaultTypedEditorState}
                     enableGutter={false}
                     enableProse={false}
-                    className="text-gray-700 text-base leading-6"
+                    className="text-slate-700 text-sm leading-4"
                   />
                 </div>
               )}
