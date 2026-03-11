@@ -62,7 +62,7 @@ export default async function Post({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       {/* Hero Image */}
-      <div className="w-full h-[567px] overflow-hidden relative">
+      <div className="w-full h-[290px] lg:h-[567px] overflow-hidden relative">
         {heroImage?.url ? (
           <Image fill alt={post.title} className="object-cover" src={heroImage.url} priority />
         ) : (
@@ -71,7 +71,7 @@ export default async function Post({ params: paramsPromise }: Args) {
       </div>
 
       {/* Content */}
-      <div className="max-w-[898px] mx-auto px-6 py-12 md:py-20">
+      <div className="max-w-[898px] mx-auto px-6 py-6 md:py-12 md:py-20">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-6 flex-wrap">
           <Link href="/" className="text-[#0cb6d8] text-[14px] hover:underline">

@@ -142,7 +142,7 @@ export function Footer() {
               <div className="flex flex-col gap-4">
                 {contacts.map((contact) => (
                   <div key={contact.country} className="flex gap-3 items-center">
-                    <div className="relative w-16 h-16 rounded-full ring-2 ring-white overflow-hidden shrink-0">
+                    <div className="relative h-14 w-14 md:w-16 md:h-16 rounded-full ring-2 ring-white overflow-hidden shrink-0">
                       <Image
                         fill
                         alt={contact.name}

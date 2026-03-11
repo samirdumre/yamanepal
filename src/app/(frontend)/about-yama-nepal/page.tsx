@@ -62,11 +62,11 @@ export default function About() {
   return (
     <div className="bg-white w-full">
       {/* Hero Image */}
-      <div className="w-full h-[567px] overflow-hidden relative">
+      <div className="w-full h-[290px]  lg:h-[567px] overflow-hidden relative">
         <img
           alt="Nepal mountain landscape"
           className="absolute w-full h-full object-cover"
-          src="/images/travel1.jpeg"
+          src="/images/langtang1.jpg"
         />
       </div>
 

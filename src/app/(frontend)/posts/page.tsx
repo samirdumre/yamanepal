@@ -29,7 +29,7 @@ export default async function Page() {
   return (
     <div className="min-h-screen bg-white font-['Inter',sans-serif]">
       {/* Hero */}
-      <div className="relative w-full h-[567px] overflow-hidden">
+      <div className="relative w-full h-[290px] lg:h-[567px] overflow-hidden">
         <Image
           fill
           alt="Blogs from the Himalayas"

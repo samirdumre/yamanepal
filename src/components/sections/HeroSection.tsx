@@ -229,10 +229,10 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
 
       <div className="relative z-10 w-full max-w-[1002px] flex flex-col items-center gap-3 md:gap-10 px-5">
         <div className="w-full flex flex-col items-center gap-3">
-          <h1 className="w-full font-['Inter',sans-serif] font-bold text-[32px] md:text-6xl text-white leading-tight">
+          <h1 className="w-full font-bold text-[32px] md:text-6xl text-white leading-tight">
             {headline}
           </h1>
-          <p className="w-full md:text-center font-['Inter',sans-serif] font-medium text-lg text-white">
+          <p className="w-full lg:text-center font-['Inter',sans-serif] font-medium text-lg text-white">
             {subheading}
           </p>
         </div>

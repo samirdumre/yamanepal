@@ -7,7 +7,7 @@ const contactDetails = [
   {
     icon: Phone,
     title: 'Phone',
-    lines: ['+977 9849289569', '+977 9849325245'],
+    lines: ['+977 9849289569', '+080 96321073', '+977 9743290500'],
   },
   {
     icon: Mail,
@@ -30,11 +30,11 @@ const ContactSection = () => {
   return (
     <div className="bg-white w-full">
       {/* Hero Image */}
-      <div className="w-full h-[567px] overflow-hidden relative">
+      <div className="w-full h-[290px] lg:h-[567px] overflow-hidden relative">
         <img
           alt="Nepal mountain landscape"
           className="absolute w-full h-full object-cover"
-          src="/images/travel1.jpeg"
+          src="/images/langtang1.jpg"
         />
       </div>
 
@@ -62,13 +62,13 @@ const ContactSection = () => {
             </div>
 
             {/* Contact Detail Items */}
-            <div className="flex flex-col sm:gap-5">
+            <div className="flex flex-col gap-3 md:gap-5">
               {contactDetails.map(({ icon: Icon, title, lines }) => (
                 <div key={title} className="flex items-start gap-4">
                   <div className="w-11 h-11 sm:w-12 sm:h-12 bg-[#dbeafe] rounded-full flex items-center justify-center flex-shrink-0">
                     <Icon className="w-5 h-5 text-[#020617]" />
                   </div>
-                  <div className="flex flex-col gap-1 sm:gap-1">
+                  <div className="flex flex-col gap-1">
                     <h3 className="text-black text-lg sm:text-xl font-semibold">{title}</h3>
                     {lines.map((line) => (
                       <p key={line} className="text-zinc-950/80 text-[16px] leading-[29px]">
@@ -81,9 +81,9 @@ const ContactSection = () => {
             </div>
 
             {/* CTA */}
-            <a href="tel:9849289569" className="xl:hidden mt-2 md:mt-4">
+            {/* <a href="tel:9849289569" className="xl:hidden mt-2 md:mt-4">
               <Button>Click to Call Us</Button>
-            </a>
+            </a> */}
           </div>
 
           {/* Right – Inquiry Form */}

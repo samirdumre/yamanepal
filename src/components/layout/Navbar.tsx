@@ -139,7 +139,7 @@ function TrekDropdown({ items }: { items: TrekkingDropdownItem[] }) {
 function LinkDropdown({ items }: { items: LinkDropdownItem[] }) {
   if (items.length === 0) return null
   return (
-    <div className="absolute -left-4  top-full hidden group-hover:block z-50 min-w-[220px]">
+    <div className="absolute -left-4  top-full hidden group-hover:block z-50 min-w-[280px]">
       <div className="bg-white rounded-xs shadow-xl border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {items.map((item) => (
           <NextLink
@@ -185,15 +185,15 @@ export function Navbar({
               alt="Logo"
               width={88}
               height={88}
-              className="w-14 h-14 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px] object-contain"
+              className="w-15 h-15 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px] object-contain"
             />
-            <div className='flex flex-col'>
-            <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
-              Yama
-            </span>
-            <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
-              Nepal
-            </span>
+            <div className="flex flex-col">
+              <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
+                Yama
+              </span>
+              <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
+                Nepal
+              </span>
             </div>
           </Link>
 
