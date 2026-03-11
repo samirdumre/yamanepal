@@ -13,10 +13,15 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: 'Admin',
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['name', 'username'],
     useAsTitle: 'name',
   },
-  auth: true,
+  auth: {
+    loginWithUsername: {
+      allowEmailLogin: false,
+      requireEmail: false,
+    },
+  },
   fields: [
     {
       name: 'name',
