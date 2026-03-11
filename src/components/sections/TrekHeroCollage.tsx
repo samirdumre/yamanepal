@@ -58,10 +58,10 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
           {/* Two stacked right images (hidden on small screens) */}
           {(slot2 || slot3) && (
-            <div className="hidden sm:flex flex-1 max-w-[324px] flex-col gap-2 min-w-0">
+            <div className="flex flex-1 max-w-[324px] flex-col gap-2 min-w-0">
               {slot2 ? (
                 <div
-                  className="relative w-full h-[236px] cursor-pointer"
+                  className="relative w-full h-[114px] sm:h-[236px] cursor-pointer"
                   onClick={() => setSelectedIndex(1)}
                 >
                   <Image
@@ -72,9 +72,9 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   />
                 </div>
               ) : (
-                <div className="w-full h-[236px] rounded-xl bg-gray-100" />
+                <div className="w-full h-[114px] sm:h-[236px] rounded-xl bg-gray-100" />
               )}
-              <div className="relative w-full h-[236px]">
+              <div className="relative w-full h-[114px] sm:h-[236px]">
                 {slot3 ? (
                   <div
                     className="absolute inset-0 cursor-pointer"
@@ -91,7 +91,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   <div className="w-full h-[236px] rounded-lg bg-gray-100" />
                 )}
                 <button
-                  className="absolute bottom-3 hover:cursor-pointer right-3 z-10 flex items-center gap-1.5 bg-white border border-gray-300 rounded-full px-3 py-1.5 text-sm font-medium text-slate-950 font-['Inter'] shadow-sm hover:bg-gray-50 transition-colors"
+                  className="absolute bottom-1 lg:bottom-3 hover:cursor-pointer right-1 lg:right-3 z-10 flex items-center gap-1.5 bg-white border border-gray-300 rounded-full px-2 lg:px-3 py-1.5 text-xs md:text-sm font-medium text-slate-950 font-['Inter'] shadow-sm hover:bg-gray-50 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation()
                     setSelectedIndex(0)

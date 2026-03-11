@@ -38,14 +38,14 @@ const contacts = [
 export function Footer() {
   return (
     <footer
-      className="relative w-full flex  flex-col"
+      className="relative w-full flex  flex-col pt-10 bg-white"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* Mountain silhouette images — stacked absolutely on top of each other */}
-      <div className="relative w-full aspect-[2160/453]">
+      <div className="relative w-full aspect-[2160/453] min-h-[60px] lg:aspect-[4320/453]">
         <Image
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full object-cover"
           src={IMAGES.footerMountain1}
           width={1440}
           height={250}
@@ -61,7 +61,6 @@ export function Footer() {
             maskSize: '100% 100%',
             maskRepeat: 'no-repeat',
             maskPosition: 'center',
-            // Safari support
             WebkitMaskImage: `url(${IMAGES.footerMountain1})`,
             WebkitMaskSize: '100% 100%',
             WebkitMaskRepeat: 'no-repeat',
@@ -71,12 +70,12 @@ export function Footer() {
       </div>
 
       {/* Footer content */}
-      <div className="relative z-10 bg-[#020617] w-full pt-16 pb-0 mt-[-88px]">
+      <div className="relative z-10 bg-[#020617] w-full pt-12 pb-0 mt-[-35px] sm:mt-[-50px] md:mt-[-70px] lg:mt-[-44px] lg:pt-16">
         <div className="max-w-[1256px] mx-auto px-6">
           {/* Main grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 md:gap-0">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-0">
             {/* Brand column */}
-            <div className="flex flex-col gap-4 md:col-span-2">
+            <div className="flex flex-col gap-4 col-span-2">
               <h2 className="text-white text-[24px] tracking-[0.5px]" style={{ fontWeight: 600 }}>
                 YAMA NEPAL
               </h2>
@@ -136,18 +135,18 @@ export function Footer() {
             </div>
 
             {/* Contact */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
                 Contact
               </h3>
               <div className="flex flex-col gap-4">
                 {contacts.map((contact) => (
                   <div key={contact.country} className="flex gap-3 items-center">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0">
+                    <div className="relative w-16 h-16 rounded-full ring-2 ring-white overflow-hidden shrink-0">
                       <Image
                         fill
                         alt={contact.name}
-                        className="object-cover"
+                        className="object-cover "
                         src={contact.avatar}
                       />
                     </div>
@@ -159,8 +158,8 @@ export function Footer() {
                         <span className="text-white text-[14px]" style={{ fontWeight: 600 }}>
                           {contact.name}
                         </span>
-                        <span className="text-[#e2e8f0] text-[18px]">{contact.phone}</span>
                       </div>
+                      <span className="text-[#e2e8f0] text-[18px]">{contact.phone}</span>
                     </div>
                   </div>
                 ))}

@@ -13,9 +13,9 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
   if (!trek.addonsDescription && !hasAddons && !hasSteps) return null
 
   return (
-    <div className="w-full bg-[#DBEAFE] rounded-2xl px-10 py-10 flex flex-col gap-6">
+    <div className="w-full bg-[#DBEAFE] rounded-2xl px-6 py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 flex flex-col gap-3">
       {/* Title */}
-      <h2 className="text-slate-950 text-xl font-medium font-['Inter'] leading-8">
+      <h2 className="text-slate-950 text-xl font-medium leading-8 mb-1">
         Add-ons &amp; Options
       </h2>
 
@@ -35,7 +35,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
           {(trek.addons ?? []).map((addon, i) => (
             <li key={addon.id ?? i} className="flex items-start gap-[14px]">
               <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0 mt-[5px]" />
-              <div className="text-slate-950 text-base font-['Inter'] leading-6">
+              <div className="text-slate-950 text-base leading-7">
                 <span className="font-semibold">{addon.label} </span>
                 <RichText
                   data={addon.description}

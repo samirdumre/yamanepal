@@ -6,7 +6,7 @@ import { SectionHeading } from '@/components/ui/SectionLabel'
 import type { Testimonial } from '@/payload-types'
 import ReviewCard from '../ui/ReviewCard'
 
-const GAP = 0
+const GAP = 20
 const MIN_CARD_W = 332 // minimum card width in px
 const SPEED = 60 // px/s — auto-scroll speed
 

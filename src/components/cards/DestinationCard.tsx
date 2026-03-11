@@ -27,9 +27,9 @@ export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
   return (
     <Link
       href={`/regions/${slug}`}
-      className="relative rounded-lg overflow-hidden h-96 w-full group cursor-pointer block"
+      className="relative rounded-lg overflow-hidden h-64 md:h-96 w-full group cursor-pointer block"
     >
-      <div className="self-stretch h-96 rounded overflow-hidden flex-shrink-0 relative">
+      <div className="self-stretch h-64 md:h-96 rounded overflow-hidden flex-shrink-0 relative">
         <Image
           fill
           alt={name}
@@ -42,9 +42,11 @@ export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/50" />
       <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-        <div className="w-64 flex flex-col items-start gap-2">
+        <div className="flex-1 flex flex-col items-start gap-1 md:gap-2">
           <StarRating />
-          <h3 className="font-['Inter',sans-serif] font-semibold text-2xl text-white">{name}</h3>
+          <h3 className="font-['Inter',sans-serif] font-semibold text-xl md:text-2xl text-white">
+            {name}
+          </h3>
         </div>
         <div className="w-20 h-7 px-5 py-1.5 bg-[#0CB6D8] rounded-lg flex items-center justify-center">
           <span className="font-['Inter',sans-serif] font-semibold text-base text-white whitespace-nowrap">

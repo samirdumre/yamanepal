@@ -90,14 +90,6 @@ export default function WhyChooseUs() {
     <div className="flex flex-col items-center max-w-[1320px]">
       {/* Header */}
       <div className="flex flex-col items-center">
-        {/* <div className="flex items-center gap-2 justify-center">
-          <Divider />
-          <span className="font-['Inter',sans-serif] text-[#0cb6d8] text-base">Why Choose Us</span>
-          <Divider />
-        </div>
-        <h2 className="font-semibold text-4xl text-slate-950 text-[#020617] text-center tracking-[-0.8px]">
-          Why Yama Nepal?
-        </h2> */}
         <SectionHeading
           align="center"
           label="Why Choose Us"
@@ -107,10 +99,10 @@ export default function WhyChooseUs() {
       </div>
 
       {/* Content Grid */}
-      <div className="bg-white w-full max-w-[1320px] flex justify-center mt-8 overflow-hidden">
-        <div className="flex gap-5 max-w-[1320px] w-full px-4">
+      <div className="bg-white w-full max-w-[1320px] flex justify-center mt-4 md:mt-6 lg:mt-8  overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row gap-5 max-w-[1320px] w-full px-4">
           {/* Left Column */}
-          <div className="flex flex-col gap-5 flex-1 justify-center">
+          <div className="flex flex-col sm:flex-row md:flex-col lg:flex-col gap-3 lg:gap-5 flex-1 justify-center">
             <FeatureCard
               icon={
                 <>
@@ -166,7 +158,7 @@ export default function WhyChooseUs() {
 
           {/* Center Column — Hero Image */}
           {/* 🖼️ IMAGE SLOT 2 — Hiker at scenic rock formation (hero/tall image) */}
-          <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0">
+          <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0 order-first lg:order-none h-64 md:h-80 md:col-span-2 lg:h-auto">
             <Image
               fill
               src={IMAGE_HIKER_SCENIC_ROCK}
@@ -176,7 +168,7 @@ export default function WhyChooseUs() {
           </div>
 
           {/* Right Column */}
-          <div className="flex flex-col gap-5 flex-1 justify-center">
+          <div className="flex flex-col sm:flex-row md:flex-col lg:flex-col gap-5 flex-1 justify-center">
             {/* 🖼️ IMAGE SLOT 3 — Family travelers photo */}
             <ImageCard src={IMAGE_FAMILY_TRAVELERS} alt="Family travelers" className="h-[154px]" />
             <FeatureCard

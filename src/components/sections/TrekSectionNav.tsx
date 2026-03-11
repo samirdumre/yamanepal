@@ -13,19 +13,22 @@ const SECTIONS = [
 
 type SectionId = (typeof SECTIONS)[number]['id']
 
+const NAV_HEIGHT = 56 // approximate nav bar height in px
+
 export function TrekSectionNav() {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [visible, setVisible] = useState(false)
-  const sectionObserverRef = useRef<IntersectionObserver | null>(null)
   const sentinelObserverRef = useRef<IntersectionObserver | null>(null)
+  const navRef = useRef<HTMLElement | null>(null)
+  const buttonRefs = useRef<Partial<Record<SectionId, HTMLButtonElement>>>({})
 
+  // Show/hide the nav bar based on whether the page has scrolled past the highlights section
   useEffect(() => {
-    const overviewEl = document.getElementById('highlights') // Sentinel is placed in Highlights section, which is the first section after hero
+    const overviewEl = document.getElementById('highlights')
     if (!overviewEl) return
 
     sentinelObserverRef.current = new IntersectionObserver(
       ([entry]) => {
-        // Show when overview is on screen OR has already scrolled above the viewport
         setVisible(entry.isIntersecting || entry.boundingClientRect.top < 0)
       },
       { threshold: 0 },
@@ -35,36 +38,44 @@ export function TrekSectionNav() {
     return () => sentinelObserverRef.current?.disconnect()
   }, [])
 
-  // Highlight active section as user scrolls — unchanged
+  // Detect the active section using scroll position — more reliable across all screen sizes
   useEffect(() => {
-    const ratioMap: Record<string, number> = {}
+    function onScroll() {
+      const offset = NAV_HEIGHT + 20
+      let best: SectionId = 'overview'
+      let bestTop = -Infinity
 
-    sectionObserverRef.current = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          ratioMap[entry.target.id] = entry.intersectionRatio
+      for (const { id } of SECTIONS) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const top = el.getBoundingClientRect().top - offset
+        // Pick the section whose top is closest to (and at or above) the detection line
+        if (top <= 0 && top > bestTop) {
+          bestTop = top
+          best = id
         }
-        let best: SectionId = 'overview'
-        let bestRatio = -1
-        for (const { id } of SECTIONS) {
-          const r = ratioMap[id] ?? 0
-          if (r > bestRatio) {
-            bestRatio = r
-            best = id
-          }
-        }
-        if (bestRatio > 0) setActiveSection(best)
-      },
-      { rootMargin: '-10% 0px -85% 0px', threshold: Array.from({ length: 21 }, (_, i) => i / 20) },
-    )
-
-    for (const { id } of SECTIONS) {
-      const el = document.getElementById(id)
-      if (el) sectionObserverRef.current.observe(el)
+      }
+      setActiveSection(best)
     }
 
-    return () => sectionObserverRef.current?.disconnect()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll() // run once on mount to set initial state
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Auto-scroll the nav horizontally so the active button is visible
+  useEffect(() => {
+    const btn = buttonRefs.current[activeSection]
+    const nav = navRef.current
+    if (!btn || !nav) return
+
+    const navWidth = nav.clientWidth
+    const btnLeft = btn.offsetLeft
+    const btnWidth = btn.offsetWidth
+    // Center the active button inside the scrollable nav
+    const targetScroll = btnLeft - navWidth / 2 + btnWidth / 2
+    nav.scrollTo({ left: targetScroll, behavior: 'smooth' })
+  }, [activeSection])
 
   function handleClick(id: SectionId) {
     const el = document.getElementById(id)
@@ -76,7 +87,6 @@ export function TrekSectionNav() {
   return (
     <div
       className={[
-        // ✅ fixed instead of sticky — no space reserved in DOM when hidden
         'fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 shadow-sm',
         'transition-transform duration-300 ease-in-out',
         visible ? 'translate-y-0' : '-translate-y-full',
@@ -85,7 +95,9 @@ export function TrekSectionNav() {
     >
       <div className="max-w-[1320px] mx-auto px-5 md:px-10">
         <nav
-          className="flex items-center overflow-x-auto scrollbar-none -mb-px"
+          ref={navRef}
+          className="flex items-center overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden -mb-px"
+          style={{ scrollbarWidth: 'none' }}
           aria-label="Trek sections"
         >
           {SECTIONS.map(({ id, label, Icon }) => {
@@ -93,6 +105,9 @@ export function TrekSectionNav() {
             return (
               <button
                 key={id}
+                ref={(el) => {
+                  if (el) buttonRefs.current[id] = el
+                }}
                 onClick={() => handleClick(id)}
                 className={[
                   'flex items-center hover:cursor-pointer gap-2 px-4 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',

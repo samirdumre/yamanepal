@@ -224,23 +224,62 @@ html[data-theme='light'] {
 }
 
 /* ---- Blog Rich Text Overrides ---- */
+
+/* Body text: slate-700 for comfortable reading */
 .payload-richtext p,
 .payload-richtext li,
 .payload-richtext td {
   font-size: 17px;
-  line-height: 30px;
-  color: #020617;
+  line-height: 1.75; /* leading-7 equivalent */
+  color: #334155;
 }
 
+/* Headings: near-black for strong contrast */
 .payload-richtext h1,
 .payload-richtext h2,
 .payload-richtext h3,
 .payload-richtext h4,
 .payload-richtext h5,
-.payload-richtext h6,
+.payload-richtext h6 {
+  color: #020617;
+  line-height: 1.2; /* leading-tight for headings */
+  letter-spacing: -0.02em; /* tracking-tight */
+}
+
 .payload-richtext strong,
 .payload-richtext b {
   color: #020617;
+}
+
+/* Vertical rhythm */
+.payload-richtext p {
+  margin-bottom: 1.5rem;
+}
+
+/* No paragraph margins inside tight list-style sections */
+#highlights .payload-richtext p,
+#inclusions .payload-richtext p,
+#addons .payload-richtext p {
+  margin-bottom: 0;
+  line-height: 28px;
+}
+.payload-richtext h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+.payload-richtext h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.payload-richtext img {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.payload-richtext blockquote {
+  margin: 2rem 0;
+}
+.payload-richtext li {
+  margin-bottom: 0.5rem;
 }
 
 .payload-richtext hr {
@@ -252,4 +291,43 @@ html[data-theme='light'] {
   width: 100%;
   max-width: 100%;
   height: auto;
+}
+
+/* ── ReviewCard scrollbar ─────────────────────────────────────────── */
+.review-card-scroll {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s ease;
+}
+
+.review-card-scroll:hover {
+  scrollbar-color: #0cb6d8 transparent;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.review-card-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.review-card-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+.review-card-scroll::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.review-card-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: #0cb6d8;
+}
+
+/* Hide up/down arrow buttons on the scrollbar */
+.review-card-scroll::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
 }

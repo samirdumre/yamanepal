@@ -47,7 +47,26 @@ export function GallerySection({ images }: GallerySectionProps) {
             labelPosition="both"
             title="Moments celebrated by Travelers"
           />
-          <div className="self-stretch inline-flex flex-col justify-start items-center gap-4">
+          {/* Mobile/Tablet: responsive grid — max 10 images */}
+          <div className="xl:hidden w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+            {images.slice(0, 10).map((src, i) => (
+              <div
+                key={i}
+                className="relative aspect-[3/4] cursor-pointer rounded overflow-hidden"
+                onClick={() => setSelectedIndex(i)}
+              >
+                <Image
+                  fill
+                  alt={`Gallery image ${i + 1}`}
+                  className="object-cover hover:opacity-90 transition-opacity"
+                  src={src}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: original two-row layout */}
+          <div className="hidden xl:flex flex-col justify-start items-center gap-4">
             {/* Row 1 — 6 images */}
             <div className="self-stretch inline-flex justify-center items-center gap-4">
               {row1.map((src, i) => (

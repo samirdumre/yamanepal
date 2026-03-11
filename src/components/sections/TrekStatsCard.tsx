@@ -24,10 +24,10 @@ function StatItem({ icon, label, value }: StatItemProps) {
         {icon}
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-sm font-normal font-['Inter'] leading-5 text-slate-950 opacity-70">
+        <span className="text-[13px] md:text-sm font-normal font-['Inter'] leading-5 text-slate-950 opacity-70">
           {label}
         </span>
-        <span className="text-base font-medium font-['Inter'] leading-5 text-slate-950">{value}</span>
+        <span className="text-sm md:text-[15px] font-medium font-['Inter'] leading-5 text-slate-950">{value}</span>
       </div>
     </div>
   )
@@ -70,8 +70,8 @@ export function TrekStatsCard({ trek }: TrekStatsCardProps) {
   if (visibleStats.length === 0) return null
 
   return (
-    <div className="w-full bg-[#DBEAFE] rounded-lg px-10 pt-10 pb-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
+    <div className="w-full bg-[#DBEAFE] rounded-lg px-4 lg:px-10 pt-8 pb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
         {visibleStats.map((stat) => (
           <StatItem
             key={stat.label}

@@ -69,7 +69,7 @@ export default async function HomePage() {
       />
 
       {/* Best Seller Treks */}
-      <section className="max-w-[1320px] mx-auto px-5 md:px-10 py-16 overflow-hidden">
+      <section className="max-w-[1320px] mx-auto px-5 md:px-10 py-10 lg:py-16 overflow-hidden">
         <TrekCarousel
           treks={bestSellerTreks as Trek[]}
           label={homepage?.bestSellerSectionLabel ?? 'Best Seller 2026'}
@@ -78,19 +78,7 @@ export default async function HomePage() {
       </section>
 
       {/* Explore Destinations */}
-      <section className="relative bg-[#e2e8f0] py-16 overflow-hidden">
-        {/* Grid Pattern Overlay */}
-        {/* <div
-          className="absolute opacity-72 inset-0 w-full h-full pointer-events-none"
-          style={{
-            backgroundImage: `
-        linear-gradient(to right, #94a3b820 1px, transparent 1px),
-        linear-gradient(to bottom, #94a3b820 1px, transparent 1px)
-      `,
-            backgroundSize: '32px 32px',
-          }}
-        /> */}
-
+      <section className="relative bg-[#e2e8f0] py-10 lg:py-16 overflow-hidden">
         {/* Content */}
         <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10">
           <SectionHeading
@@ -99,7 +87,7 @@ export default async function HomePage() {
             labelPosition="both"
             title="Explore Excellent Destination"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5 mt-4 md:mt-6 lg:mt-8 mb-6">
             {regions.map((region: Region) => (
               <RegionCard
                 key={region.id}
@@ -114,14 +102,14 @@ export default async function HomePage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16">
-        <div className="max-w-[1320px] mx-auto px-5 md:px-10">
+      <section className="py-10 lg:py-16">
+        <div className="max-w-[1320px] mx-auto px-2 md:px-10">
           <WhyChooseUs />
         </div>
       </section>
 
       {/* Last Minute Deals */}
-      <section className="max-w-[1320px] mx-auto px-5 md:px-10 pb-16 overflow-hidden">
+      <section className="max-w-[1320px] mx-auto px-5 md:px-10 pb-8 lg:pb-16 overflow-hidden">
         <TrekCarousel
           treks={lastMinuteDeals as Trek[]}
           label={homepage?.lastMinuteSectionLabel ?? 'Deals and Discounts'}
@@ -145,9 +133,9 @@ export default async function HomePage() {
           />
 
           {/* Content */}
-          <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10 py-16 md:py-20">
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-              <div className="relative rounded-lg overflow-hidden h-[258px] w-full lg:w-[522px] flex-shrink-0">
+          <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10 py-10 lg:py-16 md:py-20">
+            <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12 lg:gap-20">
+              <div className="relative rounded-lg overflow-hidden h-[180px] md:h-[258px] w-full lg:w-[522px] flex-shrink-0">
                 {tripImage?.url && (
                   <Image
                     alt={tripOfTheMonthTrek.name}
@@ -192,15 +180,15 @@ export default async function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 flex-1">
+              <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="font-['Inter',sans-serif] text-[16px] text-[#0cb6d8]">
+                    <span className="text-[16px] text-[#0cb6d8]">
                       Trip of the Month
                     </span>
                     <div className="w-[44px] h-[1px] bg-[#0cb6d8]" />
                   </div>
-                  <h2 className="font-['Inter',sans-serif] font-semibold text-[28px] md:text-[32px] text-white tracking-[-0.64px]">
+                  <h2 className="font-semibold text-2xl md:text-4xl text-white">
                     {tripOfTheMonthTrek.name}
                   </h2>
                 </div>
@@ -224,7 +212,7 @@ export default async function HomePage() {
       />
 
       {/* Testimonials */}
-      <section className="relative bg-gradient-to-b from-[#dbeafe] to-white py-16 overflow-hidden">
+      <section className="relative bg-gradient-to-b from-[#dbeafe] to-white py-10 lg:py-16 overflow-hidden">
         {/* Grid Pattern Overlay — fades out going down via mask */}
         <div
           className="absolute inset-0 w-full h-full pointer-events-none"
@@ -247,12 +235,15 @@ export default async function HomePage() {
 
       {/* Blog Section */}
       {blogPosts.length > 0 && (
-        <section className="max-w-[1320px] mx-auto px-5 md:px-10 py-16 lg:pb-20">
+        <section className="max-w-[1320px] mx-auto px-5 md:px-10 lg:pb-20">
           <SectionHeading label="Blogs" title="Blogs from the Himalayas" />
           <div className="flex flex-col lg:flex-row gap-5 mt-8">
             {/* Featured Post */}
             {featuredPost && (
-              <div className="relative rounded-[10px] overflow-hidden h-[392px] lg:flex-1 cursor-pointer group">
+              <Link
+                href={`/posts/${featuredPost.slug ?? ''}`}
+                className="relative rounded-[10px] overflow-hidden h-[392px] lg:flex-1 cursor-pointer group block"
+              >
                 {(featuredPost.image as Media)?.url && (
                   <Image
                     fill
@@ -272,13 +263,17 @@ export default async function HomePage() {
                     {featuredPost.title}
                   </h3>
                 </div>
-              </div>
+              </Link>
             )}
 
             {/* Blog List */}
             <div className="flex flex-col gap-4 lg:w-[575px]">
               {sidePosts.map((post: Post) => (
-                <div key={post.id} className="flex items-center gap-3 cursor-pointer group">
+                <Link
+                  key={post.id}
+                  href={`/posts/${post.slug ?? ''}`}
+                  className="flex items-center gap-3 cursor-pointer group"
+                >
                   <div className="relative w-[160px] h-[120px] rounded-[10px] overflow-hidden flex-shrink-0">
                     {(post.image as Media)?.url && (
                       <Image
@@ -291,21 +286,20 @@ export default async function HomePage() {
                   </div>
                   <div className="flex flex-col gap-3">
                     <div className="bg-[rgba(226,232,240,0.56)] rounded-full px-4 py-[3px] w-fit">
-                      <span className="font-['Inter',sans-serif] text-[14px] text-[#020617]">
+                      <span className="text-[14px] text-[#020617]">
                         {post.tag}
                       </span>
                     </div>
-                    <h4 className="font-['Inter',sans-serif] font-semibold text-[16px] text-[#020617] leading-[22px]">
+                    <h4 className="font-semibold text-[16px] text-[#020617] leading-[22px]">
                       {post.title}
                     </h4>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
         </section>
       )}
-
     </div>
   )
 }

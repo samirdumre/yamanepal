@@ -29,13 +29,17 @@ export function SectionHeading({
   labelPosition = 'right',
 }: SectionHeadingProps) {
   return (
-    <div className={`flex flex-col ${align === 'center' ? 'items-center' : 'items-start'}`}>
+    <div
+      className={`flex flex-col gap-1 md:gap-2 ${align === 'center' ? 'items-center' : 'items-start'}`}
+    >
       <SectionLabel text={label} position={align} linePosition={labelPosition} />
       <h2
-        className={`font-['Inter',sans-serif] font-semibold text-[32px] md:text-[40px] text-[#020617] tracking-[-0.8px] ${align === 'center' ? 'text-center' : ''}`}
+        className={`font-['Inter',sans-serif] font-semibold text-2xl md:text-4xl text-[#020617] ${align === 'center' ? 'text-center' : ''}`}
       >
         {title}
       </h2>
     </div>
   )
 }
+
+ 

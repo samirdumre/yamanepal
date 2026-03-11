@@ -14,11 +14,11 @@ export const Header: GlobalConfig = {
     {
       name: 'trekkingDropdownRegions',
       type: 'array',
-      label: 'Trekking Dropdown — Regions',
+      label: 'Nepal Trekking Dropdown — Regions',
       maxRows: 20,
       admin: {
         description:
-          'Regions shown in the "Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.',
+          'Regions shown in the "Nepal Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.',
         initCollapsed: true,
       },
       fields: [
@@ -33,11 +33,11 @@ export const Header: GlobalConfig = {
     {
       name: 'topTreksDropdownItems',
       type: 'array',
-      label: 'Top Treks Dropdown Items',
+      label: 'Bhutan Dropdown Items',
       maxRows: 30,
       admin: {
         description:
-          'Treks displayed in the "Top Treks" navigation dropdown. Add/remove/reorder here.',
+          'Treks displayed in the "Bhutan" navigation dropdown. Add/remove/reorder here.',
         initCollapsed: true,
       },
       fields: [

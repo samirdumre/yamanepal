@@ -71,7 +71,7 @@ export default async function Post({ params: paramsPromise }: Args) {
       </div>
 
       {/* Content */}
-      <div className="max-w-[898px] mx-auto px-5 md:px-10 py-6 md:pb-16">
+      <div className="max-w-[898px] mx-auto px-6 py-12 md:py-20">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-6 flex-wrap">
           <Link href="/" className="text-[#0cb6d8] text-[14px] hover:underline">
@@ -99,7 +99,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
         {/* Rich Text Content */}
         {post.content && (
-          <div className="text-[#020617] text-[17px] leading-[30px]">
+          <div className="text-[17px] leading-7">
             <RichText data={post.content} enableGutter={false} />
           </div>
         )}

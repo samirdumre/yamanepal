@@ -2172,7 +2172,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Header {
   id: number;
   /**
-   * Regions shown in the "Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.
+   * Regions shown in the "Nepal Trekking" navigation dropdown. Each region will display its assigned treks as a labelled group. Add/remove/reorder regions here.
    */
   trekkingDropdownRegions?:
     | {
@@ -2181,7 +2181,7 @@ export interface Header {
       }[]
     | null;
   /**
-   * Treks displayed in the "Top Treks" navigation dropdown. Add/remove/reorder here.
+   * Treks displayed in the "Bhutan" navigation dropdown. Add/remove/reorder here.
    */
   topTreksDropdownItems?:
     | {

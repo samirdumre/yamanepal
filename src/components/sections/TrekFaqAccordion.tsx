@@ -54,7 +54,7 @@ export function TrekFaqAccordion({ faqs }: TrekFaqAccordionProps) {
                   <div className="px-8 pb-5">
                     <ConvertRichText
                       data={faq.answer}
-                      className="text-slate-700 text-base font-normal font-['Inter'] leading-6"
+                      className="text-slate-700 text-base font-normal leading-7"
                     />
                   </div>
                 </div>

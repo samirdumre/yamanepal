@@ -35,9 +35,9 @@ export function TrekCard({
 
   return (
     <Link href={`/treks/${slug}`} className="block">
-      <div className="w-100 h-full bg-white rounded-lg inline-flex flex-col justify-start items-start gap-4 group cursor-pointer">
+      <div className="w-full h-full bg-white rounded-lg inline-flex flex-col justify-start items-start gap-3 md:gap-4 group cursor-pointer">
         {/* Trek image */}
-        <div className="self-stretch h-80 rounded overflow-hidden flex-shrink-0 relative">
+        <div className="self-stretch h-52 md:h-80 rounded overflow-hidden flex-shrink-0 relative">
           <Image
             fill
             alt={name}
@@ -58,9 +58,9 @@ export function TrekCard({
         </div>
 
         {/* Card body */}
-        <div className="self-stretch flex flex-col justify-start items-start gap-2">
+        <div className="self-stretch flex flex-col justify-start items-start gap-1 md:gap-2">
           {/* Trek name */}
-          <div className="self-stretch text-slate-950 text-2xl font-semibold font-['Inter']">
+          <div className="self-stretch text-slate-950 text-xl md:text-xl lg:text-2xl font-semibold font-['Inter']">
             {name}
           </div>
 
@@ -68,17 +68,19 @@ export function TrekCard({
           <div className="flex flex-col justify-start items-start gap-4">
             {/* Days + divider + difficulty */}
             <div className="flex items-center gap-4">
-              <span className="text-slate-950 text-base font-normal font-['Inter']">{days}</span>
+              <span className="text-slate-950 text-sm md:text-base font-normal font-['Inter']">
+                {days}
+              </span>
               <div className="w-px h-5 bg-cyan-500 flex-shrink-0" />
               <div className="flex items-center gap-3">
                 <Image
                   alt={difficulty}
-                  className="w-8 h-5 object-contain flex-shrink-0"
+                  className="w-5 h-4 md:w-8 md:h-5 object-contain flex-shrink-0"
                   src={icon}
                   width={32}
                   height={20}
                 />
-                <span className={`text-base font-normal font-['Inter'] ${color}`}>
+                <span className={`text-sm md:text-base font-normal font-['Inter'] ${color}`}>
                   {difficulty}
                 </span>
               </div>
@@ -88,7 +90,7 @@ export function TrekCard({
             <div className="inline-flex justify-start items-center gap-3">
               {showDiscount ? (
                 <>
-                  <span className="text-cyan-500 text-2xl font-bold font-['Inter']">
+                  <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Inter']">
                     US ${discountedPrice}
                   </span>
                   <span className="text-slate-400 text-base font-normal font-['Inter'] line-through">
@@ -96,7 +98,9 @@ export function TrekCard({
                   </span>
                 </>
               ) : (
-                <span className="text-cyan-500 text-2xl font-bold font-['Inter']">US ${price}</span>
+                <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Inter']">
+                  US ${price}
+                </span>
               )}
             </div>
           </div>

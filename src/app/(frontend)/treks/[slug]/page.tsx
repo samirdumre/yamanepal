@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ItineraryAccordion } from '@/components/sections/ItineraryAccordion'
 import { TrekHeroCollage } from '@/components/sections/TrekHeroCollage'
-import { BookingSidebar } from '@/components/sections/BookingSidebar'
+import { BookingSidebar, MobileBookingBar } from '@/components/sections/BookingSidebar'
 import { TrekStatsCard } from '@/components/sections/TrekStatsCard'
 import { TrekAddonsCard } from '@/components/sections/TrekAddonsCard'
 import { TrekFaqAccordion } from '@/components/sections/TrekFaqAccordion'
@@ -258,17 +258,26 @@ export default async function TrekDetailPage({ params }: PageProps) {
             <div className="mb-10">
               <TrekStatsCard trek={trek} />
             </div>
+            {/* Booking Sidebar — mobile only, between stats and highlights */}
+            <div className="lg:hidden mb-10">
+              <BookingSidebar
+                price={trek.price}
+                trekName={trek.name}
+                groupPricing={trek.groupPricing}
+                inline
+              />
+            </div>
             {/* Highlights */}
             {trek.highlights && trek.highlights.length > 0 && (
               <section className="mb-10" id="highlights">
                 <h2 className="font-['Inter'] font-semibold text-2xl text-[#020617] mb-2.5">
                   Highlights
                 </h2>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1 mt-3">
                   {(trek.highlights ?? []).map((h, i) => (
                     <div key={h.id ?? i} className="flex justify-center items-start gap-2">
                       <ArrowRight className="w-6 h-6 text-cyan-500 flex-shrink-0 mt-1" />
-                      <div className="flex-1 font-normal text-base text-[#020617] leading-7">
+                      <div className="flex-1 font-normal text-base text-slate-700 leading-7 [&_p]:my-0">
                         <RichText
                           data={h.text as DefaultTypedEditorState}
                           enableGutter={false}
@@ -336,7 +345,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
                     {(trek.excludes ?? []).map((exc, i) => (
                       <li key={exc.id ?? i} className="flex items-start gap-2">
                         <X className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
-                        <div className="flex-1 font-normal text-base text-[#020617] leading-7">
+                        <div className="flex-1 font-normal text-base text-slate-700 leading-7">
                           <RichText
                             data={exc.text as DefaultTypedEditorState}
                             enableGutter={false}
@@ -350,7 +359,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
               )}
             </section>
             {/* Add-ons & Options */}
-            <div className="mb-12">
+            <div id="addons" className="mb-12">
               <TrekAddonsCard trek={trek} />
             </div>
             {/* FAQs */}
@@ -374,7 +383,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
           </div>
           {/* Right: Booking Sidebar */}
           {/* Right: Booking Sidebar */}
-          <div className="w-[300px] flex-shrink-0 mt-12 self-start">
+          <div className="hidden lg:block w-[300px] flex-shrink-0 mt-12 self-start">
             <BookingSidebar
               price={trek.price}
               trekName={trek.name}
@@ -388,6 +397,9 @@ export default async function TrekDetailPage({ params }: PageProps) {
           <RecommendedTreks treks={trek.recommendedTreks} />
         )}
       </div>
+
+      {/* Mobile sticky booking bar — visible on scroll up, hidden on scroll down */}
+      <MobileBookingBar price={trek.price} trekName={trek.name} />
     </div>
   )
 }

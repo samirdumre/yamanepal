@@ -36,12 +36,12 @@ export default function ReviewCard({
   const stars = Math.max(0, Math.min(5, rating))
 
   // Use slightly tighter padding for very large avatars
-  const innerPad = avatarSize >= 96 ? 'p-5 md:p-6' : 'p-5 sm:p-6 md:p-7'
+  const innerPad = avatarSize >= 96 ? 'p-4 sm:p-5' : 'p-4 sm:p-5'
 
   return (
-    <div className={`rounded-xl p-2 sm:p-4 ${className}`}>
+    <div className={`w-full max-w-[382px] rounded-xl py-2 sm:py-3 ${className}`}>
       <div
-        className={`relative overflow-hidden rounded-[18px] bg-white ${innerPad} shadow-sm ring-1 ring-black/10`}
+        className={`relative flex flex-col overflow-hidden rounded-[18px] bg-white ${innerPad} max-h-[304px] shadow-sm ring-1 ring-black/10`}
       >
         {/* Decorative quotes */}
         <span
@@ -52,17 +52,19 @@ export default function ReviewCard({
         </span>
 
         {/* Stars */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex shrink-0 items-center gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
             <StarIcon key={i} filled={i < stars} />
           ))}
         </div>
 
         {/* Review text */}
-        <p className="mt-2 text-base leading-normal font-sans font-normal text-slate-700">{text}</p>
+        <div className="review-card-scroll mt-2 max-h-[6.5rem] lg:max-h-[9rem] overflow-y-auto pr-1">
+          <p className="text-sm lg:text-base leading-normal font-sans font-normal text-slate-700">{text}</p>
+        </div>
 
         {/* Author */}
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-4 flex shrink-0 items-center gap-3">
           <div
             className="relative overflow-hidden rounded-full ring-2 ring-white shadow shrink-0"
             style={{ width: avatarSize, height: avatarSize }}
@@ -80,11 +82,11 @@ export default function ReviewCard({
             )}
           </div>
           <div>
-            <div className="text-lg font-heading font-medium leading-tight text-neutral-900">
+            <div className="text-base md:text-lg font-heading font-medium leading-tight text-neutral-900">
               {author}
             </div>
             {location && (
-              <div className="text-base font-normal font-heading leading-snug text-neutral-500">
+              <div className="text-sm md:text-base font-normal font-heading leading-snug text-neutral-500">
                 {location}
               </div>
             )}

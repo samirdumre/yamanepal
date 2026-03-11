@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import NextLink from 'next/link'
@@ -35,17 +35,89 @@ type NavbarProps = {
 
 const navItems = [
   { label: 'Home', hasDropdown: false },
-  { label: 'Destinations', hasDropdown: true },
-  { label: 'Top Treks', hasDropdown: true },
+  { label: 'Nepal Trekking', hasDropdown: true },
+  { label: 'Bhutan', hasDropdown: true },
   { label: 'Travel Info', hasDropdown: true },
   { label: 'Company', hasDropdown: true },
 ]
 
+/* ─────────────────────────────────────────────────
+   Two-panel mega-menu for Destinations
+   Left: region list  |  Right: treks in 2-column grid
+───────────────────────────────────────────────── */
+function DestinationsMegaMenu({ groups }: { groups: TrekRegionGroup[] }) {
+  const [activeRegion, setActiveRegion] = useState<string>(groups[0]?.regionSlug ?? '')
+
+  if (groups.length === 0) return null
+
+  const activeGroup = groups.find((g) => g.regionSlug === activeRegion) ?? groups[0]!
+
+  return (
+    <div
+      className="absolute top-full -left-56 hidden group-hover:flex z-50"
+      style={{ minWidth: 872 }}
+    >
+      <div className="flex w-full bg-white shadow-xl border border-gray-100 rounded-xs overflow-hidden pt-2">
+        {/* Left panel — regions */}
+        <div className="w-56 shrink-0 border-r border-gray-100 overflow-y-auto max-h-[75vh]">
+          {groups.map((group) => {
+            const isActive = activeRegion === group.regionSlug
+            return (
+              <button
+                key={group.regionSlug}
+                onClick={() => setActiveRegion(group.regionSlug)}
+                className={`w-full hover:cursor-pointer flex items-center justify-between gap-2 px-5 py-3 text-left transition-colors border-b border-gray-50 ${
+                  isActive
+                    ? 'border-r-2 border-r-slate-700 bg-white text-gray-900'
+                    : 'border-r-2 border-r-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <span className={`text-[14px] ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                  {group.regionName}
+                </span>
+                <ChevronRight className="w-[14px] h-[14px] shrink-0 text-gray-400" />
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Right panel — treks in two-column grid */}
+        <div className="flex-1 p-5 overflow-y-auto max-h-[75vh]">
+          {activeGroup.treks.length > 0 ? (
+            <>
+              <h3 className="text-[14px] font-semibold text-[#020617] mb-4">
+                {activeGroup.regionName}
+              </h3>
+              <div className="grid grid-cols-2 gap-x-24 gap-y-0">
+                {activeGroup.treks.map((trek) => (
+                  <NextLink
+                    key={trek.slug}
+                    href={`/treks/${trek.slug}`}
+                    className="py-1.5 text-[14px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                  >
+                    {trek.name}
+                    {trek.days ? ` – ${trek.days}` : ''}
+                  </NextLink>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="text-[14px] text-gray-400 py-4">No treks listed yet.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ─────────────────────────────────────────────────
+   Fallback flat dropdown (when no region groups)
+───────────────────────────────────────────────── */
 function TrekDropdown({ items }: { items: TrekkingDropdownItem[] }) {
   if (items.length === 0) return null
   return (
-    <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[260px]">
-      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
+    <div className="absolute top-full -left-4 hidden group-hover:block z-50 min-w-[288px]">
+      <div className="bg-white pt-2 rounded-xs shadow-xl border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {items.map((trek) => (
           <NextLink
             key={trek.slug}
@@ -54,27 +126,9 @@ function TrekDropdown({ items }: { items: TrekkingDropdownItem[] }) {
           >
             <span className="text-[14px] font-medium text-gray-800 group-hover/item:text-[#3b82f6] transition-colors">
               {trek.name}
+              {trek.days ? ` – ${trek.days}` : ''}
             </span>
-            <span className="text-[12px] text-gray-400 shrink-0">{trek.days}</span>
-          </NextLink>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function TrekRegionDropdown({ groups }: { groups: TrekRegionGroup[] }) {
-  if (groups.length === 0) return null
-  return (
-    <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[240px]">
-      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
-        {groups.map((group) => (
-          <NextLink
-            key={group.regionSlug}
-            href={`/regions/${group.regionSlug}`}
-            className="block px-4 py-2.5 text-[14px] font-medium text-gray-800 hover:bg-gray-50 hover:text-[#3b82f6] transition-colors"
-          >
-            {group.regionName}
+            {/* <span className="text-[12px] text-gray-400 shrink-0">{trek.days}</span> */}
           </NextLink>
         ))}
       </div>
@@ -85,8 +139,8 @@ function TrekRegionDropdown({ groups }: { groups: TrekRegionGroup[] }) {
 function LinkDropdown({ items }: { items: LinkDropdownItem[] }) {
   if (items.length === 0) return null
   return (
-    <div className="absolute top-full hidden group-hover:block pt-2 z-50 min-w-[220px]">
-      <div className="bg-white rounded-xs shadow-lg border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
+    <div className="absolute -left-4  top-full hidden group-hover:block z-50 min-w-[220px]">
+      <div className="bg-white rounded-xs shadow-xl border border-gray-100 py-1 overflow-hidden divide-y divide-gray-100">
         {items.map((item) => (
           <NextLink
             key={item.url}
@@ -101,6 +155,9 @@ function LinkDropdown({ items }: { items: LinkDropdownItem[] }) {
   )
 }
 
+/* ─────────────────────────────────────────────────
+   Main Navbar
+───────────────────────────────────────────────── */
 export function Navbar({
   trekkingItems = [],
   trekkingRegionGroups = [],
@@ -116,44 +173,61 @@ export function Navbar({
   return (
     <>
       <nav className={`w-full bg-white z-50 shadow-sm ${isSticky ? 'sticky top-0' : 'relative'}`}>
-        <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-1 flex items-center justify-between">
-           <Link href="/">
-          <Image
-            src="/images/logo.jpeg"
-            alt="Logo"
-            width={88}
-            height={88}
-            className="hidden lg:block"
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-10 py-1 flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-2"
+          >
+            <Image
+              src="/images/logo.jpeg"
+              alt="Logo"
+              width={88}
+              height={88}
+              className="w-14 h-14 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px] object-contain"
             />
-            </Link>
+            <div className='flex flex-col'>
+            <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
+              Yama
+            </span>
+            <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
+              Nepal
+            </span>
+            </div>
+          </Link>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-10">
             {navItems.map((item) => {
-              const dropdownMap: Record<string, React.ReactNode> = {
-                Destinations:
-                  trekkingRegionGroups.length > 0 ? (
-                    <TrekRegionDropdown groups={trekkingRegionGroups} />
-                  ) : (
-                    <TrekDropdown items={trekkingItems} />
-                  ),
-                'Top Treks': <TrekDropdown items={topTreksItems} />,
-                'Travel Info': <LinkDropdown items={travelInfoItems} />,
-                Company: <LinkDropdown items={companyItems} />,
-              }
-              const dropdown = dropdownMap[item.label]
               const hasItems =
-                (item.label === 'Destinations' &&
+                (item.label === 'Nepal Trekking' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)) ||
-                (item.label === 'Top Treks' && topTreksItems.length > 0) ||
+                (item.label === 'Bhutan' && topTreksItems.length > 0) ||
                 (item.label === 'Travel Info' && travelInfoItems.length > 0) ||
                 (item.label === 'Company' && companyItems.length > 0)
 
               if (item.hasDropdown && hasItems) {
+                let dropdown: React.ReactNode = null
+                if (item.label === 'Nepal Trekking') {
+                  dropdown =
+                    trekkingRegionGroups.length > 0 ? (
+                      <DestinationsMegaMenu groups={trekkingRegionGroups} />
+                    ) : (
+                      <TrekDropdown items={trekkingItems} />
+                    )
+                } else if (item.label === 'Bhutan') {
+                  dropdown = <TrekDropdown items={topTreksItems} />
+                } else if (item.label === 'Travel Info') {
+                  dropdown = <LinkDropdown items={travelInfoItems} />
+                } else if (item.label === 'Company') {
+                  dropdown = <LinkDropdown items={companyItems} />
+                }
+
                 return (
                   <div key={item.label} className="relative group">
                     <div className="flex items-center gap-1 cursor-pointer">
-                      <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors hover:cursor-pointer">
+                      <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
                         {item.label}
                       </span>
                       <ChevronDown className="w-[18px] h-[18px] text-black group-hover:text-[#3b82f6] transition-transform duration-200 group-hover:rotate-180" />
@@ -164,143 +238,186 @@ export function Navbar({
               }
 
               return (
-                <div key={item.label} className="flex items-center gap-1 cursor-pointer group">
-                  <span className=" font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
+                <Link
+                  key={item.label}
+                  href={item.label === 'Home' ? '/' : '#'}
+                  className="flex items-center gap-1 cursor-pointer group"
+                >
+                  <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
                     {item.label}
                   </span>
                   {item.hasDropdown && (
-                    <ChevronDown className="w-[18px] h-[18px] text-black group-hover:text-[#3b82f6] transition-colors hover:cursor-pointer" />
+                    <ChevronDown className="w-[18px] h-[18px] text-black group-hover:text-[#3b82f6] transition-colors" />
                   )}
-                </div>
+                </Link>
               )
             })}
           </div>
 
+          {/* Contact Us — desktop */}
           <div className="hidden lg:block">
             <Link href="/contact-yama-nepal">
-            <Button size="lg">Contact Us</Button>
+              <Button size="lg">Contact Us</Button>
             </Link>
           </div>
 
+          {/* Hamburger — mobile/tablet */}
           <button
-            className="lg:hidden text-black"
+            className="lg:hidden text-black p-1 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-100 px-5 pb-5 absolute w-full left-0 shadow-md z-50">
-            <div className="flex flex-col gap-4 py-4">
+        {/* Mobile / Tablet slide-down menu */}
+        <div
+          className={`absolute top-full left-0 right-0 z-50 lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="bg-white border-t border-gray-100 px-4 sm:px-8 pb-5 overflow-y-auto max-h-[80vh] shadow-md">
+            <div className="flex flex-col gap-1 py-3">
               {navItems.map((item) => {
-                // Handle Destinations separately to support region grouping
+                /* Plain link */
+                if (!item.hasDropdown) {
+                  return (
+                    <NextLink
+                      key={item.label}
+                      href="/"
+                      className="py-2.5 font-medium text-[15px] text-black hover:text-[#3b82f6] transition-colors border-b border-gray-100"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </NextLink>
+                  )
+                }
+
+                /* Nepal Trekking accordion — regions then treks */
                 if (
-                  item.label === 'Destinations' &&
+                  item.label === 'Nepal Trekking' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)
                 ) {
-                  const isOpen = openAccordion === 'Destinations'
+                  const isOpen = openAccordion === 'Nepal Trekking'
                   return (
-                    <div key="Destinations">
-                      <div
-                        className="flex items-center gap-1 cursor-pointer"
-                        onClick={() => setOpenAccordion(isOpen ? null : 'Destinations')}
+                    <div key="Nepal Trekking" className="border-b border-gray-100">
+                      <button
+                        className="w-full flex items-center justify-between py-2.5"
+                        onClick={() => setOpenAccordion(isOpen ? null : 'Nepal Trekking')}
                       >
-                        <span className="font-medium text-[15px] text-black">Destinations</span>
+                        <span className="font-medium text-[15px] text-black">Nepal Trekking</span>
                         <ChevronDown
-                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 hover:cursor-pointer ${
+                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
                             isOpen ? 'rotate-180' : ''
                           }`}
                         />
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-200 ${
+                          isOpen ? 'max-h-[900px]' : 'max-h-0'
+                        }`}
+                      >
+                        {/* Regions with nested treks */}
+                        {trekkingRegionGroups.length > 0 ? (
+                          <MobileRegionAccordion
+                            groups={trekkingRegionGroups}
+                            onNavigate={() => setMobileMenuOpen(false)}
+                          />
+                        ) : (
+                          <div className="pb-3">
+                            <div className="bg-white border border-gray-100 rounded shadow-sm">
+                              <div className="p-3 flex flex-col sm:grid sm:grid-cols-2 gap-x-6">
+                                {trekkingItems.map((trek) => (
+                                  <NextLink
+                                    key={trek.slug}
+                                    href={`/treks/${trek.slug}`}
+                                    className="py-1.5 text-[13px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    {trek.name}
+                                    {trek.days ? ` – ${trek.days}` : ''}
+                                  </NextLink>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {isOpen && (
-                        <div className="mt-2 ml-3 flex flex-col border-l-2 border-gray-100 pl-3">
-                          {trekkingRegionGroups.length > 0
-                            ? trekkingRegionGroups.map((group) => (
-                                <NextLink
-                                  key={group.regionSlug}
-                                  href={`/regions/${group.regionSlug}`}
-                                  className="py-1.5 text-[14px] font-medium text-gray-700 hover:text-[#3b82f6] transition-colors"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  {group.regionName}
-                                </NextLink>
-                              ))
-                            : trekkingItems.map((trek) => (
-                                <NextLink
-                                  key={trek.slug}
-                                  href={`/treks/${trek.slug}`}
-                                  className="py-1.5 flex items-center gap-1.5 text-[14px] text-gray-700 hover:text-[#3b82f6] transition-colors"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  <span>{trek.name}</span>
-                                  <span className="text-gray-400 text-[12px]">{trek.days}</span>
-                                </NextLink>
-                              ))}
-                        </div>
-                      )}
                     </div>
                   )
                 }
 
-                const mobileTrekItems: Record<string, TrekkingDropdownItem[]> = {
-                  'Top Treks': topTreksItems,
+                /* Bhutan accordion */
+                if (item.label === 'Bhutan' && topTreksItems.length > 0) {
+                  const isOpen = openAccordion === item.label
+                  return (
+                    <div key={item.label} className="border-b border-gray-100">
+                      <button
+                        className="w-full flex items-center justify-between py-2.5"
+                        onClick={() => setOpenAccordion(isOpen ? null : item.label)}
+                      >
+                        <span className="font-medium text-[15px] text-black">{item.label}</span>
+                        <ChevronDown
+                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-200 ${
+                          isOpen ? 'max-h-[600px]' : 'max-h-0'
+                        }`}
+                      >
+                        <div className="pb-3">
+                          <div className="bg-white border border-gray-100 rounded shadow-sm">
+                            <div className="p-3 flex flex-col sm:grid sm:grid-cols-2 gap-x-6">
+                              {topTreksItems.map((trek) => (
+                                <NextLink
+                                  key={trek.slug}
+                                  href={`/treks/${trek.slug}`}
+                                  className="py-1.5 text-[13px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {trek.name}
+                                  {trek.days ? ` – ${trek.days}` : ''}
+                                </NextLink>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
                 }
+
+                /* Travel Info / Company accordion */
                 const mobileLinkItems: Record<string, LinkDropdownItem[]> = {
                   'Travel Info': travelInfoItems,
                   Company: companyItems,
                 }
-
-                if (item.label in mobileTrekItems && mobileTrekItems[item.label]!.length > 0) {
-                  const trekList = mobileTrekItems[item.label]!
-                  const isOpen = openAccordion === item.label
-                  return (
-                    <div key={item.label}>
-                      <div
-                        className="flex items-center gap-1 cursor-pointer"
-                        onClick={() => setOpenAccordion(isOpen ? null : item.label)}
-                      >
-                        <span className="font-medium text-[15px] text-black">{item.label}</span>
-                        <ChevronDown
-                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 hover:cursor-pointer ${isOpen ? 'rotate-180' : ''}`}
-                        />
-                      </div>
-                      {isOpen && (
-                        <div className="mt-2 ml-3 flex flex-col border-l-2 border-gray-100 pl-3">
-                          {trekList.map((trek) => (
-                            <NextLink
-                              key={trek.slug}
-                              href={`/treks/${trek.slug}`}
-                              className="py-1.5 flex items-center gap-1.5 text-[14px] text-gray-700 hover:text-[#3b82f6] transition-colors"
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              <span>{trek.name}</span>
-                              <span className="text-gray-400 text-[12px]">{trek.days}</span>
-                            </NextLink>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )
-                }
-
                 if (item.label in mobileLinkItems && mobileLinkItems[item.label]!.length > 0) {
                   const linkList = mobileLinkItems[item.label]!
                   const isOpen = openAccordion === item.label
                   return (
-                    <div key={item.label}>
-                      <div
-                        className="flex items-center gap-1 cursor-pointer"
+                    <div key={item.label} className="border-b border-gray-100">
+                      <button
+                        className="w-full flex items-center justify-between py-2.5"
                         onClick={() => setOpenAccordion(isOpen ? null : item.label)}
                       >
                         <span className="font-medium text-[15px] text-black">{item.label}</span>
                         <ChevronDown
-                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 hover:cursor-pointer ${isOpen ? 'rotate-180' : ''}`}
+                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
                         />
-                      </div>
-                      {isOpen && (
-                        <div className="mt-2 ml-3 flex flex-col border-l-2 border-gray-100 pl-3">
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-200 ${
+                          isOpen ? 'max-h-96' : 'max-h-0'
+                        }`}
+                      >
+                        <div className="ml-3 flex flex-col border-l-2 border-gray-100 pl-3 pb-2">
                           {linkList.map((link) => (
                             <NextLink
                               key={link.url}
@@ -312,25 +429,115 @@ export function Navbar({
                             </NextLink>
                           ))}
                         </div>
-                      )}
+                      </div>
                     </div>
                   )
                 }
 
+                /* Dropdown item with no data yet */
                 return (
-                  <div key={item.label} className="flex items-center gap-1 cursor-pointer">
+                  <div
+                    key={item.label}
+                    className="flex items-center gap-1 py-2.5 border-b border-gray-100"
+                  >
                     <span className="font-medium text-[15px] text-black">{item.label}</span>
-                    {item.hasDropdown && (
-                      <ChevronDown className="w-[18px] h-[18px] text-black hover:cursor-pointer" />
-                    )}
+                    {item.hasDropdown && <ChevronDown className="w-[18px] h-[18px] text-black" />}
                   </div>
                 )
               })}
-              <Button className="w-full">Contact Us</Button>
+
+              <div className="pt-3">
+                <Link href="/contact-yama-nepal" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full">Contact Us</Button>
+                </Link>
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </nav>
     </>
+  )
+}
+
+/* ─────────────────────────────────────────────────
+   Mobile: nested region → trek accordion
+───────────────────────────────────────────────── */
+function MobileRegionAccordion({
+  groups,
+  onNavigate,
+}: {
+  groups: TrekRegionGroup[]
+  onNavigate: () => void
+}) {
+  const [openRegions, setOpenRegions] = useState<Set<string>>(new Set())
+
+  const toggleRegion = (slug: string) => {
+    setOpenRegions((prev) => {
+      const next = new Set(prev)
+      next.has(slug) ? next.delete(slug) : next.add(slug)
+      return next
+    })
+  }
+
+  return (
+    <div className="pb-3">
+      {groups.map((group) => {
+        const isOpen = openRegions.has(group.regionSlug)
+        return (
+          <div key={group.regionSlug}>
+            <button
+              className={`w-full flex items-center justify-between px-2 py-2 rounded-sm transition-colors ${
+                isOpen
+                  ? 'bg-gray-50 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+              onClick={() => toggleRegion(group.regionSlug)}
+            >
+              <span
+                className={`text-[14px] transition-colors ${
+                  isOpen ? 'font-medium text-gray-900' : 'font-medium'
+                }`}
+              >
+                {group.regionName}
+              </span>
+              {group.treks.length > 0 && (
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              )}
+            </button>
+
+            {group.treks.length > 0 && (
+              <div
+                className={`overflow-hidden transition-all duration-200 ${
+                  isOpen ? 'max-h-[500px]' : 'max-h-0'
+                }`}
+              >
+                <div className="mb-2 bg-white border border-gray-100 rounded shadow-sm">
+                  {/* <p className="px-4 pt-3 pb-2 text-[13px] font-semibold text-[#020617] border-b border-gray-50">
+                    {group.regionName}
+                  </p> */}
+                  <div className="p-3 flex flex-col sm:grid sm:grid-cols-2 gap-x-6">
+                    {group.treks.map((trek) => (
+                      <NextLink
+                        key={trek.slug}
+                        href={`/treks/${trek.slug}`}
+                        className="py-1.5 text-[14px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                        onClick={onNavigate}
+                      >
+                        {trek.name}
+                        {trek.days ? ` – ${trek.days}` : ''}
+                      </NextLink>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
   )
 }
