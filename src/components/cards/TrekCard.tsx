@@ -6,7 +6,7 @@ interface TrekCardProps {
   image: Media | string | null
   name: string
   days: string
-  difficulty: 'Easy' | 'Moderate' | 'Hard'
+  difficulty: '初級' | '中級' | '上級'
   price: number
   slug: string
   discountedPrice?: number | null
@@ -14,9 +14,9 @@ interface TrekCardProps {
 }
 
 const difficultyConfig = {
-  Easy: { icon: '/images/easy.png', color: 'text-green-500' },
-  Moderate: { icon: '/images/moderate.png', color: 'text-yellow-500' },
-  Hard: { icon: '/images/hard.png', color: 'text-red-500' },
+  初級: { icon: '/images/easy.png', color: 'text-green-500' },
+  中級: { icon: '/images/moderate.png', color: 'text-yellow-500' },
+  上級: { icon: '/images/hard.png', color: 'text-red-500' },
 }
 
 export function TrekCard({
@@ -30,7 +30,7 @@ export function TrekCard({
   isLastMinuteDeal,
 }: TrekCardProps) {
   const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
-  const { icon, color } = difficultyConfig[difficulty] ?? difficultyConfig.Moderate
+  const { icon, color } = difficultyConfig[difficulty] ?? difficultyConfig.中級
   const showDiscount = discountedPrice != null && discountedPrice < price
 
   return (

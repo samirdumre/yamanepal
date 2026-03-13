@@ -67,7 +67,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   <Image
                     fill
                     src={slot2}
-                    alt={`${trekName} — photo 2`}
+                    alt={`${trekName} — 写真 2`}
                     className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                   />
                 </div>
@@ -83,7 +83,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                     <Image
                       fill
                       src={slot3}
-                      alt={`${trekName} — photo 3`}
+                      alt={`${trekName} — 写真 3`}
                       className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                     />
                   </div>
@@ -98,7 +98,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   }}
                 >
                   <Images className="w-4 h-4 text-slate-700 flex-shrink-0" />
-                  See All Photos
+                  すべての写真を見る
                 </button>
               </div>
             </div>
@@ -122,7 +122,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
               {selectedIndex + 1} / {total}
             </span>
             <button
-              aria-label="Close lightbox"
+              aria-label="ライトボックスを閉じる"
               className="p-1 rounded hover:cursor-pointer hover:bg-white/10 transition-colors"
               onClick={close}
             >
@@ -145,7 +145,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
             {/* Previous arrow */}
             <button
-              aria-label="Previous image"
+              aria-label="前の画像"
               className="absolute left-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
@@ -165,7 +165,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
             {/* Active image */}
             <Image
-              alt={`${trekName} — photo ${selectedIndex + 1}`}
+              alt={`${trekName} — 写真 ${selectedIndex + 1}`}
               className="max-h-full max-w-full object-contain select-none"
               src={images[selectedIndex]!}
               width={1920}
@@ -175,7 +175,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
             {/* Next arrow */}
             <button
-              aria-label="Next image"
+              aria-label="次の画像"
               className="absolute right-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
@@ -202,7 +202,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
             {images.map((src, i) => (
               <button
                 key={i}
-                aria-label={`Go to image ${i + 1}`}
+                aria-label={`画像 ${i + 1} へ移動`}
                 className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden transition-all ${
                   i === selectedIndex
                     ? 'ring-2 ring-white opacity-100'
@@ -211,7 +211,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                 onClick={() => setSelectedIndex(i)}
               >
                 <Image
-                  alt={`Thumbnail ${i + 1}`}
+                  alt={`サムネイル ${i + 1}`}
                   className="w-full h-full object-cover"
                   src={src}
                   width={64}

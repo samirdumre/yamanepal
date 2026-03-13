@@ -1,16 +1,18 @@
-import * as migration_20260228_092125 from './20260228_092125';
-import * as migration_20260306_055845 from './20260306_055845';
-import * as migration_20260307_043652 from './20260307_043652';
-import * as migration_20260307_104130 from './20260307_104130';
-import * as migration_20260308_234442 from './20260308_234442';
-import * as migration_20260309_025458 from './20260309_025458';
-import * as migration_20260309_062713 from './20260309_062713';
-import * as migration_20260309_090043 from './20260309_090043';
-import * as migration_20260309_112353 from './20260309_112353';
-import * as migration_20260309_112415 from './20260309_112415';
-import * as migration_20260309_130403 from './20260309_130403';
-import * as migration_20260311_172550___name from './20260311_172550___name';
-import * as migration_20260311_173001 from './20260311_173001';
+import * as migration_20260228_092125 from './20260228_092125'
+import * as migration_20260306_055845 from './20260306_055845'
+import * as migration_20260307_043652 from './20260307_043652'
+import * as migration_20260307_104130 from './20260307_104130'
+import * as migration_20260308_234442 from './20260308_234442'
+import * as migration_20260309_025458 from './20260309_025458'
+import * as migration_20260309_062713 from './20260309_062713'
+import * as migration_20260309_090043 from './20260309_090043'
+import * as migration_20260309_112353 from './20260309_112353'
+import * as migration_20260309_112415 from './20260309_112415'
+import * as migration_20260309_130403 from './20260309_130403'
+import * as migration_20260311_172550___name from './20260311_172550___name'
+import * as migration_20260311_173001 from './20260311_173001'
+import * as migration_20260313_090058 from './20260313_090058'
+import * as migration_20260313_160200_difficulty_japanese from './20260313_160200_difficulty_japanese'
 
 export const migrations = [
   {
@@ -76,6 +78,16 @@ export const migrations = [
   {
     up: migration_20260311_173001.up,
     down: migration_20260311_173001.down,
-    name: '20260311_173001'
+    name: '20260311_173001',
   },
-];
+  {
+    up: migration_20260313_090058.up,
+    down: migration_20260313_090058.down,
+    name: '20260313_090058',
+  },
+  {
+    up: migration_20260313_160200_difficulty_japanese.up,
+    down: migration_20260313_160200_difficulty_japanese.down,
+    name: '20260313_160200_difficulty_japanese',
+  },
+]

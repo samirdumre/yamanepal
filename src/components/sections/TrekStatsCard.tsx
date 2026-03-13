@@ -27,7 +27,9 @@ function StatItem({ icon, label, value }: StatItemProps) {
         <span className="text-[13px] md:text-sm font-normal  leading-5 text-slate-950 opacity-70">
           {label}
         </span>
-        <span className="text-sm md:text-[15px] font-medium  leading-5 text-slate-950">{value}</span>
+        <span className="text-sm md:text-[15px] font-medium  leading-5 text-slate-950">
+          {value}
+        </span>
       </div>
     </div>
   )
@@ -42,27 +44,27 @@ export function TrekStatsCard({ trek }: TrekStatsCardProps) {
   const activityType = category && typeof category === 'object' ? (category.title ?? null) : null
 
   const stats: { icon: React.ReactNode; label: string; value: string | null | undefined }[] = [
-    { icon: <Clock className="w-8 h-8" />, label: 'Duration', value: trek.days },
-    { icon: <BarChart2 className="w-8 h-8" />, label: 'Difficulty Level', value: trek.difficulty },
+    { icon: <Clock className="w-8 h-8" />, label: '所要日数', value: trek.days },
+    { icon: <BarChart2 className="w-8 h-8" />, label: '難易度', value: trek.difficulty },
     {
       icon: <Mountain className="w-8 h-8" />,
-      label: 'Max. Altitude/Elevation',
+      label: '最高標高',
       value: trek.maxAltitude,
     },
-    { icon: <Footprints className="w-8 h-8" />, label: 'Activity Type', value: activityType },
-    { icon: <CloudSun className="w-8 h-8" />, label: 'Best Season', value: trek.bestSeason },
-    { icon: <MapPin className="w-8 h-8" />, label: 'Start/End Point', value: trek.startEndPoint },
+    { icon: <Footprints className="w-8 h-8" />, label: 'アクティビティ', value: activityType },
+    { icon: <CloudSun className="w-8 h-8" />, label: '最適シーズン', value: trek.bestSeason },
+    { icon: <MapPin className="w-8 h-8" />, label: '出発地・到着地', value: trek.startEndPoint },
     {
       icon: <Home className="w-8 h-8" />,
-      label: 'Accommodation',
+      label: '宿泊',
       value: trek.trekAccommodation,
     },
     {
       icon: <Utensils className="w-8 h-8" />,
-      label: 'Meals (Included)',
+      label: '食事（含む）',
       value: trek.trekMeals,
     },
-    { icon: <Users className="w-8 h-8" />, label: 'Group Size', value: trek.groupSize },
+    { icon: <Users className="w-8 h-8" />, label: 'グループ人数', value: trek.groupSize },
   ]
 
   const visibleStats = stats.filter((s) => s.value)

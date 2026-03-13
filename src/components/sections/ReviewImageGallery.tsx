@@ -43,7 +43,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
         {images.map((img, idx) => (
           <button
             key={idx}
-            aria-label={`View ${img.alt}`}
+            aria-label={`${img.alt} を表示`}
             className="relative w-32 h-24 rounded-[10px] overflow-hidden shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
             onClick={() => setSelectedIndex(idx)}
           >
@@ -73,7 +73,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
               {selectedIndex + 1} / {total}
             </span>
             <button
-              aria-label="Close lightbox"
+              aria-label="ライトボックスを閉じる"
               className="p-1 rounded hover:cursor-pointer hover:bg-white/10 transition-colors"
               onClick={close}
             >
@@ -97,7 +97,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
             {/* Previous arrow */}
             {total > 1 && (
               <button
-                aria-label="Previous image"
+                aria-label="前の画像"
                 className="absolute left-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -129,7 +129,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
             {/* Next arrow */}
             {total > 1 && (
               <button
-                aria-label="Next image"
+                aria-label="次の画像"
                 className="absolute right-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -158,7 +158,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
               {images.map((img, i) => (
                 <button
                   key={i}
-                  aria-label={`Go to image ${i + 1}`}
+                  aria-label={`画像 ${i + 1} へ移動`}
                   className={`shrink-0 w-16 h-12 rounded overflow-hidden transition-all ${
                     i === selectedIndex
                       ? 'ring-2 ring-white opacity-100'
@@ -167,7 +167,7 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
                   onClick={() => setSelectedIndex(i)}
                 >
                   <Image
-                    alt={`Thumbnail ${i + 1}`}
+                    alt={`サムネイル ${i + 1}`}
                     className="w-full h-full object-cover"
                     src={img.src}
                     width={64}

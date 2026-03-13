@@ -354,9 +354,8 @@ export interface Category {
   id: number;
   title: string;
   /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   * Auto-generated from title. Override manually if needed.
    */
-  generateSlug?: boolean | null;
   slug: string;
   parent?: (number | null) | Category;
   breadcrumbs?:
@@ -800,7 +799,7 @@ export interface Trek {
   id: number;
   name: string;
   days: string;
-  difficulty: 'Easy' | 'Moderate' | 'Hard';
+  difficulty: '初級' | '中級' | '上級';
   /**
    * Price in USD (numbers only, e.g. 1495)
    */
@@ -870,6 +869,10 @@ export interface Trek {
    * Auto-generated from name. Override manually if needed.
    */
   slug?: string | null;
+  /**
+   * Previously used slugs kept for automatic redirects.
+   */
+  legacySlugs?: string[] | null;
   /**
    * Short paragraph shown at top of the trek detail page (bold, italic, links supported)
    */
@@ -1704,7 +1707,6 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
-  generateSlug?: T;
   slug?: T;
   parent?: T;
   breadcrumbs?:
@@ -1794,6 +1796,7 @@ export interface TreksSelect<T extends boolean = true> {
   discountedPrice?: T;
   description?: T;
   slug?: T;
+  legacySlugs?: T;
   overview?: T;
   maxAltitude?: T;
   bestSeason?: T;

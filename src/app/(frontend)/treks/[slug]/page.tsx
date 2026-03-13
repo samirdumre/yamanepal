@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import { ItineraryAccordion } from '@/components/sections/ItineraryAccordion'
 import { TrekHeroCollage } from '@/components/sections/TrekHeroCollage'
@@ -26,27 +26,50 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-async function getTrek(slug: string) {
+type TrekLookupResult = {
+  trek?: Trek
+  matchedLegacySlug: boolean
+}
+
+async function getTrek(slug: string): Promise<TrekLookupResult> {
   const payload = await getPayload({ config })
-  const { docs } = await payload.find({
+
+  const exact = await payload.find({
     collection: 'treks',
     where: { slug: { equals: slug } },
     limit: 1,
     depth: 2,
   })
-  return docs[0] as Trek | undefined
+
+  const exactTrek = exact.docs[0] as Trek | undefined
+  if (exactTrek) return { trek: exactTrek, matchedLegacySlug: false }
+
+  const legacy = await payload.find({
+    collection: 'treks',
+    where: { legacySlugs: { contains: slug } },
+    limit: 1,
+    depth: 2,
+  })
+
+  const trek = legacy.docs[0] as Trek | undefined
+  if (!trek) return { trek: undefined, matchedLegacySlug: false }
+
+  return {
+    trek,
+    matchedLegacySlug: trek.slug !== slug,
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const trek = await getTrek(slug)
+  const { trek } = await getTrek(slug)
   if (!trek) return {}
 
   const serverUrl = getServerSideURL()
-  const url = `${serverUrl}/treks/${slug}`
+  const url = `${serverUrl}/treks/${trek.slug}`
 
   const description =
-    trek.description || lexicalToText(trek.overview) || `Explore the ${trek.name} with Yama Nepal.`
+    trek.description || lexicalToText(trek.overview) || `Yama Nepalで${trek.name}を体験しませんか。`
 
   const trekImage = trek.image as Media | null | undefined
   const ogImage = trekImage?.url ? serverUrl + trekImage.url : undefined
@@ -68,8 +91,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function TrekDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const trek = await getTrek(slug)
+  const { trek, matchedLegacySlug } = await getTrek(slug)
   if (!trek) notFound()
+
+  if (matchedLegacySlug) {
+    permanentRedirect(`/treks/${trek.slug}`)
+  }
 
   function imgUrl(img: Media | number | null | undefined): string | null {
     if (!img || typeof img !== 'object') return null
@@ -92,10 +119,10 @@ export default async function TrekDetailPage({ params }: PageProps) {
 
   // ── JSON-LD structured data ─────────────────────────────────────────────
   const serverUrl = getServerSideURL()
-  const trekUrl = `${serverUrl}/treks/${slug}`
+  const trekUrl = `${serverUrl}/treks/${trek.slug}`
 
   const metaDescription =
-    trek.description || lexicalToText(trek.overview) || `Explore the ${trek.name} with Yama Nepal.`
+    trek.description || lexicalToText(trek.overview) || `Yama Nepalで${trek.name}を体験しませんか。`
 
   const touristTripSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -132,7 +159,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
               position: item.day,
               item: {
                 '@type': 'TouristAttraction',
-                name: `Day ${item.day}: ${item.title}`,
+                name: `${item.day}日目: ${item.title}`,
                 description: lexicalToText(item.description),
               },
             })),
@@ -145,13 +172,13 @@ export default async function TrekDetailPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${serverUrl}/` },
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${serverUrl}/` },
       ...(categorySlug
         ? [
             {
               '@type': 'ListItem',
               position: 2,
-              name: categoryTitle ?? 'Trekking',
+              name: categoryTitle ?? 'トレッキング',
               item: `${serverUrl}/treks?category=${categorySlug}`,
             },
             { '@type': 'ListItem', position: 3, name: trek.name },
@@ -208,7 +235,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Breadcrumb */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1 mt-4">
               <Link href="/" className="text-cyan-500 text-sm hover:underline">
-                Home
+                ホーム
               </Link>
               <ChevronRight className="w-4 h-4 text-cyan-500 flex-shrink-0" />
               {categorySlug ? (
@@ -216,10 +243,10 @@ export default async function TrekDetailPage({ params }: PageProps) {
                   href={`/treks?category=${categorySlug}`}
                   className="text-cyan-500 text-sm hover:underline"
                 >
-                  {categoryTitle ?? 'Trekking'}
+                  {categoryTitle ?? 'トレッキング'}
                 </Link>
               ) : (
-                <span className="text-cyan-500 text-sm">Trekking</span>
+                <span className="text-cyan-500 text-sm">トレッキング</span>
               )}
               <ChevronRight className="w-4 h-4 text-cyan-500 flex-shrink-0" />
               <span className="text-cyan-500 text-sm">{trek.name}</span>
@@ -238,7 +265,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
                     ))}
                   </div>
                   <span className="text-sm text-[#020617]">
-                    {rating}/5{reviewCount != null ? ` from ${reviewCount} Reviews` : ''}
+                    {rating}/5{reviewCount != null ? `（${reviewCount}件の口コミ）` : ''}
                   </span>
                 </div>
               )}
@@ -270,9 +297,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Highlights */}
             {trek.highlights && trek.highlights.length > 0 && (
               <section className="mb-10" id="highlights">
-                <h2 className=" font-semibold text-2xl text-[#020617] mb-2.5">
-                  Highlights
-                </h2>
+                <h2 className=" font-semibold text-2xl text-[#020617] mb-2.5">見どころ</h2>
                 <div className="flex flex-col gap-1 mt-3">
                   {(trek.highlights ?? []).map((h, i) => (
                     <div key={h.id ?? i} className="flex justify-center items-start gap-2">
@@ -292,9 +317,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Detailed Overview */}
             {trek.detailedOverview && (
               <section className="mb-10">
-                <h2 className="font-semibold text-2xl text-[#020617] mb-4">
-                  Detailed Overview
-                </h2>
+                <h2 className="font-semibold text-2xl text-[#020617] mb-4">詳細情報</h2>
                 <RichText
                   data={trek.detailedOverview as DefaultTypedEditorState}
                   enableGutter={false}
@@ -307,7 +330,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {trek.itinerary && trek.itinerary.length > 0 && (
               <section id="itinerary" className="mb-12 scroll-mt-16">
                 <h2 className="font-['Inter',sans-serif] font-semibold text-[28px] text-[#020617] mb-6">
-                  Day-by-Day Itinerary
+                  日程表
                 </h2>
                 <ItineraryAccordion itinerary={trek.itinerary!} />
               </section>
@@ -316,9 +339,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             <section id="inclusions" className="mb-12 flex flex-col gap-10 scroll-mt-16">
               {trek.includes && trek.includes.length > 0 && (
                 <div className="flex flex-col gap-3 w-full">
-                  <h3 className="text-[#020617] text-xl font-semibold ">
-                    Cost Includes
-                  </h3>
+                  <h3 className="text-[#020617] text-xl font-semibold ">料金に含まれるもの</h3>
                   <ul className="flex flex-col gap-2">
                     {(trek.includes ?? []).map((inc, i) => (
                       <li key={inc.id ?? i} className="flex items-start gap-2">
@@ -338,9 +359,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
 
               {trek.excludes && trek.excludes.length > 0 && (
                 <div className="flex flex-col gap-3 w-full">
-                  <h3 className="text-[#020617] text-xl font-semibold">
-                    Cost Excludes
-                  </h3>
+                  <h3 className="text-[#020617] text-xl font-semibold">料金に含まれないもの</h3>
                   <ul className="flex flex-col gap-2">
                     {(trek.excludes ?? []).map((exc, i) => (
                       <li key={exc.id ?? i} className="flex items-start gap-2">

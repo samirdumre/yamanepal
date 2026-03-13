@@ -53,9 +53,9 @@ export default async function HomePage() {
   const sidePosts = blogPosts.slice(1, 4)
 
   const difficultyConfig = {
-    Easy: { icon: '/images/easy.png', color: 'text-green-500' },
-    Moderate: { icon: '/images/moderate.png', color: 'text-yellow-500' },
-    Hard: { icon: '/images/hard.png', color: 'text-red-500' },
+    初級: { icon: '/images/easy.png', color: 'text-green-500' },
+    中級: { icon: '/images/moderate.png', color: 'text-yellow-500' },
+    上級: { icon: '/images/hard.png', color: 'text-red-500' },
   }
 
   return (
@@ -162,7 +162,7 @@ export default async function HomePage() {
                         className="w-10 h-6 object-contain flex-shrink-0"
                         src={
                           difficultyConfig[tripOfTheMonthTrek.difficulty]?.icon ??
-                          difficultyConfig.Moderate.icon
+                          difficultyConfig.中級.icon
                         }
                         width={32}
                         height={20}

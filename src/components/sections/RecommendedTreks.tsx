@@ -12,9 +12,7 @@ export function RecommendedTreks({ treks }: Props) {
 
   return (
     <section className="mb-12">
-      <h2 className="font-semibold text-2xl text-[#020617] mb-6">
-        Recommended Packages
-      </h2>
+      <h2 className="font-semibold text-2xl text-[#020617] mb-6">おすすめのトレック</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {resolved.map((trek) => (
           <TrekCard

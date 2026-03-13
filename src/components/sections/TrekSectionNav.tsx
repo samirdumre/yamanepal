@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Eye, Map, CheckSquare, HelpCircle, Star } from 'lucide-react'
 
 const SECTIONS = [
-  { id: 'overview', label: 'Overview', Icon: Eye },
-  { id: 'itinerary', label: 'Itinerary', Icon: Map },
-  { id: 'inclusions', label: 'Inclusions', Icon: CheckSquare },
-  { id: 'faqs', label: 'FAQs', Icon: HelpCircle },
-  { id: 'reviews', label: 'Reviews', Icon: Star },
+  { id: 'overview', label: '概要', Icon: Eye },
+  { id: 'itinerary', label: '日程', Icon: Map },
+  { id: 'inclusions', label: '料金内訳', Icon: CheckSquare },
+  { id: 'faqs', label: 'よくあるご質問', Icon: HelpCircle },
+  { id: 'reviews', label: '口コミ', Icon: Star },
 ] as const
 
 type SectionId = (typeof SECTIONS)[number]['id']
@@ -98,7 +98,7 @@ export function TrekSectionNav() {
           ref={navRef}
           className="flex items-center overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden -mb-px"
           style={{ scrollbarWidth: 'none' }}
-          aria-label="Trek sections"
+          aria-label="トレックのセクション"
         >
           {SECTIONS.map(({ id, label, Icon }) => {
             const isActive = activeSection === id

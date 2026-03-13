@@ -11,22 +11,12 @@ function formatReviewDate(iso: string): string {
   const d = new Date(iso)
   if (isNaN(d.getTime())) return ''
 
-  const day = d.getUTCDate()
-  const month = d.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' })
-  const year = d.getUTCFullYear()
-
-  const suffix =
-    day % 100 >= 11 && day % 100 <= 13
-      ? 'th'
-      : day % 10 === 1
-        ? 'st'
-        : day % 10 === 2
-          ? 'nd'
-          : day % 10 === 3
-            ? 'rd'
-            : 'th'
-
-  return `${day}${suffix} ${month} ${year}`
+  return d.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
 }
 
 function StarRow({ rating }: { rating: '1' | '2' | '3' | '4' | '5' }) {
@@ -57,7 +47,7 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-black text-2xl font-semibold ">Travellers&apos; Reviews</h2>
+      <h2 className="text-black text-2xl font-semibold ">参加者の口コミ</h2>
 
       <div className="flex flex-col gap-4">
         {reviews.map((review: Review) => {
@@ -88,7 +78,7 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
                     const media = img.image as Media
                     return {
                       src: getMediaUrl(media.url),
-                      alt: media.alt ?? `Review photo ${idx + 1}`,
+                      alt: media.alt ?? `口コミ写真 ${idx + 1}`,
                     }
                   })}
                 />

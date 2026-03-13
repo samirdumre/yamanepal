@@ -36,6 +36,29 @@ export const Treks: CollectionConfig = {
         return data
       },
     ],
+    beforeChange: [
+      ({ data, originalDoc }) => {
+        if (!data) return data
+
+        const nextSlug = typeof data.slug === 'string' ? data.slug : undefined
+        const previousSlug = typeof originalDoc?.slug === 'string' ? originalDoc.slug : undefined
+
+        if (!nextSlug || !previousSlug || nextSlug === previousSlug) return data
+
+        const dataLegacy = Array.isArray(data.legacySlugs) ? data.legacySlugs : []
+        const originalLegacy = Array.isArray(originalDoc?.legacySlugs)
+          ? originalDoc.legacySlugs
+          : []
+        const merged = [...originalLegacy, ...dataLegacy]
+
+        if (!merged.includes(previousSlug)) {
+          merged.push(previousSlug)
+        }
+
+        data.legacySlugs = Array.from(new Set(merged)).filter(Boolean)
+        return data
+      },
+    ],
   },
   fields: [
     {
@@ -53,9 +76,9 @@ export const Treks: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
-        { label: 'Easy', value: 'Easy' },
-        { label: 'Moderate', value: 'Moderate' },
-        { label: 'Hard', value: 'Hard' },
+        { label: '初級', value: '初級' },
+        { label: '中級', value: '中級' },
+        { label: '上級', value: '上級' },
       ],
     },
     {
@@ -205,6 +228,16 @@ export const Treks: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Auto-generated from name. Override manually if needed.',
+      },
+    },
+    {
+      name: 'legacySlugs',
+      type: 'text',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Previously used slugs kept for automatic redirects.',
       },
     },
     {

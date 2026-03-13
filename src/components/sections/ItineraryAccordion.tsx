@@ -71,7 +71,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                   }
                 >
                   <p className="text-lg font-medium leading-7">
-                    <span className="text-gray-700 font-medium">Day {item.day}: </span>
+                    <span className="text-gray-700 font-medium">{item.day}日目: </span>
                     <span className="text-gray-800 font-medium">{item.title}</span>
                   </p>
                   <span
@@ -105,7 +105,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                             <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
                               <Image
                                 src="/images/hiking-icon.svg"
-                                alt="Distance"
+                                alt="距離"
                                 width={16}
                                 height={16}
                                 className="w-3.5 h-3.5 text-blue-400"
@@ -123,7 +123,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                           )}
                           <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
                             <Utensils className="w-3.5 h-3.5 text-blue-400" />
-                            <span className="text-xs text-gray-700">Meals Included</span>
+                            <span className="text-xs text-gray-700">含まれる食事</span>
                           </div>
                           {item.accommodation && (
                             <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
@@ -146,7 +146,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                               <Image
                                 fill
                                 src={url}
-                                alt={`Day ${item.day} photo ${i + 1}`}
+                                alt={`${item.day}日目の写真 ${i + 1}`}
                                 className="object-cover rounded-lg hover:opacity-90 transition-opacity"
                               />
                             </div>
@@ -178,7 +178,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
               {lightbox.index + 1} / {lightbox.photos.length}
             </span>
             <button
-              aria-label="Close lightbox"
+              aria-label="ライトボックスを閉じる"
               className="p-1 rounded hover:cursor-pointer hover:bg-white/10 transition-colors"
               onClick={closeLightbox}
             >
@@ -199,7 +199,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
             <div className="absolute inset-0" onClick={closeLightbox} />
             {lightbox.photos.length > 1 && (
               <button
-                aria-label="Previous image"
+                aria-label="前の画像"
                 className="absolute left-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -218,7 +218,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
               </button>
             )}
             <Image
-              alt={`Photo ${lightbox.index + 1}`}
+              alt={`画像 ${lightbox.index + 1}`}
               className="max-h-full max-w-full object-contain select-none"
               src={lightbox.photos[lightbox.index]!}
               width={1920}
@@ -227,7 +227,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
             />
             {lightbox.photos.length > 1 && (
               <button
-                aria-label="Next image"
+                aria-label="次の画像"
                 className="absolute right-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
@@ -256,7 +256,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
               {lightbox.photos.map((src, i) => (
                 <button
                   key={i}
-                  aria-label={`Go to photo ${i + 1}`}
+                  aria-label={`写真 ${i + 1} へ移動`}
                   className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden transition-all ${
                     i === lightbox.index
                       ? 'ring-2 ring-white opacity-100'
@@ -265,7 +265,7 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                   onClick={() => setLightbox((lb) => (lb ? { ...lb, index: i } : null))}
                 >
                   <Image
-                    alt={`Thumbnail ${i + 1}`}
+                    alt={`サムネイル ${i + 1}`}
                     className="w-full h-full object-cover"
                     src={src}
                     width={64}

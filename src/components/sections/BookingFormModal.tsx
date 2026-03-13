@@ -33,19 +33,19 @@ function validate(fields: FormFields): FormErrors {
   const errors: FormErrors = {}
   const name = fields.fullName.trim()
   if (!name || name.length < 2 || name.length > 100)
-    errors.fullName = 'Full name must be between 2 and 100 characters.'
+    errors.fullName = 'お名前は2文字以上100文字以下で入力してください。'
   const emailTrimmed = fields.email.trim()
   if (!emailTrimmed || !EMAIL_REGEX.test(emailTrimmed) || emailTrimmed.length > 254)
-    errors.email = 'Please enter a valid email address.'
+    errors.email = '有効なメールアドレスを入力してください。'
   const phone = fields.phone.trim()
   if (!phone || phone.length < 7 || phone.length > 20)
-    errors.phone = 'Please enter a valid phone number.'
+    errors.phone = '有効な電話番号を入力してください。'
   const travellers = Number(fields.noOfTravellers)
   if (!fields.noOfTravellers || !Number.isInteger(travellers) || travellers < 1 || travellers > 200)
-    errors.noOfTravellers = 'Please enter a number of travellers between 1 and 200.'
+    errors.noOfTravellers = '参加人数は1〜200の範囲で入力してください。'
   const msg = fields.message.trim()
   if (!msg || msg.length < 10 || msg.length > 2000)
-    errors.message = 'Message must be between 10 and 2000 characters.'
+    errors.message = 'お問い合わせ内容は10文字以上2000文字以下で入力してください。'
   return errors
 }
 
@@ -105,7 +105,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
       const data = await res.json()
 
       if (!res.ok) {
-        setErrorMsg(data.error ?? 'Something went wrong. Please try again.')
+        setErrorMsg(data.error ?? 'エラーが発生しました。もう一度お試しください。')
         setStatus('error')
         return
       }
@@ -113,7 +113,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
       setStatus('success')
       setFields(INITIAL)
     } catch {
-      setErrorMsg('Network error. Please check your connection and try again.')
+      setErrorMsg('通信エラーが発生しました。接続状況をご確認のうえ、再度お試しください。')
       setStatus('error')
     }
   }
@@ -128,7 +128,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
       aria-modal="true"
       role="dialog"
-      aria-label="Make an Inquiry"
+      aria-label="お問い合わせ"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -137,7 +137,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
         {/* Close button */}
         <button
           onClick={onClose}
-          aria-label="Close"
+          aria-label="閉じる"
           className="absolute top-4 right-4 text-gray-400 cursor-pointer transition-colors focus:outline-none"
         >
           <svg
@@ -154,7 +154,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
 
         <div className="p-8">
           <h2 className="text-[#020617] font-semibold text-xl tracking-[0.6] mb-6">
-            MAKE AN INQUIRY
+            お問い合わせフォーム
           </h2>
 
           {status === 'success' ? (
@@ -172,12 +172,12 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                   d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <p className="text-gray-800 font-semibold text-lg">Inquiry Submitted!</p>
+              <p className="text-gray-800 font-semibold text-lg">お問い合わせを受け付けました。</p>
               <p className="text-gray-500 text-sm">
-                Thank you for reaching out. Our team will get back to you shortly.
+                お問い合わせありがとうございます。担当者より順次ご連絡いたします。
               </p>
               <Button variant="primary" onClick={onClose} className="mt-2 hover:cursor-pointer">
-                Close
+                閉じる
               </Button>
             </div>
           ) : (
@@ -203,7 +203,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                       className={inputClass}
                       type="text"
                       name="fullName"
-                      placeholder="Full Name*"
+                      placeholder="お名前*"
                       required
                       value={fields.fullName}
                       onChange={handleChange}
@@ -217,7 +217,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                       className={inputClass}
                       type="email"
                       name="email"
-                      placeholder="E-mail*"
+                      placeholder="メールアドレス*"
                       required
                       value={fields.email}
                       onChange={handleChange}
@@ -233,7 +233,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                       className={inputClass}
                       type="tel"
                       name="phone"
-                      placeholder="Mobile*"
+                      placeholder="電話番号*"
                       required
                       value={fields.phone}
                       onChange={handleChange}
@@ -245,7 +245,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                       className={inputClass}
                       type="number"
                       name="noOfTravellers"
-                      placeholder="No of Travellers*"
+                      placeholder="参加人数*"
                       min={1}
                       required
                       value={fields.noOfTravellers}
@@ -262,7 +262,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                   <textarea
                     className={`${inputClass} resize-y min-h-[120px]`}
                     name="message"
-                    placeholder="Message*"
+                    placeholder="お問い合わせ内容*"
                     required
                     value={fields.message}
                     onChange={handleChange}
@@ -278,7 +278,7 @@ export function BookingFormModal({ open, onClose, trekName }: BookingFormModalPr
                   className="w-fit"
                   disabled={status === 'submitting'}
                 >
-                  {status === 'submitting' ? 'SUBMITTING...' : 'SUBMIT'}
+                  {status === 'submitting' ? '送信中...' : '送信する'}
                 </Button>
               </div>
             </form>

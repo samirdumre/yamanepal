@@ -15,9 +15,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
   return (
     <div className="w-full bg-[#DBEAFE] rounded-2xl px-6 py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 flex flex-col gap-3">
       {/* Title */}
-      <h2 className="text-slate-950 text-xl font-medium leading-8 mb-1">
-        Add-ons &amp; Options
-      </h2>
+      <h2 className="text-slate-950 text-xl font-medium leading-8 mb-1">追加オプション</h2>
 
       {/* Intro paragraph */}
       {trek.addonsDescription && (
@@ -62,9 +60,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
           {(trek.addonsSteps as string[]).map((step, i) => (
             <li key={i} className="flex items-start gap-[14px]">
               <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0  mt-[5px]" />
-              <span className="text-slate-950 text-base font-normal  leading-6">
-                {step}
-              </span>
+              <span className="text-slate-950 text-base font-normal  leading-6">{step}</span>
             </li>
           ))}
         </ul>

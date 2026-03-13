@@ -197,7 +197,7 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
                   image={typeof trek.image === 'object' ? trek.image : null}
                   name={trek.name}
                   days={trek.days}
-                  difficulty={trek.difficulty as 'Easy' | 'Moderate' | 'Hard'}
+                  difficulty={trek.difficulty as '初級' | '中級' | '上級'}
                   price={trek.price}
                   slug={trek.slug ?? ''}
                   discountedPrice={trek.discountedPrice}

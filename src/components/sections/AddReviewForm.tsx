@@ -10,11 +10,11 @@ interface AddReviewFormProps {
 }
 
 const RATING_LABELS: Record<number, string> = {
-  1: 'Poor',
-  2: 'Fair',
-  3: 'Good',
-  4: 'Very Good',
-  5: 'Excellent',
+  1: 'やや不満',
+  2: '普通',
+  3: '良い',
+  4: 'とても良い',
+  5: '素晴らしい',
 }
 
 type FormErrors = {
@@ -25,13 +25,13 @@ type FormErrors = {
 
 function validate(selectedRating: number, reviewerName: string, reviewText: string): FormErrors {
   const errors: FormErrors = {}
-  if (!selectedRating) errors.rating = 'Please select a star rating.'
+  if (!selectedRating) errors.rating = '星評価を選択してください。'
   const name = reviewerName.trim()
   if (!name || name.length < 2 || name.length > 100)
-    errors.reviewerName = 'Name must be between 2 and 100 characters.'
+    errors.reviewerName = 'お名前は2文字以上100文字以下で入力してください。'
   const text = reviewText.trim()
   if (!text || text.length < 10 || text.length > 2000)
-    errors.reviewText = 'Review must be between 10 and 2000 characters.'
+    errors.reviewText = '口コミは10文字以上2000文字以下で入力してください。'
   return errors
 }
 
@@ -72,7 +72,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
       const data = await res.json()
 
       if (!res.ok) {
-        setErrorMsg(data.error ?? 'Submission failed. Please try again.')
+        setErrorMsg(data.error ?? '送信に失敗しました。もう一度お試しください。')
         setStatus('error')
         return
       }
@@ -86,14 +86,14 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
       // Refresh server component data to show the new review
       router.refresh()
     } catch {
-      setErrorMsg('Network error. Please check your connection and try again.')
+      setErrorMsg('通信エラーが発生しました。接続状況をご確認のうえ、再度お試しください。')
       setStatus('error')
     }
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-black text-2xl font-semibold ">Write a Review</h2>
+      <h2 className="text-black text-2xl font-semibold ">口コミを投稿</h2>
 
       <div className="bg-white rounded-2xl outline outline-[0.67px] outline-gray-200 p-5">
         {status === 'success' ? (
@@ -110,16 +110,14 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
               </svg>
             </div>
             <p className="text-slate-950 font-semibold text-base ">
-              Thank you for your review!
+              口コミのご投稿ありがとうございます。
             </p>
-            <p className="text-gray-500 text-sm ">
-              Your review has been posted successfully.
-            </p>
+            <p className="text-gray-500 text-sm ">口コミが正常に投稿されました。</p>
             <button
               onClick={() => setStatus('idle')}
               className="mt-2 text-cyan-500 text-sm font-medium  hover:underline"
             >
-              Write another review
+              別の口コミを投稿する
             </button>
           </div>
         ) : (
@@ -127,7 +125,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
             {/* Star rating selector */}
             <div className="flex flex-col gap-2">
               <label className="text-slate-950 text-sm font-semibold ">
-                Your Rating <span className="text-red-500">*</span>
+                評価 <span className="text-red-500">*</span>
               </label>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((n) => (
@@ -140,7 +138,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                       setSelectedRating(n)
                       setErrors((prev) => ({ ...prev, rating: undefined }))
                     }}
-                    aria-label={`Rate ${n} star${n > 1 ? 's' : ''}`}
+                    aria-label={`${n}つ星で評価`}
                     className="focus:outline-none hover:cursor-pointer"
                   >
                     <Star
@@ -153,23 +151,16 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                   </button>
                 ))}
                 {activeStar > 0 && (
-                  <span className="ml-2 text-gray-600 text-sm ">
-                    {RATING_LABELS[activeStar]}
-                  </span>
+                  <span className="ml-2 text-gray-600 text-sm ">{RATING_LABELS[activeStar]}</span>
                 )}
               </div>
-              {errors.rating && (
-                <p className="text-red-500 text-xs mt-1 ">{errors.rating}</p>
-              )}
+              {errors.rating && <p className="text-red-500 text-xs mt-1 ">{errors.rating}</p>}
             </div>
 
             {/* Name */}
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="reviewer-name"
-                className="text-slate-950 text-sm font-semibold "
-              >
-                Your Name <span className="text-red-500">*</span>
+              <label htmlFor="reviewer-name" className="text-slate-950 text-sm font-semibold ">
+                お名前 <span className="text-red-500">*</span>
               </label>
               <input
                 id="reviewer-name"
@@ -179,7 +170,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                   setReviewerName(e.target.value)
                   setErrors((prev) => ({ ...prev, reviewerName: undefined }))
                 }}
-                placeholder="e.g. John Smith"
+                placeholder="例：山田 太郎"
                 maxLength={100}
                 className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition"
               />
@@ -190,11 +181,8 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
 
             {/* Review text */}
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="review-text"
-                className="text-slate-950 text-sm font-semibold "
-              >
-                Your Review <span className="text-red-500">*</span>
+              <label htmlFor="review-text" className="text-slate-950 text-sm font-semibold ">
+                口コミ内容 <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="review-text"
@@ -203,17 +191,13 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                   setReviewText(e.target.value)
                   setErrors((prev) => ({ ...prev, reviewText: undefined }))
                 }}
-                placeholder="Share your experience on this trek..."
+                placeholder="このトレックに参加した感想をご記入ください..."
                 rows={5}
                 maxLength={2000}
                 className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition resize-none"
               />
-              <span className="text-gray-400 text-xs  text-right">
-                {reviewText.length}/2000
-              </span>
-              {errors.reviewText && (
-                <p className="text-red-500 text-xs ">{errors.reviewText}</p>
-              )}
+              <span className="text-gray-400 text-xs  text-right">{reviewText.length}/2000</span>
+              {errors.reviewText && <p className="text-red-500 text-xs ">{errors.reviewText}</p>}
             </div>
 
             {/* Error */}
@@ -229,8 +213,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
               disabled={status === 'loading'}
               className="self-start"
             >
-              {' '}
-              {status === 'loading' ? 'Submitting…' : 'Submit Review'}
+              {status === 'loading' ? '送信中…' : '口コミを送信'}
             </Button>
           </form>
         )}
