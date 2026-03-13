@@ -91,7 +91,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   <div className="w-full h-[236px] rounded-lg bg-gray-100" />
                 )}
                 <button
-                  className="absolute bottom-1 lg:bottom-3 hover:cursor-pointer right-1 lg:right-3 z-10 flex items-center gap-1.5 bg-white border border-gray-300 rounded-full px-2 lg:px-3 py-1.5 text-xs md:text-sm font-medium text-slate-950 font-['Inter'] shadow-sm hover:bg-gray-50 transition-colors"
+                  className="absolute bottom-1 lg:bottom-3 hover:cursor-pointer right-1 lg:right-3 z-10 flex items-center gap-1.5 bg-white border border-gray-300 rounded-full px-2 lg:px-3 py-1.5 text-xs md:text-sm font-medium text-slate-950  shadow-sm hover:bg-gray-50 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation()
                     setSelectedIndex(0)

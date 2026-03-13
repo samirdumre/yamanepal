@@ -75,11 +75,11 @@ export default async function Post({ params: paramsPromise }: Args) {
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-6 flex-wrap">
           <Link href="/" className="text-[#0cb6d8] text-[14px] hover:underline">
-            Home
+            ホーム
           </Link>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
           <Link href="/posts" className="text-[#0cb6d8] text-[14px] hover:underline">
-            Blogs
+            ブログ
           </Link>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
           <span className="text-[#020617] text-[14px]">{post.title}</span>

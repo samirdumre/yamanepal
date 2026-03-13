@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { Inter } from 'next/font/google'
+import { Noto_Sans_JP } from 'next/font/google'
 import React from 'react'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], variable: '--font-noto-sans-jp' })
 
 import { AdminBar } from '@/components/AdminBar'
 import { Providers } from '@/providers'
@@ -82,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }))
 
   return (
-    <html className={cn(inter.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(notoSansJP.variable)} lang="ja" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

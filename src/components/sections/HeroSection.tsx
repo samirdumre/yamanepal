@@ -229,10 +229,10 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
 
       <div className="relative z-10 w-full max-w-[1002px] flex flex-col items-center gap-3 md:gap-10 px-5">
         <div className="w-full flex flex-col items-center gap-3">
-          <h1 className="w-full font-bold text-[32px] md:text-6xl text-white leading-tight">
+          <h1 className="w-full font-bold text-center text-[32px] md:text-5xl text-white leading-tight font-['Noto_Sans_JP',sans-serif]">
             {headline}
           </h1>
-          <p className="w-full lg:text-center font-['Inter',sans-serif] font-medium text-lg text-white">
+          <p className="w-full lg:text-center font-['Noto_Sans_JP',sans-serif] font-medium text-lg text-white">
             {subheading}
           </p>
         </div>
@@ -246,8 +246,8 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
               <Search className="w-6 h-6 flex-shrink-0 text-slate-950/30" />
             )}
             <input
-              className="flex-1 font-['Inter',sans-serif] text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
-              placeholder="Search Trips..."
+              className="flex-1 font-['Noto_Sans_JP',sans-serif] text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
+              placeholder="トレッキングを検索..."
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -262,13 +262,13 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
             <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-xl overflow-hidden z-50 max-h-[480px] overflow-y-auto">
               <div className="px-4 pt-3 pb-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  All Trips
+                  すべてのトリップ
                 </span>
               </div>
 
               {results.length === 0 ? (
                 <div className="px-4 py-6 text-center text-sm text-slate-500">
-                  No results found.
+                  検索結果がありません。
                 </div>
               ) : (
                 <ul>
@@ -296,10 +296,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
                           <p className="text-sm font-semibold text-slate-900 truncate">
                             {trek.name}
                             {trek.days ? (
-                              <span className="font-normal text-slate-500">
-                                {' '}
-                                - {trek.days} Days
-                              </span>
+                              <span className="font-normal text-slate-500"> - {trek.days}日間</span>
                             ) : null}
                           </p>
                           {trek.description && (

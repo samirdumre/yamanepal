@@ -22,9 +22,9 @@ const svgPaths = {
 }
 
 // ─── 🖼️ IMAGE PLACEHOLDERS — replace these with your actual image paths ───────
-const IMAGE_TRAVEL_PLANNING = '/images/gallery5.jpg'
-const IMAGE_HIKER_SCENIC_ROCK = '/images/ebc.jpg'
-const IMAGE_FAMILY_TRAVELERS = '/images/langtang_region.jpg'
+const IMAGE_TRAVEL_PLANNING = '/images/annapurna4.jpg'
+const IMAGE_HIKER_SCENIC_ROCK = '/images/langtang1.jpg'
+const IMAGE_FAMILY_TRAVELERS = '/images/camping.jpg'
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
@@ -92,9 +92,9 @@ export default function WhyChooseUs() {
       <div className="flex flex-col items-center">
         <SectionHeading
           align="center"
-          label="Why Choose Us"
+          label="選ばれる理由"
           labelPosition="both"
-          title="Why Yama Nepal?"
+          title="なぜヤマネパール？"
         />
       </div>
 
@@ -136,8 +136,8 @@ export default function WhyChooseUs() {
                   />
                 </>
               }
-              title="Expertly Curated Packages"
-              description="Carefully designed itineraries tailored to your preferences."
+              title="厳選されたパッケージ"
+              description="お客様のご要望に合わせた丁寧な旅程設計。"
             />
             <FeatureCard
               icon={
@@ -149,11 +149,11 @@ export default function WhyChooseUs() {
                   strokeWidth="2.33333"
                 />
               }
-              title="24/7 Customer Support"
-              description="We're here to assist you at every step of your journey, anytime and anywhere you need us."
+              title="24時間サポート"
+              description="旅のあらゆる場面で、いつでもどこでもサポートいたします。"
             />
             {/* 🖼️ IMAGE SLOT 1 — Travel Planning photo */}
-            <ImageCard src={IMAGE_TRAVEL_PLANNING} alt="Travel planning" className="h-[154px]" />
+            <ImageCard src={IMAGE_TRAVEL_PLANNING} alt="旅行の計画" className="h-[154px]" />
           </div>
 
           {/* Center Column — Hero Image */}
@@ -162,7 +162,7 @@ export default function WhyChooseUs() {
             <Image
               fill
               src={IMAGE_HIKER_SCENIC_ROCK}
-              alt="Hiker at scenic rock formation"
+              alt="景観の良い岩場のハイカー"
               className="object-cover"
             />
           </div>
@@ -170,7 +170,7 @@ export default function WhyChooseUs() {
           {/* Right Column */}
           <div className="flex flex-col sm:flex-row md:flex-col lg:flex-col gap-5 flex-1 justify-center">
             {/* 🖼️ IMAGE SLOT 3 — Family travelers photo */}
-            <ImageCard src={IMAGE_FAMILY_TRAVELERS} alt="Family travelers" className="h-[154px]" />
+            <ImageCard src={IMAGE_FAMILY_TRAVELERS} alt="家族旅行" className="h-[154px]" />
             <FeatureCard
               icon={
                 <>
@@ -204,8 +204,8 @@ export default function WhyChooseUs() {
                   />
                 </>
               }
-              title="Hassle Free Booking"
-              description="Easy and secure booking process, giving you peace of mind. 100% satisfaction guaranteed."
+              title="簡単予約"
+              description="安心・安全な予約手続き。100%満足保証。"
             />
             <FeatureCard
               icon={
@@ -217,8 +217,8 @@ export default function WhyChooseUs() {
                   strokeWidth="2.33333"
                 />
               }
-              title="Best Travel Guides"
-              description="Local guides that will prioritize your safety on every path."
+              title="最高の旅行ガイド"
+              description="あなたの安全を第一に考える地元ガイド。"
             />
           </div>
         </div>

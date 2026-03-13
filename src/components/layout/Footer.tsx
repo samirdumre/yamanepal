@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 // ============================================================
 // IMAGE PLACEHOLDERS — replace these paths with your actual images
@@ -11,25 +12,32 @@ const IMAGES = {
 }
 // ============================================================
 
-const quickLinks = ['Home', 'Destinations', 'Activities', 'Travel Guide', 'Company']
+const quickLinks = [
+  { label: 'ホーム', href: '/' },
+  { label: '会社概要', href: '/about-yama-nepal' },
+  { label: 'ブログ', href: '/posts' },
+  { label: 'お支払い情報', href: '/how-to-make-payment' },
+  { label: 'お問い合わせ', href: '/contact-yama-nepal' },
+]
+
 const destinations = [
-  'Everest Region',
-  'Langtang Region',
-  'Chitwan Region',
-  'Annapurna Region',
-  'Kathmandu',
+  'エベレスト地域',
+  'ランタン地域',
+  'チトワン地域',
+  'アンナプルナ地域',
+  'カトマンズ',
 ]
 
 const contacts = [
   {
-    country: 'NEPAL',
-    name: 'Shanta Magar',
+    country: 'ネパール',
+    name: 'シャンタ マガル',
     phone: '+977-9866937865',
     avatar: IMAGES.avatarNepal,
   },
   {
-    country: 'JAPAN',
-    name: 'Bimal Magar',
+    country: '日本',
+    name: 'ビマル マガル',
     phone: '+080-96321073',
     avatar: IMAGES.avatarJapan,
   },
@@ -77,12 +85,12 @@ export function Footer() {
             {/* Brand column */}
             <div className="flex flex-col gap-4 col-span-2">
               <h2 className="text-white text-[24px] tracking-[0.5px]" style={{ fontWeight: 600 }}>
-                YAMA NEPAL
+                ヤマネパール
               </h2>
               <div className="flex flex-col gap-3">
-                <p className="text-[#e2e8f0] text-[14px]">Location: Swayambhu, Nepal</p>
+                <p className="text-[#e2e8f0] text-[14px]">所在地: ネパール・スワヤンブー</p>
                 <p className="text-[#e2e8f0] text-[14px]">
-                  Email:{' '}
+                  メール:{' '}
                   <a
                     href="mailto:info@yamatravel.com"
                     className="hover:text-white transition-colors"
@@ -92,24 +100,24 @@ export function Footer() {
                 </p>
               </div>
               <div className="relative w-[218px] h-[218px] mt-2">
-                <Image fill alt="QR Contact" className="object-cover" src={IMAGES.qrContact} />
+                <Image fill alt="連絡先QRコード" className="object-cover" src={IMAGES.qrContact} />
               </div>
             </div>
-
             {/* Quick Links */}
+
             <div className="flex flex-col gap-4">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
-                Quick Links
+                クイックリンク
               </h3>
               <ul className="flex flex-col gap-2.5">
                 {quickLinks.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
                       className="text-[#d1d5dc] text-[14px] hover:text-white transition-colors"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -118,7 +126,7 @@ export function Footer() {
             {/* Destinations */}
             <div className="flex flex-col gap-4">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
-                Destinations
+                目的地
               </h3>
               <ul className="flex flex-col gap-2.5">
                 {destinations.map((dest) => (
@@ -133,11 +141,10 @@ export function Footer() {
                 ))}
               </ul>
             </div>
-
             {/* Contact */}
             <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
-                Contact
+                お問い合わせ
               </h3>
               <div className="flex flex-col gap-4">
                 {contacts.map((contact) => (
@@ -170,7 +177,7 @@ export function Footer() {
           {/* Copyright */}
           <div className="mt-8 mb-4 text-center">
             <p className="text-[#e2e8f0] text-[14px]">
-              © {new Date().getFullYear()} Yama Nepal . All Rights Reserved
+              © {new Date().getFullYear()} Yama Nepal. All rights reserved.
             </p>
           </div>
 

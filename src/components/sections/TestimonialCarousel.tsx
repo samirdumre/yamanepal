@@ -149,9 +149,9 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
       <div className="max-w-[1320px] mx-auto px-5">
         <SectionHeading
           align="center"
-          label="Our Testimonials"
+          label="お客様の声"
           labelPosition="both"
-          title="What Our Client Say"
+          title="お客様の感想"
         />
       </div>
 
@@ -193,7 +193,7 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
 
           {/* Left arrow */}
           <button
-            aria-label="Previous"
+            aria-label="前へ"
             className="absolute cursor-pointer left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center z-10 transition-opacity duration-300"
             onClick={() => slide(-1)}
             type="button"
@@ -203,7 +203,7 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
 
           {/* Right arrow */}
           <button
-            aria-label="Next"
+            aria-label="次へ"
             className="absolute cursor-pointer right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center z-10 transition-opacity duration-300"
             onClick={() => slide(1)}
             type="button"

@@ -34,11 +34,11 @@ type NavbarProps = {
 }
 
 const navItems = [
-  { label: 'Home', hasDropdown: false },
-  { label: 'Nepal Trekking', hasDropdown: true },
-  { label: 'Bhutan', hasDropdown: true },
-  { label: 'Travel Info', hasDropdown: true },
-  { label: 'Company', hasDropdown: true },
+  { label: 'ホーム', hasDropdown: false },
+  { label: 'ネパールトレッキング', hasDropdown: true },
+  { label: 'ブータン', hasDropdown: true },
+  { label: '旅行情報', hasDropdown: true },
+  { label: '会社について', hasDropdown: true },
 ]
 
 /* ─────────────────────────────────────────────────
@@ -257,7 +257,7 @@ export function Navbar({
           {/* Contact Us — desktop */}
           <div className="hidden lg:block">
             <Link href="/contact-yama-nepal">
-              <Button size="lg">Contact Us</Button>
+              <Button size="lg">お問い合わせ</Button>
             </Link>
           </div>
 

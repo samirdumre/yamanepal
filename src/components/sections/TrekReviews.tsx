@@ -57,7 +57,7 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-black text-2xl font-semibold font-['Inter']">Travellers&apos; Reviews</h2>
+      <h2 className="text-black text-2xl font-semibold ">Travellers&apos; Reviews</h2>
 
       <div className="flex flex-col gap-4">
         {reviews.map((review: Review) => {
@@ -71,7 +71,7 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
             >
               {/* Review text */}
               {review.reviewText && (
-                <div className="text-slate-700 text-xs font-['Inter'] leading-4 [&_strong]:font-semibold [&_strong]:text-slate-950">
+                <div className="text-slate-700 text-xs  leading-4 [&_strong]:font-semibold [&_strong]:text-slate-950">
                   <RichText
                     data={review.reviewText as DefaultTypedEditorState}
                     enableGutter={false}
@@ -107,15 +107,15 @@ export function TrekReviews({ reviews }: TrekReviewsProps) {
                     <div className="flex items-center gap-2">
                       <StarRow rating={review.rating} />
                       {review.ratingLabel && (
-                        <span className="text-gray-700 text-sm font-normal font-['Inter'] leading-5">
+                        <span className="text-gray-700 text-sm font-normal  leading-5">
                           - {review.ratingLabel}
                         </span>
                       )}
                     </div>
-                    <span className="text-cyan-500 text-base font-semibold font-['Inter'] leading-6">
+                    <span className="text-cyan-500 text-base font-semibold  leading-6">
                       {review.reviewerName}
                     </span>
-                    <span className="text-gray-500 text-sm font-normal font-['Inter'] leading-5">
+                    <span className="text-gray-500 text-sm font-normal  leading-5">
                       {formatReviewDate(review.reviewDate)}
                     </span>
                   </div>

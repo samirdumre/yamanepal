@@ -59,21 +59,21 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-['Inter',sans-serif] overflow-x-hidden">
+    <div className="min-h-screen bg-white font-['Noto_Sans_JP',sans-serif] overflow-x-hidden">
       {/* <Navbar /> */}
 
       {/* Hero */}
       <HeroSection
-        headline={homepage?.hero?.headline ?? 'Explore Nepal with Local Guides'}
-        subheading={homepage?.hero?.subheading ?? 'Book a trek in Nepal now!!'}
+        headline={'地元ガイドと一緒にネパールを探検しよう'}
+        subheading={'ネパールのトレッキングを今すぐ予約！'}
       />
 
       {/* Best Seller Treks */}
       <section className="max-w-[1320px] mx-auto px-5 md:px-10 py-10 lg:py-16 overflow-hidden">
         <TrekCarousel
           treks={bestSellerTreks as Trek[]}
-          label={homepage?.bestSellerSectionLabel ?? 'Best Seller 2026'}
-          title="Best Seller Treks"
+          label={homepage?.bestSellerSectionLabel ?? '2026年 ベストセラー'}
+          title="人気トレッキング"
         />
       </section>
 
@@ -83,9 +83,9 @@ export default async function HomePage() {
         <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10">
           <SectionHeading
             align="center"
-            label="Top Notch Destination"
+            label="一流の目的地"
             labelPosition="both"
-            title="Explore Excellent Destination"
+            title="素晴らしい目的地を探索"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5 mt-4 md:mt-6 lg:mt-8 mb-6">
             {regions.map((region: Region) => (
@@ -112,8 +112,8 @@ export default async function HomePage() {
       <section className="max-w-[1320px] mx-auto px-5 md:px-10 pb-8 lg:pb-16 overflow-hidden">
         <TrekCarousel
           treks={lastMinuteDeals as Trek[]}
-          label={homepage?.lastMinuteSectionLabel ?? 'Deals and Discounts'}
-          title="Best Last Minute Deals"
+          label={'お得なセール'}
+          title="直前割引プラン"
         />
       </section>
 
@@ -151,7 +151,7 @@ export default async function HomePage() {
                     <span className="text-white text-[14px]">
                       <CalendarCheck2 />
                     </span>
-                    <span className="font-['Inter',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
                       {tripOfTheMonthTrek.days}
                     </span>
                   </div>
@@ -168,13 +168,13 @@ export default async function HomePage() {
                         height={20}
                       />
                     </span>
-                    <span className="font-['Inter',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
                       {tripOfTheMonthTrek.difficulty}
                     </span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <Tag />
-                    <span className="font-['Inter',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
                       US ${tripOfTheMonthTrek.price}
                     </span>
                   </div>
@@ -183,21 +183,19 @@ export default async function HomePage() {
               <div className="flex flex-col gap-2 flex-1">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="text-[16px] text-[#0cb6d8]">
-                      Trip of the Month
-                    </span>
+                    <span className="text-[16px] text-[#0cb6d8]">今月のおすすめ旅</span>
                     <div className="w-[44px] h-[1px] bg-[#0cb6d8]" />
                   </div>
                   <h2 className="font-semibold text-2xl md:text-4xl text-white">
                     {tripOfTheMonthTrek.name}
                   </h2>
                 </div>
-                <p className="font-['Inter',sans-serif] text-[14px] text-white leading-[22px]">
+                <p className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[22px]">
                   {homepage?.tripOfTheMonth?.description}
                 </p>
                 <Link href={`/treks/${tripOfTheMonthTrek.slug ?? ''}`} className="w-fit">
                   <Button variant="primary" className="w-fit mt-2">
-                    View Trip
+                    旅の詳細を見る
                   </Button>
                 </Link>
               </div>
@@ -236,7 +234,7 @@ export default async function HomePage() {
       {/* Blog Section */}
       {blogPosts.length > 0 && (
         <section className="max-w-[1320px] mx-auto px-5 md:px-10 lg:pb-20">
-          <SectionHeading label="Blogs" title="Blogs from the Himalayas" />
+          <SectionHeading label="ブログ" title="ヒマラヤからのブログ" />
           <div className="flex flex-col lg:flex-row gap-5 mt-8">
             {/* Featured Post */}
             {featuredPost && (
@@ -255,11 +253,11 @@ export default async function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="bg-[#e2e8f0] rounded-full px-3 py-[3px] w-fit mb-3">
-                    <span className="font-['Inter',sans-serif] text-[14px] text-[#020617]">
+                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-[#020617]">
                       {featuredPost.tag}
                     </span>
                   </div>
-                  <h3 className="font-['Inter',sans-serif] font-semibold text-[20px] text-white leading-[32px]">
+                  <h3 className="font-['Noto_Sans_JP',sans-serif] font-semibold text-[20px] text-white leading-[32px]">
                     {featuredPost.title}
                   </h3>
                 </div>
@@ -286,9 +284,7 @@ export default async function HomePage() {
                   </div>
                   <div className="flex flex-col gap-3">
                     <div className="bg-[rgba(226,232,240,0.56)] rounded-full px-4 py-[3px] w-fit">
-                      <span className="text-[14px] text-[#020617]">
-                        {post.tag}
-                      </span>
+                      <span className="text-[14px] text-[#020617]">{post.tag}</span>
                     </div>
                     <h4 className="font-semibold text-[16px] text-[#020617] leading-[22px]">
                       {post.title}

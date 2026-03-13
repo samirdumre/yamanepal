@@ -93,7 +93,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-black text-2xl font-semibold font-['Inter']">Write a Review</h2>
+      <h2 className="text-black text-2xl font-semibold ">Write a Review</h2>
 
       <div className="bg-white rounded-2xl outline outline-[0.67px] outline-gray-200 p-5">
         {status === 'success' ? (
@@ -109,15 +109,15 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p className="text-slate-950 font-semibold text-base font-['Inter']">
+            <p className="text-slate-950 font-semibold text-base ">
               Thank you for your review!
             </p>
-            <p className="text-gray-500 text-sm font-['Inter']">
+            <p className="text-gray-500 text-sm ">
               Your review has been posted successfully.
             </p>
             <button
               onClick={() => setStatus('idle')}
-              className="mt-2 text-cyan-500 text-sm font-medium font-['Inter'] hover:underline"
+              className="mt-2 text-cyan-500 text-sm font-medium  hover:underline"
             >
               Write another review
             </button>
@@ -126,7 +126,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Star rating selector */}
             <div className="flex flex-col gap-2">
-              <label className="text-slate-950 text-sm font-semibold font-['Inter']">
+              <label className="text-slate-950 text-sm font-semibold ">
                 Your Rating <span className="text-red-500">*</span>
               </label>
               <div className="flex items-center gap-1">
@@ -153,13 +153,13 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                   </button>
                 ))}
                 {activeStar > 0 && (
-                  <span className="ml-2 text-gray-600 text-sm font-['Inter']">
+                  <span className="ml-2 text-gray-600 text-sm ">
                     {RATING_LABELS[activeStar]}
                   </span>
                 )}
               </div>
               {errors.rating && (
-                <p className="text-red-500 text-xs mt-1 font-['Inter']">{errors.rating}</p>
+                <p className="text-red-500 text-xs mt-1 ">{errors.rating}</p>
               )}
             </div>
 
@@ -167,7 +167,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="reviewer-name"
-                className="text-slate-950 text-sm font-semibold font-['Inter']"
+                className="text-slate-950 text-sm font-semibold "
               >
                 Your Name <span className="text-red-500">*</span>
               </label>
@@ -181,10 +181,10 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                 }}
                 placeholder="e.g. John Smith"
                 maxLength={100}
-                className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950 font-['Inter'] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition"
+                className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition"
               />
               {errors.reviewerName && (
-                <p className="text-red-500 text-xs mt-1 font-['Inter']">{errors.reviewerName}</p>
+                <p className="text-red-500 text-xs mt-1 ">{errors.reviewerName}</p>
               )}
             </div>
 
@@ -192,7 +192,7 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="review-text"
-                className="text-slate-950 text-sm font-semibold font-['Inter']"
+                className="text-slate-950 text-sm font-semibold "
               >
                 Your Review <span className="text-red-500">*</span>
               </label>
@@ -206,19 +206,19 @@ export function AddReviewForm({ trekId }: AddReviewFormProps) {
                 placeholder="Share your experience on this trek..."
                 rows={5}
                 maxLength={2000}
-                className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950 font-['Inter'] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition resize-none"
+                className="w-full rounded-lg border border-gray-200 px-3.5 py-2.5 text-sm text-slate-950  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition resize-none"
               />
-              <span className="text-gray-400 text-xs font-['Inter'] text-right">
+              <span className="text-gray-400 text-xs  text-right">
                 {reviewText.length}/2000
               </span>
               {errors.reviewText && (
-                <p className="text-red-500 text-xs font-['Inter']">{errors.reviewText}</p>
+                <p className="text-red-500 text-xs ">{errors.reviewText}</p>
               )}
             </div>
 
             {/* Error */}
             {(status === 'error' || errorMsg) && (
-              <p className="text-red-500 text-sm font-['Inter']">{errorMsg}</p>
+              <p className="text-red-500 text-sm ">{errorMsg}</p>
             )}
 
             {/* Submit */}

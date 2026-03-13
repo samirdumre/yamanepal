@@ -24,10 +24,10 @@ function StatItem({ icon, label, value }: StatItemProps) {
         {icon}
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-[13px] md:text-sm font-normal font-['Inter'] leading-5 text-slate-950 opacity-70">
+        <span className="text-[13px] md:text-sm font-normal  leading-5 text-slate-950 opacity-70">
           {label}
         </span>
-        <span className="text-sm md:text-[15px] font-medium font-['Inter'] leading-5 text-slate-950">{value}</span>
+        <span className="text-sm md:text-[15px] font-medium  leading-5 text-slate-950">{value}</span>
       </div>
     </div>
   )

@@ -270,7 +270,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Highlights */}
             {trek.highlights && trek.highlights.length > 0 && (
               <section className="mb-10" id="highlights">
-                <h2 className="font-['Inter'] font-semibold text-2xl text-[#020617] mb-2.5">
+                <h2 className=" font-semibold text-2xl text-[#020617] mb-2.5">
                   Highlights
                 </h2>
                 <div className="flex flex-col gap-1 mt-3">
@@ -292,7 +292,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Detailed Overview */}
             {trek.detailedOverview && (
               <section className="mb-10">
-                <h2 className="font-['Inter'] font-semibold text-2xl text-[#020617] mb-4">
+                <h2 className="font-semibold text-2xl text-[#020617] mb-4">
                   Detailed Overview
                 </h2>
                 <RichText
@@ -316,7 +316,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             <section id="inclusions" className="mb-12 flex flex-col gap-10 scroll-mt-16">
               {trek.includes && trek.includes.length > 0 && (
                 <div className="flex flex-col gap-3 w-full">
-                  <h3 className="text-[#020617] text-xl font-semibold font-['Inter']">
+                  <h3 className="text-[#020617] text-xl font-semibold ">
                     Cost Includes
                   </h3>
                   <ul className="flex flex-col gap-2">
@@ -338,7 +338,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
 
               {trek.excludes && trek.excludes.length > 0 && (
                 <div className="flex flex-col gap-3 w-full">
-                  <h3 className="text-[#020617] text-xl font-semibold font-['Inter']">
+                  <h3 className="text-[#020617] text-xl font-semibold">
                     Cost Excludes
                   </h3>
                   <ul className="flex flex-col gap-2">

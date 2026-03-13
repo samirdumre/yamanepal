@@ -22,7 +22,7 @@ export function TrekFaqAccordion({ faqs }: TrekFaqAccordionProps) {
 
   return (
     <div className="inline-flex flex-col gap-6 w-full">
-      <h2 className="text-[#020617] text-2xl font-semibold font-['Inter']">FAQs</h2>
+      <h2 className="text-[#020617] text-2xl font-semibold ">FAQs</h2>
 
       <div className="w-full bg-white rounded-2xl border border-gray-200 overflow-hidden">
         {faqs.map((faq, i) => {
@@ -36,7 +36,7 @@ export function TrekFaqAccordion({ faqs }: TrekFaqAccordionProps) {
                 onClick={() => toggleIndex(i)}
                 aria-expanded={isOpen}
               >
-                <span className="flex-1 text-base font-['Inter'] leading-6">
+                <span className="flex-1 text-base  leading-6">
                   <span className="text-blue-600 font-semibold">Q{i + 1}.</span>{' '}
                   <span className="text-[#020617] font-medium">{faq.question}</span>
                 </span>

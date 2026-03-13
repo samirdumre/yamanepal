@@ -43,9 +43,9 @@ export function GallerySection({ images }: GallerySectionProps) {
         <div className="flex flex-col items-center gap-8">
           <SectionHeading
             align="center"
-            label="Our Gallery"
+            label="ギャラリー"
             labelPosition="both"
-            title="Moments celebrated by Travelers"
+            title="旅人たちの思い出"
           />
           {/* Mobile/Tablet: responsive grid — max 10 images */}
           <div className="xl:hidden w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
@@ -57,7 +57,7 @@ export function GallerySection({ images }: GallerySectionProps) {
               >
                 <Image
                   fill
-                  alt={`Gallery image ${i + 1}`}
+                  alt={`ギャラリー画像 ${i + 1}`}
                   className="object-cover hover:opacity-90 transition-opacity"
                   src={src}
                 />
@@ -77,7 +77,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 >
                   <Image
                     fill
-                    alt={`Gallery image ${i + 1}`}
+                    alt={`ギャラリー画像 ${i + 1}`}
                     className="object-cover rounded hover:opacity-90 transition-opacity"
                     src={src}
                   />
@@ -95,7 +95,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                   >
                     <Image
                       fill
-                      alt={`Gallery image ${i + 7}`}
+                      alt={`ギャラリー画像 ${i + 7}`}
                       className="object-cover rounded hover:opacity-90 transition-opacity"
                       src={src}
                     />
@@ -123,7 +123,7 @@ export function GallerySection({ images }: GallerySectionProps) {
               {selectedIndex + 1} / {total}
             </span>
             <button
-              aria-label="Close lightbox"
+              aria-label="閉じる"
               className="p-1 rounded hover:cursor-pointer hover:bg-white/10 transition-colors"
               onClick={close}
             >
@@ -145,7 +145,7 @@ export function GallerySection({ images }: GallerySectionProps) {
             <div className="absolute inset-0" onClick={close} />
             {/* Previous arrow */}
             <button
-              aria-label="Previous image"
+              aria-label="前の画像"
               className="absolute left-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
@@ -165,7 +165,7 @@ export function GallerySection({ images }: GallerySectionProps) {
 
             {/* Active image */}
             <Image
-              alt={`Gallery image ${selectedIndex + 1}`}
+              alt={`ギャラリー画像 ${selectedIndex + 1}`}
               className="max-h-full max-w-full object-contain select-none"
               src={images[selectedIndex]}
               width={1920}
@@ -175,7 +175,7 @@ export function GallerySection({ images }: GallerySectionProps) {
 
             {/* Next arrow */}
             <button
-              aria-label="Next image"
+              aria-label="次の画像"
               className="absolute right-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation()
@@ -202,7 +202,7 @@ export function GallerySection({ images }: GallerySectionProps) {
             {images.map((src, i) => (
               <button
                 key={i}
-                aria-label={`Go to image ${i + 1}`}
+                aria-label={`画像 ${i + 1} に移動`}
                 className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden transition-all ${
                   i === selectedIndex
                     ? 'ring-2 ring-white opacity-100'
@@ -211,7 +211,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 onClick={() => setSelectedIndex(i)}
               >
                 <Image
-                  alt={`Thumbnail ${i + 1}`}
+                  alt={`サムネイル ${i + 1}`}
                   className="w-full h-full object-cover"
                   src={src}
                   width={64}

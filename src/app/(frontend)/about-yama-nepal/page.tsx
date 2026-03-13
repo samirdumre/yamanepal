@@ -23,38 +23,38 @@ function Section({ title, paragraphs }: SectionProps) {
 export default function About() {
   const sections: SectionProps[] = [
     {
-      title: 'About Us',
+      title: '私たちについて',
       paragraphs: [
-        'Yama Nepal is a trusted travel agency in Nepal offering trekking in Nepal, Nepal tour packages, cultural tours, wildlife safaris, adventure holidays, and customized trips across the Himalayas.',
-        'We help solo travelers, couples, families, and groups discover Nepal through safe, well-planned, and authentic travel experiences. From iconic Himalayan trekking routes and ancient heritage sites to peaceful villages, national parks, and spiritual destinations, we create journeys that show travelers the true beauty and diversity of Nepal.',
-        'Our team is passionate about delivering trips that are not only enjoyable but also meaningful. With strong local knowledge, personalized service, and a commitment to responsible tourism, Yama Nepal works to make every journey smooth, memorable, and deeply connected to the people, culture, and landscapes of Nepal.',
+        'Yama Nepalは、ネパールで信頼される旅行会社として、ネパールトレッキング、ネパール周遊パッケージ、文化ツアー、野生動物サファリ、アドベンチャーホリデー、そしてヒマラヤ各地へのオーダーメイド旅行を提供しています。',
+        '私たちは、一人旅、カップル、家族、グループなど、あらゆる旅行者の皆さまに、安全で綿密に計画された本物志向の旅を通してネパールの魅力をお届けします。代表的なヒマラヤのトレッキングルートや古代遺産から、静かな村々、国立公園、スピリチュアルな聖地まで、ネパールの真の美しさと多様性を体感できる旅をつくります。',
+        '私たちのチームは、楽しいだけでなく心に残る意味のある旅を提供することに情熱を注いでいます。豊富な地域知識、きめ細やかなサービス、そして責任ある観光への取り組みにより、Yama Nepalはすべての旅がスムーズで忘れられないものとなり、ネパールの人々・文化・風景と深くつながる体験になるよう努めています。',
       ],
     },
     {
-      title: 'Our Story',
+      title: '私たちの歩み',
       paragraphs: [
-        'Yama Nepal was founded with a simple purpose: to share the beauty, culture, and adventure of Nepal with travelers from around the world. We wanted to build a Nepal travel company that goes beyond standard sightseeing by creating experiences that feel personal, authentic, and carefully planned.',
-        'From the beginning, our goal has been to provide professional service with a warm local touch. We believe the best trips are created when travelers feel supported at every stage, from choosing the right itinerary to arriving in Nepal and exploring the country with confidence.',
-        'What started as a vision to connect visitors with the heart of the Himalayas has grown into a reliable travel partner for those looking for trekking in Nepal, cultural discovery, and customized Nepal holidays. Today, Yama Nepal continues to serve travelers with the same values that inspired its beginning: honesty, hospitality, safety, and genuine local experience.',
+        'Yama Nepalは、世界中の旅行者にネパールの美しさ、文化、冒険を届けたいというシンプルな想いから設立されました。私たちは、一般的な観光を超え、よりパーソナルで本格的、そして丁寧に設計された体験を生み出す旅行会社を目指しました。',
+        '創業当初からの目標は、プロフェッショナルな品質と温かいローカルの心配りを両立したサービスを提供することです。最適な旅程選びからネパール到着後の旅まで、あらゆる段階で安心していただけるとき、最高の旅が生まれると私たちは信じています。',
+        'ヒマラヤの本質と旅行者をつなぎたいというビジョンから始まった私たちは、ネパールトレッキング、文化体験、オーダーメイドのネパール旅行を求める方々にとって信頼できるパートナーへと成長しました。現在もYama Nepalは、誠実さ、おもてなし、安全性、そして本物のローカル体験という創業時の価値観を大切に、旅行者の皆さまをお迎えしています。',
       ],
     },
   ]
 
   const sectionsAfterImage: SectionProps[] = [
     {
-      title: 'Our Vision',
+      title: '私たちのビジョン',
       paragraphs: [
-        'Our vision is to become a leading Nepal travel company known for safe, authentic, and responsible travel experiences. We aim to connect travelers with the best of Nepal through Himalayan adventures, cultural journeys, spiritual travel, and immersive local experiences that leave a lasting impression.',
-        "We believe tourism should create value for everyone involved. It should inspire travelers, support local communities, respect culture, and help preserve Nepal's natural beauty. For this reason, we promote responsible travel practices that encourage deeper connection and more thoughtful exploration.",
-        'As Yama Nepal grows, we want to continue setting high standards for quality service, trusted guidance, and meaningful travel in Nepal. Our vision is not only to help people visit Nepal, but to help them truly experience it.',
+        '私たちのビジョンは、安全で本物志向、そして責任ある旅で知られるネパール有数の旅行会社になることです。ヒマラヤでの冒険、文化的な旅、スピリチュアルな体験、そして地域に深く触れるプログラムを通して、旅行者の皆さまにネパールの魅力を最大限に届けることを目指しています。',
+        '私たちは、観光は関わるすべての人に価値を生み出すべきだと考えています。旅行者に感動を与え、地域社会を支え、文化を尊重し、ネパールの自然の美しさを守ることが大切です。そのため、より深いつながりと丁寧な探求を促す責任ある旅のあり方を推進しています。',
+        'Yama Nepalが成長するこれからも、質の高いサービス、信頼できる案内、そして意義あるネパール旅行の高い基準を追求し続けます。私たちのビジョンは、ネパールを訪れていただくだけでなく、ネパールを本当に体験していただくことです。',
       ],
     },
     {
-      title: 'Our Mission',
+      title: '私たちのミッション',
       paragraphs: [
-        "Our mission is to deliver high-quality Nepal tours and trekking packages with a strong focus on safety, service, authenticity, and flexibility. We design carefully planned itineraries and customized Nepal tour packages that match each traveler's interests, travel style, schedule, and comfort level.",
-        'By working with experienced local guides, trusted drivers, accommodation partners, and community-based services, we make each trip enjoyable, seamless, and culturally enriching. Whether it is a short holiday, a heritage tour, a wildlife experience, or a long Himalayan trek, we give attention to every detail so travelers can focus on enjoying the journey.',
-        'Yama Nepal is also committed to responsible tourism in Nepal. We believe travel should positively impact both visitors and local communities, so we support respectful cultural exchange, local employment, and travel experiences that honor the environment. Through every trip we organize, our mission is to create unforgettable memories while contributing to the long-term value of tourism in Nepal.',
+        '私たちのミッションは、安全性、サービス品質、本物らしさ、柔軟性を重視しながら、高品質なネパールツアーとトレッキングパッケージを提供することです。旅行者一人ひとりの興味、旅のスタイル、日程、快適さに合わせて、綿密に計画した旅程とオーダーメイドのツアーパッケージを設計します。',
+        '経験豊富な現地ガイド、信頼できるドライバー、宿泊パートナー、地域に根ざしたサービスと連携することで、すべての旅を快適でスムーズ、かつ文化的に豊かな体験へと高めています。短期旅行、遺産巡り、野生動物体験、長期のヒマラヤトレッキングまで、細部にまで配慮し、旅行者の皆さまが旅そのものを楽しめるようにしています。',
+        'Yama Nepalは、ネパールにおける責任ある観光にも力を入れています。旅は旅行者と地域社会の双方に良い影響をもたらすべきだと考え、敬意ある文化交流、地域雇用、環境に配慮した旅行体験を支援しています。私たちは、企画するすべての旅を通して、忘れられない思い出を生み出すと同時に、ネパール観光の長期的な価値向上に貢献することを使命としています。',
       ],
     },
   ]
@@ -64,9 +64,9 @@ export default function About() {
       {/* Hero Image */}
       <div className="w-full h-[290px]  lg:h-[567px] overflow-hidden relative">
         <img
-          alt="Nepal mountain landscape"
+          alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/langtang1.jpg"
+          src="/images/coverimage.jpg"
         />
       </div>
 
@@ -74,9 +74,9 @@ export default function About() {
       <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-4">
-          <span className=" text-[#0cb6d8] text-[14px]">Home</span>
+          <span className=" text-[#0cb6d8] text-[14px]">ホーム</span>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
-          <span className=" text-[#0cb6d8] text-[14px]">About Us</span>
+          <span className=" text-[#0cb6d8] text-[14px]">私たちについて</span>
         </div>
 
         {/* About Us & Our Story */}
@@ -89,7 +89,7 @@ export default function About() {
         {/* Story Image */}
         <div className="w-full h-[464px] overflow-hidden relative my-10">
           <img
-            alt="Trekking in Nepal"
+            alt="ネパールでのトレッキング"
             className="absolute w-full h-full object-cover"
             src="/images/manaslu-trek.jpeg"
           />
@@ -105,7 +105,7 @@ export default function About() {
         {/* Story Image */}
         <div className="w-full h-[464px] overflow-hidden relative my-10 pb-16">
           <img
-            alt="Trekking in Nepal"
+            alt="ネパールでのトレッキング"
             className="absolute w-full h-full object-cover object-bottom"
             src="/images/travel1.jpeg"
           />

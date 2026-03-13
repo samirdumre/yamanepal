@@ -46,13 +46,13 @@ export function TrekCard({
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-500 flex items-center justify-center">
             <span className="text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              Explore
+              詳しく見る
             </span>
           </div>
           {/* Deal badge */}
           {isLastMinuteDeal && (
             <span className="absolute top-3 left-3 bg-cyan-500 text-white text-xs font-semibold px-2 py-1 rounded">
-              Deal
+              セール
             </span>
           )}
         </div>
@@ -60,7 +60,7 @@ export function TrekCard({
         {/* Card body */}
         <div className="self-stretch flex flex-col justify-start items-start gap-1 md:gap-2">
           {/* Trek name */}
-          <div className="self-stretch text-slate-950 text-xl md:text-xl lg:text-2xl font-semibold font-['Inter']">
+          <div className="self-stretch text-slate-950 text-xl md:text-xl lg:text-2xl font-semibold font-['Noto_Sans_JP']">
             {name}
           </div>
 
@@ -68,7 +68,7 @@ export function TrekCard({
           <div className="flex flex-col justify-start items-start gap-4">
             {/* Days + divider + difficulty */}
             <div className="flex items-center gap-4">
-              <span className="text-slate-950 text-sm md:text-base font-normal font-['Inter']">
+              <span className="text-slate-950 text-sm md:text-base font-normal font-['Noto_Sans_JP']">
                 {days}
               </span>
               <div className="w-px h-5 bg-cyan-500 flex-shrink-0" />
@@ -80,7 +80,7 @@ export function TrekCard({
                   width={32}
                   height={20}
                 />
-                <span className={`text-sm md:text-base font-normal font-['Inter'] ${color}`}>
+                <span className={`text-sm md:text-base font-normal font-['Noto_Sans_JP'] ${color}`}>
                   {difficulty}
                 </span>
               </div>
@@ -90,15 +90,15 @@ export function TrekCard({
             <div className="inline-flex justify-start items-center gap-3">
               {showDiscount ? (
                 <>
-                  <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Inter']">
+                  <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Noto_Sans_JP']">
                     US ${discountedPrice}
                   </span>
-                  <span className="text-slate-400 text-base font-normal font-['Inter'] line-through">
+                  <span className="text-slate-400 text-base font-normal font-['Noto_Sans_JP'] line-through">
                     US ${price}
                   </span>
                 </>
               ) : (
-                <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Inter']">
+                <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Noto_Sans_JP']">
                   US ${price}
                 </span>
               )}

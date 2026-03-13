@@ -1,28 +1,27 @@
 import { Phone, Mail, MapPin, Clock, ChevronRight } from 'lucide-react'
 import Map from '@/components/ui/Map'
-import { Button } from '@/components/ui/button'
 import { ContactInquiryForm } from '@/components/sections/ContactInquiryForm'
 
 const contactDetails = [
   {
     icon: Phone,
-    title: 'Phone',
+    title: '電話',
     lines: ['+977 9849289569', '+080 96321073', '+977 9743290500'],
   },
   {
     icon: Mail,
-    title: 'Email',
+    title: 'メール',
     lines: ['yamanepal633@gmail.com'],
   },
   {
     icon: MapPin,
-    title: 'Location',
-    lines: ['Swoyambhu, Kathmandu'],
+    title: '所在地',
+    lines: ['カトマンズ、スワヤンブ'],
   },
   {
     icon: Clock,
-    title: 'Working Hours',
-    lines: ['Monday - Saturday: 7:00 AM - 7:00 PM', 'Sunday: 8:00 AM - 5:00 PM'],
+    title: '営業時間',
+    lines: ['月曜日 - 土曜日: 午前7:00 - 午後7:00', '日曜日: 午前8:00 - 午後5:00'],
   },
 ]
 
@@ -32,9 +31,9 @@ const ContactSection = () => {
       {/* Hero Image */}
       <div className="w-full h-[290px] lg:h-[567px] overflow-hidden relative">
         <img
-          alt="Nepal mountain landscape"
+          alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/langtang1.jpg"
+          src="/images/coverimage.jpg"
         />
       </div>
 
@@ -42,9 +41,9 @@ const ContactSection = () => {
       <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-4">
-          <span className="text-[#0cb6d8] text-[14px]">Home</span>
+          <span className="text-[#0cb6d8] text-[14px]">ホーム</span>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
-          <span className="text-[#0cb6d8] text-[14px]">Contact Us</span>
+          <span className="text-[#0cb6d8] text-[14px]">お問い合わせ</span>
         </div>
 
         {/* ── Get in Touch ── */}
@@ -54,10 +53,10 @@ const ContactSection = () => {
             {/* Header */}
             <div className="flex flex-col gap-2">
               <h2 className="text-[#020617] text-[32px] font-semibold tracking-[-0.8px]">
-                Contact Us
+                お問い合わせ
               </h2>
               <p className="text-black text-[17px] leading-[30px]">
-                We&apos;re here to help with all your trekking, tour, and travel needs.
+                トレッキング、ツアー、旅行に関するあらゆるご相談をお手伝いします。
               </p>
             </div>
 
@@ -82,7 +81,7 @@ const ContactSection = () => {
 
             {/* CTA */}
             {/* <a href="tel:9849289569" className="xl:hidden mt-2 md:mt-4">
-              <Button>Click to Call Us</Button>
+              <Button>お電話はこちら</Button>
             </a> */}
           </div>
 
@@ -96,12 +95,10 @@ const ContactSection = () => {
         <div className="max-w-[1320px] mx-auto px-5 md:px-10 flex flex-col gap-6 sm:gap-8">
           {/* Header */}
           <div className="flex flex-col gap-3 sm:gap-4 text-center">
-            <h2 className="text-[#020617] text-[32px] font-semibold tracking-[-0.8px]">
-              Our Location
-            </h2>
+            <h2 className="text-[#020617] text-[32px] font-semibold tracking-[-0.8px]">アクセス</h2>
             <p className="text-black text-[16px] leading-[29px] max-w-2xl mx-auto">
-              We&apos;re conveniently located in Swoyambhu, Kathmandu and ready to assist you with
-              all your travel plans.
+              カトマンズのスワヤンブに位置し、
+              皆さまの旅行プランをサポートできるよう準備しております。
             </p>
           </div>
 

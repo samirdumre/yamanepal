@@ -170,10 +170,10 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
       {/* Section heading */}
       <div className="flex flex-col gap-1 md:gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-['Inter',sans-serif] text-base text-cyan-500">{label}</span>
+          <span className="font-['Noto_Sans_JP',sans-serif] text-base text-cyan-500">{label}</span>
           <div className="w-11 h-px bg-cyan-500" />
         </div>
-        <h2 className="font-['Inter',sans-serif] font-semibold text-2xl md:text-4xl text-[#020617]">
+        <h2 className="font-['Noto_Sans_JP',sans-serif] font-semibold text-2xl md:text-4xl text-[#020617]">
           {title}
         </h2>
       </div>
@@ -210,7 +210,7 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
 
         {/* Left arrow — hidden until scrolled */}
         <button
-          aria-label="Previous"
+          aria-label="前へ"
           className={`absolute cursor-pointer left-0 top-32 md:top-40 -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center z-10 transition-opacity duration-300 ${
             offset > 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
@@ -222,7 +222,7 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
 
         {/* Right arrow */}
         <button
-          aria-label="Next"
+          aria-label="次へ"
           className={`absolute cursor-pointer right-0 top-32 md:top-40 translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center z-10 transition-opacity duration-300 ${
             offset < maxOffset ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}

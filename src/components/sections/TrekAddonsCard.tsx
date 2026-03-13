@@ -25,7 +25,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
           data={trek.addonsDescription}
           enableGutter={false}
           enableProse={false}
-          className="text-slate-950 text-base font-normal font-['Inter'] leading-6"
+          className="text-slate-950 text-base font-normal  leading-6"
         />
       )}
 
@@ -51,7 +51,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
 
       {/* Personalize heading */}
       {trek.addonsPersonalizeTitle && (
-        <h3 className="text-slate-950 text-lg font-medium font-['Inter'] leading-7">
+        <h3 className="text-slate-950 text-lg font-medium leading-7">
           {trek.addonsPersonalizeTitle}
         </h3>
       )}
@@ -62,7 +62,7 @@ export function TrekAddonsCard({ trek }: TrekAddonsCardProps) {
           {(trek.addonsSteps as string[]).map((step, i) => (
             <li key={i} className="flex items-start gap-[14px]">
               <ArrowRight className="w-4 h-4 text-green-600 flex-shrink-0  mt-[5px]" />
-              <span className="text-slate-950 text-base font-normal font-['Inter'] leading-6">
+              <span className="text-slate-950 text-base font-normal  leading-6">
                 {step}
               </span>
             </li>

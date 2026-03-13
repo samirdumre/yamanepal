@@ -23,30 +23,30 @@ function Section({ title, paragraphs }: SectionProps) {
 export default function HowToMakePayment() {
   const sections: SectionProps[] = [
     {
-      title: 'How to Make Payment',
+      title: 'お支払い方法',
       paragraphs: [
-        'Yama Nepal is a trusted travel agency in Nepal offering trekking in Nepal, Nepal tour packages, cultural tours, wildlife safaris, adventure holidays, and customized trips across the Himalayas.',
-        'We help solo travelers, couples, families, and groups discover Nepal through safe, well-planned, and authentic travel experiences. From iconic Himalayan trekking routes and ancient heritage sites to peaceful villages, national parks, and spiritual destinations, we create journeys that show travelers the true beauty and diversity of Nepal.',
-        'Our team is passionate about delivering trips that are not only enjoyable but also meaningful. With strong local knowledge, personalized service, and a commitment to responsible tourism, Yama Nepal works to make every journey smooth, memorable, and deeply connected to the people, culture, and landscapes of Nepal.',
+        'Yama Nepalは、ネパールで信頼される旅行会社として、ネパールトレッキング、ネパール周遊パッケージ、文化ツアー、野生動物サファリ、アドベンチャーホリデー、そしてヒマラヤ各地へのオーダーメイド旅行を提供しています。',
+        '私たちは、一人旅、カップル、家族、グループなど、あらゆる旅行者の皆さまに、安全で綿密に計画された本物志向の旅を通してネパールの魅力をお届けします。代表的なヒマラヤのトレッキングルートや古代遺産から、静かな村々、国立公園、スピリチュアルな聖地まで、ネパールの真の美しさと多様性を体感できる旅をつくります。',
+        '私たちのチームは、楽しいだけでなく心に残る意味のある旅を提供することに情熱を注いでいます。豊富な地域知識、きめ細やかなサービス、そして責任ある観光への取り組みにより、Yama Nepalはすべての旅がスムーズで忘れられないものとなり、ネパールの人々・文化・風景と深くつながる体験になるよう努めています。',
       ],
     },
   ]
 
   const sectionsAfterImage: SectionProps[] = [
     {
-      title: 'Our Vision',
+      title: '私たちのビジョン',
       paragraphs: [
-        'Our vision is to become a leading Nepal travel company known for safe, authentic, and responsible travel experiences. We aim to connect travelers with the best of Nepal through Himalayan adventures, cultural journeys, spiritual travel, and immersive local experiences that leave a lasting impression.',
-        "We believe tourism should create value for everyone involved. It should inspire travelers, support local communities, respect culture, and help preserve Nepal's natural beauty. For this reason, we promote responsible travel practices that encourage deeper connection and more thoughtful exploration.",
-        'As Yama Nepal grows, we want to continue setting high standards for quality service, trusted guidance, and meaningful travel in Nepal. Our vision is not only to help people visit Nepal, but to help them truly experience it.',
+        '私たちのビジョンは、安全で本物志向、そして責任ある旅で知られるネパール有数の旅行会社になることです。ヒマラヤでの冒険、文化的な旅、スピリチュアルな体験、そして地域に深く触れるプログラムを通して、旅行者の皆さまにネパールの魅力を最大限に届けることを目指しています。',
+        '私たちは、観光は関わるすべての人に価値を生み出すべきだと考えています。旅行者に感動を与え、地域社会を支え、文化を尊重し、ネパールの自然の美しさを守ることが大切です。そのため、より深いつながりと丁寧な探求を促す責任ある旅のあり方を推進しています。',
+        'Yama Nepalが成長するこれからも、質の高いサービス、信頼できる案内、そして意義あるネパール旅行の高い基準を追求し続けます。私たちのビジョンは、ネパールを訪れていただくだけでなく、ネパールを本当に体験していただくことです。',
       ],
     },
     {
-      title: 'Our Mission',
+      title: '私たちのミッション',
       paragraphs: [
-        "Our mission is to deliver high-quality Nepal tours and trekking packages with a strong focus on safety, service, authenticity, and flexibility. We design carefully planned itineraries and customized Nepal tour packages that match each traveler's interests, travel style, schedule, and comfort level.",
-        'By working with experienced local guides, trusted drivers, accommodation partners, and community-based services, we make each trip enjoyable, seamless, and culturally enriching. Whether it is a short holiday, a heritage tour, a wildlife experience, or a long Himalayan trek, we give attention to every detail so travelers can focus on enjoying the journey.',
-        'Yama Nepal is also committed to responsible tourism in Nepal. We believe travel should positively impact both visitors and local communities, so we support respectful cultural exchange, local employment, and travel experiences that honor the environment. Through every trip we organize, our mission is to create unforgettable memories while contributing to the long-term value of tourism in Nepal.',
+        '私たちのミッションは、安全性、サービス品質、本物らしさ、柔軟性を重視しながら、高品質なネパールツアーとトレッキングパッケージを提供することです。旅行者一人ひとりの興味、旅のスタイル、日程、快適さに合わせて、綿密に計画した旅程とオーダーメイドのツアーパッケージを設計します。',
+        '経験豊富な現地ガイド、信頼できるドライバー、宿泊パートナー、地域に根ざしたサービスと連携することで、すべての旅を快適でスムーズ、かつ文化的に豊かな体験へと高めています。短期旅行、遺産巡り、野生動物体験、長期のヒマラヤトレッキングまで、細部にまで配慮し、旅行者の皆さまが旅そのものを楽しめるようにしています。',
+        'Yama Nepalは、ネパールにおける責任ある観光にも力を入れています。旅は旅行者と地域社会の双方に良い影響をもたらすべきだと考え、敬意ある文化交流、地域雇用、環境に配慮した旅行体験を支援しています。私たちは、企画するすべての旅を通して、忘れられない思い出を生み出すと同時に、ネパール観光の長期的な価値向上に貢献することを使命としています。',
       ],
     },
   ]
@@ -56,9 +56,9 @@ export default function HowToMakePayment() {
       {/* Hero Image */}
       <div className="w-full h-[290px]  lg:h-[567px] overflow-hidden relative">
         <img
-          alt="Nepal mountain landscape"
+          alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/langtang1.jpg"
+          src="/images/coverimage.jpg"
         />
       </div>
 
@@ -66,30 +66,27 @@ export default function HowToMakePayment() {
       <div className="max-w-[1320px] mx-auto px-5 md:px-10 py-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-4">
-          <span className=" text-[#0cb6d8] text-[14px]">Home</span>
+          <span className=" text-[#0cb6d8] text-[14px]">ホーム</span>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
-          <span className=" text-[#0cb6d8] text-[14px]">How to Make Payment</span>
+          <span className=" text-[#0cb6d8] text-[14px]">お支払い方法</span>
         </div>
 
         {/* How to Make Payment */}
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-3 w-full">
-            <h2 className=" text-[#020617] text-[24px] font-semibold">How to Make a Payment</h2>
+            <h2 className=" text-[#020617] text-[24px] font-semibold">お支払い方法</h2>
             <div className=" text-black text-[16px] leading-[28px]">
-              <h3 className="font-semibold mb-2">SWIFT Transfer:</h3>
+              <h3 className="font-semibold mb-2">SWIFT送金:</h3>
               <div>
-                Pay to: Yama Nepal Trek & Expedition Pvt.Ltd. (Shanta Bahadur Pun) <br />
-                A/c Number: 3100310374600001 <br /> A/c Name: Shanta Bahadur Pun <br />
-                Paying Bank: Kumari Bank Ltd <br /> Branch: Dallu Branch, Kathmandu Nepal <br />
+                受取人: Yama Nepal Trek & Expedition Pvt.Ltd. (Shanta Bahadur Pun) <br />
+                口座番号: 3100310374600001 <br /> 口座名義: Shanta Bahadur Pun <br />
+                取扱銀行: Kumari Bank Ltd <br /> 支店名: Dallu Branch, Kathmandu Nepal <br />
                 <div className="flex gap-1">
-                  <p className="font-semibold">Swift code:</p>
+                  <p className="font-semibold">SWIFTコード:</p>
                   <p>KMBLNPKA</p>
                 </div>
               </div>
-              <div className="mt-2">
-                (Bank service charges related to submitting a deposit are the responsibility of the
-                client.)
-              </div>
+              <div className="mt-2">（振込に伴う銀行手数料はお客様のご負担となります。）</div>
             </div>
           </div>
         </div>

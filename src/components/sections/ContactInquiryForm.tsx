@@ -27,19 +27,19 @@ function validate(fields: FormFields): FormErrors {
   const errors: FormErrors = {}
   const name = fields.fullName.trim()
   if (!name || name.length < 2 || name.length > 100)
-    errors.fullName = 'Full name must be between 2 and 100 characters.'
+    errors.fullName = '氏名は2文字以上100文字以内で入力してください。'
   const emailTrimmed = fields.email.trim()
   if (!emailTrimmed || !EMAIL_REGEX.test(emailTrimmed) || emailTrimmed.length > 254)
-    errors.email = 'Please enter a valid email address.'
+    errors.email = '有効なメールアドレスを入力してください。'
   const phone = fields.phone.trim()
   if (!phone || phone.length < 7 || phone.length > 20)
-    errors.phone = 'Please enter a valid phone number.'
+    errors.phone = '有効な電話番号を入力してください。'
   const travellers = Number(fields.noOfTravellers)
   if (!fields.noOfTravellers || !Number.isInteger(travellers) || travellers < 1 || travellers > 200)
-    errors.noOfTravellers = 'Please enter a number of travellers between 1 and 200.'
+    errors.noOfTravellers = '旅行者数は1〜200の整数で入力してください。'
   const msg = fields.message.trim()
   if (!msg || msg.length < 10 || msg.length > 2000)
-    errors.message = 'Message must be between 10 and 2000 characters.'
+    errors.message = 'メッセージは10文字以上2000文字以内で入力してください。'
   return errors
 }
 
@@ -77,7 +77,7 @@ export function ContactInquiryForm() {
       const data = await res.json()
 
       if (!res.ok) {
-        setErrorMsg(data.error ?? 'Something went wrong. Please try again.')
+        setErrorMsg(data.error ?? 'エラーが発生しました。もう一度お試しください。')
         setStatus('error')
         return
       }
@@ -85,7 +85,7 @@ export function ContactInquiryForm() {
       setStatus('success')
       setFields(INITIAL)
     } catch {
-      setErrorMsg('Network error. Please check your connection and try again.')
+      setErrorMsg('ネットワークエラーが発生しました。接続を確認して再度お試しください。')
       setStatus('error')
     }
   }
@@ -95,7 +95,7 @@ export function ContactInquiryForm() {
 
   return (
     <div className="w-full bg-white rounded-sm shadow-md p-8">
-      <h2 className="text-[#020617] font-semibold text-2xl mb-6">MAKE AN INQUIRY</h2>
+      <h2 className="text-[#020617] font-semibold text-2xl mb-6">お問い合わせフォーム</h2>
 
       {status === 'success' ? (
         <div className="flex flex-col items-center gap-4 py-8 text-center">
@@ -112,16 +112,16 @@ export function ContactInquiryForm() {
               d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="text-gray-800 font-semibold text-lg">Inquiry Submitted!</p>
+          <p className="text-gray-800 font-semibold text-lg">お問い合わせを送信しました。</p>
           <p className="text-gray-500 text-sm">
-            Thank you for reaching out. Our team will get back to you shortly.
+            お問い合わせありがとうございます。担当者より近日中にご連絡いたします。
           </p>
           <Button
             variant="primary"
             onClick={() => setStatus('idle')}
             className="mt-2 hover:cursor-pointer hover:bg-[#020617]"
           >
-            Send Another
+            もう一度送信する
           </Button>
         </div>
       ) : (
@@ -147,7 +147,7 @@ export function ContactInquiryForm() {
                   className={inputClass}
                   type="text"
                   name="fullName"
-                  placeholder="Full Name*"
+                  placeholder="お名前*"
                   required
                   value={fields.fullName}
                   onChange={handleChange}
@@ -159,7 +159,7 @@ export function ContactInquiryForm() {
                   className={inputClass}
                   type="email"
                   name="email"
-                  placeholder="E-mail*"
+                  placeholder="メールアドレス*"
                   required
                   value={fields.email}
                   onChange={handleChange}
@@ -175,7 +175,7 @@ export function ContactInquiryForm() {
                   className={inputClass}
                   type="tel"
                   name="phone"
-                  placeholder="Mobile*"
+                  placeholder="電話番号*"
                   required
                   value={fields.phone}
                   onChange={handleChange}
@@ -187,7 +187,7 @@ export function ContactInquiryForm() {
                   className={inputClass}
                   type="number"
                   name="noOfTravellers"
-                  placeholder="No. of Travellers*"
+                  placeholder="旅行者数*"
                   min={1}
                   required
                   value={fields.noOfTravellers}
@@ -204,7 +204,7 @@ export function ContactInquiryForm() {
               <textarea
                 className={`${inputClass} resize-none`}
                 name="message"
-                placeholder="Message*"
+                placeholder="メッセージ*"
                 rows={4}
                 required
                 value={fields.message}
@@ -225,7 +225,7 @@ export function ContactInquiryForm() {
               disabled={status === 'submitting'}
               className="mt-2 hover:cursor-pointer disabled:opacity-60"
             >
-              {status === 'submitting' ? 'Sending...' : 'SEND INQUIRY'}
+              {status === 'submitting' ? '送信中...' : 'お問い合わせを送信'}
             </Button>
           </div>
         </form>

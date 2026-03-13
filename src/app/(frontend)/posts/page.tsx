@@ -34,27 +34,24 @@ export default async function Page() {
           fill
           alt="Blogs from the Himalayas"
           className="object-cover"
-          src="/images/nepal-hill.jpg"
+          src="/images/coverimage.jpg"
           priority
         />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-          <h1 className="font-['Inter',sans-serif] font-bold text-[40px] md:text-[52px] text-white tracking-tight text-center">
-            Blogs from the Himalayas
-          </h1>
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-1 text-sm">
-            <Link href="/" className="text-[#0cb6d8] hover:underline">
-              Home
-            </Link>
-            <ChevronRight className="w-4 h-4 text-[#0cb6d8]" />
-            <span className="text-white">Blogs</span>
-          </div>
-        </div>
       </div>
 
       {/* Blog Grid */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 lg:px-0 py-12">
+        <div className="flex items-center gap-1 mb-2">
+          <Link href="/" className="text-[#0cb6d8] text-[14px]">
+            ホーム
+          </Link>
+          <ChevronRight className="size-5 text-[#0cb6d8]" />
+          <span className="text-[#0cb6d8] text-[14px]">ブログ</span>
+        </div>
+
+        <h1 className="text-left font-semibold mb-4 text-[32px] text-[#020617] tracking-tight">
+          ヒマラヤからのブログ
+        </h1>
         {posts.totalDocs === 0 ? (
           <p className="text-[#64748b] text-center py-20">No blogs published yet.</p>
         ) : (
