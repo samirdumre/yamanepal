@@ -49,6 +49,8 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                 fill
                 src={slot1}
                 alt={trekName}
+                priority
+                sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 768px) calc(100vw - 80px), 996px"
                 className="object-cover rounded-xl hover:opacity-95 transition-opacity"
               />
             ) : (
@@ -58,7 +60,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
           {/* Two stacked right images (hidden on small screens) */}
           {(slot2 || slot3) && (
-            <div className="flex flex-1 max-w-[324px] flex-col gap-2 min-w-0">
+            <div className="hidden sm:flex flex-1 max-w-[324px] flex-col gap-2 min-w-0">
               {slot2 ? (
                 <div
                   className="relative w-full h-[114px] sm:h-[236px] cursor-pointer"
@@ -68,6 +70,8 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                     fill
                     src={slot2}
                     alt={`${trekName} — 写真 2`}
+                    priority
+                    sizes="(max-width: 768px) 240px, 324px"
                     className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                   />
                 </div>
@@ -84,6 +88,8 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                       fill
                       src={slot3}
                       alt={`${trekName} — 写真 3`}
+                      priority
+                      sizes="(max-width: 768px) 240px, 324px"
                       className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                     />
                   </div>

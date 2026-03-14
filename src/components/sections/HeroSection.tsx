@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useDebounce } from '@/utilities/useDebounce'
 
-const HERO_IMAGE_SRC = '/images/hero1.jpg'
+const HERO_IMAGE_SRC = '/images/heromax.jpg'
 const HERO_VIDEO_ID = 'R_V9gKlZAZc'
 
 function extractYouTubeId(urlOrId: string): string {
@@ -23,6 +23,9 @@ interface YTPlayer {
   getDuration: () => number
   getCurrentTime: () => number
   getIframe: () => HTMLIFrameElement
+  getAvailableQualityLevels?: () => string[]
+  setPlaybackQuality: (suggestedQuality: string) => void
+  setPlaybackQualityRange?: (suggestedQuality: string) => void
 }
 
 declare global {
@@ -128,6 +131,33 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
   }
 
   useEffect(() => {
+    const isDesktop = () =>
+      typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
+
+    const qualityOrder = ['hd1080', 'hd720']
+
+    function forcePreferredQuality(player: YTPlayer) {
+      const preferredMinQuality = isDesktop() ? 'hd1080' : 'hd720'
+      const available = player.getAvailableQualityLevels?.() ?? []
+
+      // Pick the best available quality that still satisfies the desktop/mobile minimum target.
+      const minIndex = qualityOrder.indexOf(preferredMinQuality)
+      const chosen = qualityOrder.find((level) => {
+        const levelIndex = qualityOrder.indexOf(level)
+        return levelIndex >= 0 && levelIndex <= minIndex && available.includes(level)
+      })
+
+      const target = chosen ?? preferredMinQuality
+      player.setPlaybackQuality(target)
+      player.setPlaybackQualityRange?.(target)
+
+      // Re-assert once after startup because YouTube may auto-adjust shortly after play begins.
+      setTimeout(() => {
+        player.setPlaybackQuality(target)
+        player.setPlaybackQualityRange?.(target)
+      }, 1200)
+    }
+
     function createPlayer() {
       if (!playerContainerRef.current || playerRef.current) return
       const videoId = extractYouTubeId(HERO_VIDEO_ID)
@@ -150,6 +180,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
         events: {
           onReady: (e) => {
             playerRef.current = e.target
+            forcePreferredQuality(e.target)
             e.target.playVideo()
             const iframe = e.target.getIframe()
             Object.assign(iframe.style, {
@@ -167,6 +198,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
           },
           onStateChange: (e) => {
             if (e.data === 1) {
+              forcePreferredQuality(e.target)
               if (!hasStartedRef.current) {
                 hasStartedRef.current = true
                 setIsActive(true)

@@ -450,7 +450,7 @@ export function Navbar({
 
               <div className="pt-3">
                 <Link href="/contact-yama-nepal" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">Contact Us</Button>
+                  <Button className="w-full">お問い合わせ</Button>
                 </Link>
               </div>
             </div>
