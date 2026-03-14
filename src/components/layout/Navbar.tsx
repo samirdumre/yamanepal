@@ -201,26 +201,26 @@ export function Navbar({
           <div className="hidden lg:flex items-center gap-10">
             {navItems.map((item) => {
               const hasItems =
-                (item.label === 'Nepal Trekking' &&
+                (item.label === 'ネパールトレッキング' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)) ||
-                (item.label === 'Bhutan' && topTreksItems.length > 0) ||
-                (item.label === 'Travel Info' && travelInfoItems.length > 0) ||
-                (item.label === 'Company' && companyItems.length > 0)
+                (item.label === 'ブータン' && topTreksItems.length > 0) ||
+                (item.label === '旅行情報' && travelInfoItems.length > 0) ||
+                (item.label === '会社について' && companyItems.length > 0)
 
               if (item.hasDropdown && hasItems) {
                 let dropdown: React.ReactNode = null
-                if (item.label === 'Nepal Trekking') {
+                if (item.label === 'ネパールトレッキング') {
                   dropdown =
                     trekkingRegionGroups.length > 0 ? (
                       <DestinationsMegaMenu groups={trekkingRegionGroups} />
                     ) : (
                       <TrekDropdown items={trekkingItems} />
                     )
-                } else if (item.label === 'Bhutan') {
+                } else if (item.label === 'ブータン') {
                   dropdown = <TrekDropdown items={topTreksItems} />
-                } else if (item.label === 'Travel Info') {
+                } else if (item.label === '旅行情報') {
                   dropdown = <LinkDropdown items={travelInfoItems} />
-                } else if (item.label === 'Company') {
+                } else if (item.label === '会社について') {
                   dropdown = <LinkDropdown items={companyItems} />
                 }
 
@@ -240,7 +240,7 @@ export function Navbar({
               return (
                 <Link
                   key={item.label}
-                  href={item.label === 'Home' ? '/' : '#'}
+                  href={item.label === 'ホーム' ? '/' : '#'}
                   className="flex items-center gap-1 cursor-pointer group"
                 >
                   <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
@@ -296,17 +296,19 @@ export function Navbar({
 
                 /* Nepal Trekking accordion — regions then treks */
                 if (
-                  item.label === 'Nepal Trekking' &&
+                  item.label === 'ネパールトレッキング' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)
                 ) {
-                  const isOpen = openAccordion === 'Nepal Trekking'
+                  const isOpen = openAccordion === 'ネパールトレッキング'
                   return (
-                    <div key="Nepal Trekking" className="border-b border-gray-100">
+                    <div key="ネパールトレッキング" className="border-b border-gray-100">
                       <button
                         className="w-full flex items-center justify-between py-2.5"
-                        onClick={() => setOpenAccordion(isOpen ? null : 'Nepal Trekking')}
+                        onClick={() => setOpenAccordion(isOpen ? null : 'ネパールトレッキング')}
                       >
-                        <span className="font-medium text-[15px] text-black">Nepal Trekking</span>
+                        <span className="font-medium text-[15px] text-black">
+                          ネパールトレッキング
+                        </span>
                         <ChevronDown
                           className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
                             isOpen ? 'rotate-180' : ''
@@ -349,7 +351,7 @@ export function Navbar({
                 }
 
                 /* Bhutan accordion */
-                if (item.label === 'Bhutan' && topTreksItems.length > 0) {
+                if (item.label === 'ブータン' && topTreksItems.length > 0) {
                   const isOpen = openAccordion === item.label
                   return (
                     <div key={item.label} className="border-b border-gray-100">
@@ -393,8 +395,8 @@ export function Navbar({
 
                 /* Travel Info / Company accordion */
                 const mobileLinkItems: Record<string, LinkDropdownItem[]> = {
-                  'Travel Info': travelInfoItems,
-                  Company: companyItems,
+                  旅行情報: travelInfoItems,
+                  会社について: companyItems,
                 }
                 if (item.label in mobileLinkItems && mobileLinkItems[item.label]!.length > 0) {
                   const linkList = mobileLinkItems[item.label]!
