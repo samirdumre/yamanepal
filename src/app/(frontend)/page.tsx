@@ -32,11 +32,18 @@ export default async function HomePage() {
     payload.find({ collection: 'testimonials', limit: 3 }),
     payload.findGlobal({ slug: 'homepage', depth: 2 }),
     payload.find({ collection: 'media', limit: 11 }),
-    payload.find({ collection: 'treks', depth: 0, limit: 1000 }),
+    payload.find({
+      collection: 'treks',
+      depth: 0,
+      pagination: false,
+      select: {
+        region: true,
+      },
+    }),
   ])
 
   const regionTrekCounts = new Map<number | string, number>()
-  for (const trek of allTreks) {
+  for (const trek of allTreks as Array<Pick<Trek, 'region'>>) {
     const regionId = typeof trek.region === 'object' ? trek.region?.id : trek.region
     if (regionId != null) {
       regionTrekCounts.set(regionId, (regionTrekCounts.get(regionId) ?? 0) + 1)
@@ -59,7 +66,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-['Noto_Sans_JP',sans-serif] overflow-x-hidden">
+    <div className="min-h-screen bg-white font-['Noto_Sans_JP',sans-serif]">
       {/* <Navbar /> */}
 
       {/* Hero */}
@@ -142,6 +149,8 @@ export default async function HomePage() {
                     className="absolute inset-0 w-full h-full object-cover"
                     src={tripImage.url}
                     height={400}
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 522px"
                     width={600}
                   />
                 )}
@@ -247,6 +256,8 @@ export default async function HomePage() {
                     fill
                     alt={featuredPost.title}
                     className="object-cover group-hover:scale-103 transition-transform duration-300"
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     src={(featuredPost.image as Media).url!}
                   />
                 )}
@@ -278,6 +289,7 @@ export default async function HomePage() {
                         fill
                         alt={post.title}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="160px"
                         src={(post.image as Media).url!}
                       />
                     )}

@@ -59,8 +59,10 @@ export default function ReviewCard({
         </div>
 
         {/* Review text */}
-        <div className="review-card-scroll mt-2 max-h-[6.5rem] lg:max-h-[9rem] overflow-y-auto pr-1">
-          <p className="text-sm lg:text-base leading-normal font-sans font-normal text-slate-700">{text}</p>
+        <div className="review-card-scroll mt-2 max-h-[6.5rem] lg:max-h-[9rem] overflow-hidden lg:overflow-y-auto pr-0 lg:pr-1">
+          <p className="text-sm lg:text-base leading-normal font-sans font-normal text-slate-700">
+            {text}
+          </p>
         </div>
 
         {/* Author */}

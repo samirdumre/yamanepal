@@ -37,6 +37,17 @@ export function GallerySection({ images }: GallerySectionProps) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [selectedIndex, onKeyDown])
 
+  useEffect(() => {
+    if (selectedIndex === null) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [selectedIndex])
+
   return (
     <>
       <section className="max-w-[1340px] mx-auto px-5 md:px-10 py-16">

@@ -9,6 +9,8 @@ import ReviewCard from '../ui/ReviewCard'
 const GAP = 20
 const MIN_CARD_W = 332 // minimum card width in px
 const SPEED = 60 // px/s — auto-scroll speed
+const TOUCH_THRESHOLD = 40
+const HORIZONTAL_INTENT_RATIO = 1.25
 
 interface TestimonialCarouselProps {
   testimonials: Testimonial[]
@@ -46,9 +48,13 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
   const wrapRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const tweenRef = useRef<gsap.core.Tween | null>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
   const [cardW, setCardW] = useState(0)
   const cardWRef = useRef(0)
   const [visibleCount, setVisibleCount] = useState(1)
+  const touchStartXRef = useRef(0)
+  const touchStartYRef = useRef(0)
+  const [isVisible, setIsVisible] = useState(true)
 
   // Double the items for a seamless infinite loop
   const items = [...testimonials, ...testimonials]
@@ -118,14 +124,60 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
   // Start auto-scroll once card width is measured
   useEffect(() => {
     if (cardW === 0) return
+    if (!isVisible) return
+
     buildAutoTween(0)
     return () => {
       tweenRef.current?.kill()
     }
-  }, [cardW, buildAutoTween])
+  }, [cardW, isVisible, buildAutoTween])
+
+  useEffect(() => {
+    const sectionEl = sectionRef.current
+    if (!sectionEl) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry?.isIntersecting ?? false
+        setIsVisible(visible)
+        if (!visible) {
+          tweenRef.current?.pause()
+        } else {
+          tweenRef.current?.resume()
+        }
+      },
+      { threshold: 0.2 },
+    )
+
+    observer.observe(sectionEl)
+    return () => observer.disconnect()
+  }, [])
 
   const pause = () => tweenRef.current?.pause()
   const resume = () => tweenRef.current?.resume()
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? 0
+    touchStartYRef.current = e.touches[0]?.clientY ?? 0
+    pause()
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    const endX = e.changedTouches[0]?.clientX ?? 0
+    const endY = e.changedTouches[0]?.clientY ?? 0
+    const deltaX = touchStartXRef.current - endX
+    const deltaY = touchStartYRef.current - endY
+    const absDeltaX = Math.abs(deltaX)
+    const absDeltaY = Math.abs(deltaY)
+
+    // Let vertical gestures pass through to page scrolling.
+    if (absDeltaX < TOUCH_THRESHOLD || absDeltaX < absDeltaY * HORIZONTAL_INTENT_RATIO) {
+      resume()
+      return
+    }
+
+    slide(deltaX > 0 ? -1 : 1)
+  }
 
   const slide = (dir: 1 | -1) => {
     const cw = cardWRef.current
@@ -144,7 +196,7 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
   }
 
   return (
-    <div>
+    <div ref={sectionRef}>
       {/* Section heading — constrained to 1320px */}
       <div className="max-w-[1320px] mx-auto px-5">
         <SectionHeading
@@ -158,7 +210,16 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
       {/* Carousel */}
       <div className="max-w-[1320px] mx-auto px-5 md:px-10">
         <div className="relative mt-4">
-          <div ref={wrapRef} className="overflow-hidden" onMouseEnter={pause} onMouseLeave={resume}>
+          <div
+            ref={wrapRef}
+            className="overflow-hidden"
+            style={{ touchAction: 'pan-y' }}
+            onMouseEnter={pause}
+            onMouseLeave={resume}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={resume}
+          >
             <div
               ref={trackRef}
               className="flex"

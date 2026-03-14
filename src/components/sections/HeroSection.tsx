@@ -17,7 +17,6 @@ function extractYouTubeId(urlOrId: string): string {
   return urlOrId
 }
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface YTPlayer {
   playVideo: () => void
   seekTo: (seconds: number, allowSeekAhead?: boolean) => void
@@ -66,7 +65,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
   const hasStartedRef = useRef(false)
   const rewindTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // ─── Search state ──────────────────────────────────────────────────────────
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TrekResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -82,10 +80,13 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       return
     }
 
+    const abortController = new AbortController()
     let cancelled = false
     setIsLoading(true)
 
-    fetch(`/api/treks/search?q=${encodeURIComponent(debouncedQuery)}`)
+    fetch(`/api/treks/search?q=${encodeURIComponent(debouncedQuery)}`, {
+      signal: abortController.signal,
+    })
       .then((res) => res.json())
       .then((data: TrekResult[]) => {
         if (!cancelled) {
@@ -100,21 +101,24 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
 
     return () => {
       cancelled = true
+      abortController.abort()
     }
   }, [debouncedQuery])
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    function handleMouseDown(e: MouseEvent) {
+    function handleOutside(e: MouseEvent | TouchEvent) {
       if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target as Node)) {
         setIsOpen(false)
       }
     }
-    document.addEventListener('mousedown', handleMouseDown)
-    return () => document.removeEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('touchstart', handleOutside, { passive: true })
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('touchstart', handleOutside)
+    }
   }, [])
 
-  // ─── YouTube player ────────────────────────────────────────────────────────
   function scheduleRewind(player: YTPlayer) {
     if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
     const remaining = player.getDuration() - player.getCurrentTime()
@@ -131,8 +135,8 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       new window.YT.Player(playerContainerRef.current, {
         videoId,
         playerVars: {
-          autoplay: 1, // ← play immediately, no interaction needed
-          mute: 1, // required for autoplay to work in all browsers
+          autoplay: 1,
+          mute: 1,
           controls: 0,
           disablekb: 1,
           playsinline: 1,
@@ -146,7 +150,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
         events: {
           onReady: (e) => {
             playerRef.current = e.target
-            // Belt-and-suspenders: call playVideo() in case autoplay was blocked
             e.target.playVideo()
             const iframe = e.target.getIframe()
             Object.assign(iframe.style, {
@@ -159,14 +162,14 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
               minWidth: '177.78vh',
               transform: 'translate(-50%, -50%)',
               pointerEvents: 'none',
+              touchAction: 'none',
             })
           },
           onStateChange: (e) => {
             if (e.data === 1) {
-              // PLAYING
               if (!hasStartedRef.current) {
                 hasStartedRef.current = true
-                setIsActive(true) // crossfade only when frames confirmed
+                setIsActive(true)
               }
               scheduleRewind(e.target)
             }
@@ -193,7 +196,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       }
     }
 
-    // Load immediately on mount — fastest possible startup
     loadAPI()
 
     return () => {
@@ -202,26 +204,27 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
   }, [])
 
   return (
-    <section className="relative w-full h-[500px] md:h-[716px] flex items-start justify-center pt-32 md:pt-44">
+    <section
+      className="relative w-full h-[500px] md:h-[716px] flex items-start justify-center pt-32 md:pt-44"
+      style={{ touchAction: 'pan-y' }}
+    >
       <div className="absolute inset-0 overflow-hidden">
-        {/* Static image — LCP element, stays visible until video is confirmed playing */}
         <Image
           fill
           priority
           alt=""
-          className={`object-cover transition-opacity duration-700 ${
+          className={`object-cover transition-opacity duration-500 ${
             isActive ? 'opacity-0' : 'opacity-100'
           }`}
           src={HERO_IMAGE_SRC}
         />
 
-        {/* Video wrapper — crossfades in on first PLAYING state only */}
         <div
-          className={`absolute inset-0 overflow-hidden transition-opacity duration-700 ${
+          className={`absolute inset-0 overflow-hidden transition-opacity duration-500 pointer-events-none ${
             isActive ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div ref={playerContainerRef} className="absolute inset-0" />
+          <div ref={playerContainerRef} className="absolute inset-0 pointer-events-none" />
         </div>
 
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
@@ -237,7 +240,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
           </p>
         </div>
 
-        {/* Search bar + dropdown */}
         <div ref={searchWrapperRef} className="relative w-full max-w-[630px]">
           <div className="h-10 pl-4 pr-5 py-1.5 bg-white rounded-lg flex items-center gap-3">
             {isLoading ? (
@@ -257,9 +259,11 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
             />
           </div>
 
-          {/* Dropdown */}
           {isOpen && (
-            <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-xl overflow-hidden z-50 max-h-[480px] overflow-y-auto">
+            <div
+              className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-xl overflow-hidden z-50 max-h-[480px] overflow-y-auto"
+              style={{ touchAction: 'pan-y' }}
+            >
               <div className="px-4 pt-3 pb-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   すべてのトリップ

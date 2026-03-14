@@ -1,10 +1,15 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 
 import { cn } from '@/utilities/ui'
 import { Noto_Sans_JP } from 'next/font/google'
 import React from 'react'
 
-const notoSansJP = Noto_Sans_JP({ subsets: ['latin'], variable: '--font-noto-sans-jp' })
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  variable: '--font-noto-sans-jp',
+  display: 'swap',
+})
 
 import { AdminBar } from '@/components/AdminBar'
 import { Providers } from '@/providers'
@@ -86,8 +91,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://s.ytimg.com" />
       </head>
       <body suppressHydrationWarning>
+        <Script src="https://www.youtube.com/iframe_api" strategy="afterInteractive" />
         <Providers>
           <AdminBar
             adminBarProps={{

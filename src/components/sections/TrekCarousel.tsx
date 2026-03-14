@@ -7,6 +7,7 @@ import type { Trek } from '@/payload-types'
 
 const WHEEL_THRESHOLD = 40 // px of deltaX to trigger a slide
 const TOUCH_THRESHOLD = 50 // px of touch swipe to trigger a slide
+const HORIZONTAL_INTENT_RATIO = 1.25
 const MOBILE_BREAKPOINT = 768
 const TABLET_BREAKPOINT = 1024
 const MOBILE_VISIBLE = 1
@@ -60,10 +61,12 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
   const wheelAccRef = useRef(0)
   const wheelTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const touchStartXRef = useRef(0)
+  const touchStartYRef = useRef(0)
   const offsetRef = useRef(0)
   const cardWRef = useRef(0)
   const visibleRef = useRef(DEFAULT_VISIBLE)
   const gapRef = useRef(DEFAULT_GAP)
+  const resizeRafRef = useRef<number | null>(null)
 
   // Keep refs in sync so event handlers always read latest values
   useEffect(() => {
@@ -94,23 +97,44 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
     const el = wrapRef.current
     if (!el) return
     const observer = new ResizeObserver(([entry]) => {
-      const w = entry!.contentRect.width
-      const isMobile = w < MOBILE_BREAKPOINT
-      const isTablet = w >= MOBILE_BREAKPOINT && w < TABLET_BREAKPOINT
-      const vis = isMobile ? MOBILE_VISIBLE : isTablet ? TABLET_VISIBLE : DEFAULT_VISIBLE
-      const g = isMobile ? MOBILE_GAP : isTablet ? TABLET_GAP : DEFAULT_GAP
-      setVisible(vis)
-      setGap(g)
-      visibleRef.current = vis
-      gapRef.current = g
-      const cw = (w - g * (vis - 1)) / vis
-      setCardW(cw)
-      cardWRef.current = cw
-      // Re-apply position without animation on resize
-      gsap.set(trackRef.current, { x: -(offsetRef.current * (cw + g)) })
+      if (resizeRafRef.current != null) {
+        cancelAnimationFrame(resizeRafRef.current)
+      }
+
+      resizeRafRef.current = requestAnimationFrame(() => {
+        const w = entry!.contentRect.width
+        const isMobile = w < MOBILE_BREAKPOINT
+        const isTablet = w >= MOBILE_BREAKPOINT && w < TABLET_BREAKPOINT
+        const vis = isMobile ? MOBILE_VISIBLE : isTablet ? TABLET_VISIBLE : DEFAULT_VISIBLE
+        const g = isMobile ? MOBILE_GAP : isTablet ? TABLET_GAP : DEFAULT_GAP
+        const cw = (w - g * (vis - 1)) / vis
+
+        if (visibleRef.current !== vis) {
+          setVisible(vis)
+          visibleRef.current = vis
+        }
+
+        if (gapRef.current !== g) {
+          setGap(g)
+          gapRef.current = g
+        }
+
+        if (cardWRef.current !== cw) {
+          setCardW(cw)
+          cardWRef.current = cw
+        }
+
+        // Re-apply position without animation on resize
+        gsap.set(trackRef.current, { x: -(offsetRef.current * (cw + g)) })
+      })
     })
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (resizeRafRef.current != null) {
+        cancelAnimationFrame(resizeRafRef.current)
+      }
+    }
   }, [])
 
   // Trackpad horizontal wheel
@@ -121,7 +145,6 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
     const onWheel = (e: WheelEvent) => {
       const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY)
       if (!isHorizontal) return
-      e.preventDefault()
 
       wheelAccRef.current += e.deltaX
 
@@ -139,7 +162,7 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
       }
     }
 
-    el.addEventListener('wheel', onWheel, { passive: false })
+    el.addEventListener('wheel', onWheel, { passive: true })
     return () => el.removeEventListener('wheel', onWheel)
   }, [slideTo])
 
@@ -150,11 +173,19 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
 
     const onTouchStart = (e: TouchEvent) => {
       touchStartXRef.current = e.touches[0]!.clientX
+      touchStartYRef.current = e.touches[0]!.clientY
     }
     const onTouchEnd = (e: TouchEvent) => {
-      const delta = touchStartXRef.current - e.changedTouches[0]!.clientX
-      if (Math.abs(delta) < TOUCH_THRESHOLD) return
-      slideTo(offsetRef.current + (delta > 0 ? 1 : -1))
+      const deltaX = touchStartXRef.current - e.changedTouches[0]!.clientX
+      const deltaY = touchStartYRef.current - e.changedTouches[0]!.clientY
+      const absDeltaX = Math.abs(deltaX)
+      const absDeltaY = Math.abs(deltaY)
+
+      // Ignore mostly vertical gestures so normal page scroll works on mobile.
+      if (absDeltaX < TOUCH_THRESHOLD) return
+      if (absDeltaX < absDeltaY * HORIZONTAL_INTENT_RATIO) return
+
+      slideTo(offsetRef.current + (deltaX > 0 ? 1 : -1))
     }
 
     el.addEventListener('touchstart', onTouchStart, { passive: true })
@@ -180,7 +211,7 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
 
       {/* Carousel */}
       <div className="relative mt-4 md:mt-6 lg:mt-8">
-        <div ref={wrapRef} className="overflow-visible">
+        <div ref={wrapRef} className="overflow-visible" style={{ touchAction: 'pan-y' }}>
           <div ref={trackRef} className="flex" style={{ gap: `${gap}px`, willChange: 'transform' }}>
             {treks.map((trek) => (
               <div
