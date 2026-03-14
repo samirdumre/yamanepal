@@ -31,7 +31,7 @@ export default async function HomePage() {
     payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
     payload.find({ collection: 'testimonials', limit: 3 }),
     payload.findGlobal({ slug: 'homepage', depth: 2 }),
-    payload.find({ collection: 'media', limit: 11 }),
+    payload.find({ collection: 'media', limit: 11, sort: 'id' }),
     payload.find({
       collection: 'treks',
       depth: 0,

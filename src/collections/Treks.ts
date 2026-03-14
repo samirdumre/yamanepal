@@ -1,6 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { authenticated } from '@/access/authenticated'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { fullLexical } from '@/fields/fullLexical'
+import {
+  cleanupDeletedTrek,
+  cleanupTrekReferencesBeforeDelete,
+} from './treks/hooks/cleanupDeletedTrek'
 
 function toSlug(str: string): string {
   return str
@@ -26,8 +31,12 @@ export const Treks: CollectionConfig = {
       'isLastMinuteDeal',
     ],
   },
-  access: { read: () => true },
+  access: {
+    read: () => true,
+    delete: authenticated,
+  },
   hooks: {
+    beforeDelete: [cleanupTrekReferencesBeforeDelete],
     beforeValidate: [
       ({ data, operation: _operation }) => {
         if (data && !data.slug && data.name) {
@@ -59,6 +68,7 @@ export const Treks: CollectionConfig = {
         return data
       },
     ],
+    afterDelete: [cleanupDeletedTrek],
   },
   fields: [
     {

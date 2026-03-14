@@ -36,7 +36,7 @@ type NavbarProps = {
 const navItems = [
   { label: 'ホーム', hasDropdown: false },
   { label: 'ネパールトレッキング', hasDropdown: true },
-  { label: 'ブータン', hasDropdown: true },
+  { label: 'トップトレッキング', hasDropdown: true },
   { label: '旅行情報', hasDropdown: true },
   { label: '会社について', hasDropdown: true },
 ]
@@ -203,7 +203,7 @@ export function Navbar({
               const hasItems =
                 (item.label === 'ネパールトレッキング' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)) ||
-                (item.label === 'ブータン' && topTreksItems.length > 0) ||
+                (item.label === 'トップトレッキング' && topTreksItems.length > 0) ||
                 (item.label === '旅行情報' && travelInfoItems.length > 0) ||
                 (item.label === '会社について' && companyItems.length > 0)
 
@@ -216,7 +216,7 @@ export function Navbar({
                     ) : (
                       <TrekDropdown items={trekkingItems} />
                     )
-                } else if (item.label === 'ブータン') {
+                } else if (item.label === 'トップトレッキング') {
                   dropdown = <TrekDropdown items={topTreksItems} />
                 } else if (item.label === '旅行情報') {
                   dropdown = <LinkDropdown items={travelInfoItems} />
@@ -351,7 +351,7 @@ export function Navbar({
                 }
 
                 /* Bhutan accordion */
-                if (item.label === 'ブータン' && topTreksItems.length > 0) {
+                if (item.label === 'トップトレッキング' && topTreksItems.length > 0) {
                   const isOpen = openAccordion === item.label
                   return (
                     <div key={item.label} className="border-b border-gray-100">
