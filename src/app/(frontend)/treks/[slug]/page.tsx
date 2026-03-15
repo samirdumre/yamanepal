@@ -107,9 +107,10 @@ export default async function TrekDetailPage({ params }: PageProps) {
     .map((g) => imgUrl(g.image as Media))
     .filter((s): s is string => Boolean(s))
 
-  const fallbackImage = imgUrl(trek.image as Media)
-  const allImages: string[] =
-    galleryImages.length > 0 ? galleryImages : fallbackImage ? [fallbackImage] : []
+  const primaryHeroImage = imgUrl(trek.image as Media)
+  const allImages: string[] = primaryHeroImage
+    ? [primaryHeroImage, ...galleryImages.filter((url) => url !== primaryHeroImage)]
+    : galleryImages
 
   const category = trek.category as Category | null | undefined
   const categoryTitle = category && typeof category === 'object' ? category.title : null
