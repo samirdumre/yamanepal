@@ -2,50 +2,13 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
-import fs from 'node:fs/promises'
-import path from 'node:path'
 
 const REQUIRED_STATIC_PATHS = [
+  '/',
   '/about-yama-nepal',
   '/contact-yama-nepal',
   '/how-to-make-payment',
 ] as const
-
-async function collectFrontendStaticPaths(baseDir: string): Promise<string[]> {
-  const staticPaths = new Set<string>()
-
-  async function walk(currentDir: string) {
-    const entries = await fs.readdir(currentDir, { withFileTypes: true })
-
-    for (const entry of entries) {
-      const fullPath = path.join(currentDir, entry.name)
-
-      if (entry.isDirectory()) {
-        await walk(fullPath)
-        continue
-      }
-
-      if (!entry.isFile() || entry.name !== 'page.tsx') continue
-
-      const relativeDir = path.relative(baseDir, path.dirname(fullPath))
-      const segments = relativeDir
-        .split(path.sep)
-        .filter(Boolean)
-        .filter((segment) => !segment.startsWith('(') && !segment.endsWith(')'))
-
-      // Skip dynamic app routes; they are handled via collection data.
-      if (segments.some((segment) => segment.startsWith('[') && segment.endsWith(']'))) {
-        continue
-      }
-
-      const routePath = segments.length === 0 ? '/' : `/${segments.join('/')}`
-      staticPaths.add(routePath)
-    }
-  }
-
-  await walk(baseDir)
-  return Array.from(staticPaths)
-}
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -55,9 +18,7 @@ const getPagesSitemap = unstable_cache(
       process.env.VERCEL_PROJECT_PRODUCTION_URL ||
       'https://example.com'
 
-    const frontendDir = path.join(process.cwd(), 'src', 'app', '(frontend)')
-    const staticRoutePaths = await collectFrontendStaticPaths(frontendDir)
-    const allStaticPaths = Array.from(new Set([...staticRoutePaths, ...REQUIRED_STATIC_PATHS]))
+    const allStaticPaths = Array.from(new Set(REQUIRED_STATIC_PATHS))
 
     const pagesResult = await payload.find({
       collection: 'pages',
