@@ -5,6 +5,7 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { processUploadedImage } from '@/hooks/processUploadedImage'
+import { revalidateMedia } from '@/hooks/revalidateMedia'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -32,6 +33,7 @@ export const Media: CollectionConfig = {
   ],
   hooks: {
     beforeOperation: [processUploadedImage],
+    afterChange: [revalidateMedia],
   },
   upload: {
     imageSizes: [

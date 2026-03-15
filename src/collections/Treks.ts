@@ -6,6 +6,7 @@ import {
   cleanupDeletedTrek,
   cleanupTrekReferencesBeforeDelete,
 } from './treks/hooks/cleanupDeletedTrek'
+import { revalidateTrek, revalidateTrekAfterDelete } from './treks/hooks/revalidateTrek'
 
 function toSlug(str: string): string {
   return str
@@ -37,6 +38,7 @@ export const Treks: CollectionConfig = {
   },
   hooks: {
     beforeDelete: [cleanupTrekReferencesBeforeDelete],
+    afterChange: [revalidateTrek],
     beforeValidate: [
       ({ data, operation: _operation }) => {
         if (data && !data.slug && data.name) {
@@ -68,7 +70,7 @@ export const Treks: CollectionConfig = {
         return data
       },
     ],
-    afterDelete: [cleanupDeletedTrek],
+    afterDelete: [cleanupDeletedTrek, revalidateTrekAfterDelete],
   },
   fields: [
     {

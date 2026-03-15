@@ -1,5 +1,4 @@
 import type { CollectionAfterDeleteHook, CollectionBeforeDeleteHook } from 'payload'
-import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Header, Homepage, Trek } from '@/payload-types'
 
@@ -16,18 +15,6 @@ export const cleanupDeletedTrek: CollectionAfterDeleteHook<Trek> = async ({ doc,
   const deletedTrekId = toTrekId(doc)
 
   if (!deletedTrekId) return doc
-
-  if (!req.context.disableRevalidate) {
-    revalidatePath('/')
-
-    if (doc?.slug) {
-      revalidatePath(`/treks/${doc.slug}`)
-    }
-
-    revalidateTag('pages-sitemap')
-    revalidateTag('global_header')
-    revalidateTag('global_homepage')
-  }
 
   return doc
 }

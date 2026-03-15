@@ -5,6 +5,12 @@ import { unstable_cache } from 'next/cache'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+const REQUIRED_STATIC_PATHS = [
+  '/about-yama-nepal',
+  '/contact-yama-nepal',
+  '/how-to-make-payment',
+] as const
+
 async function collectFrontendStaticPaths(baseDir: string): Promise<string[]> {
   const staticPaths = new Set<string>()
 
@@ -51,6 +57,7 @@ const getPagesSitemap = unstable_cache(
 
     const frontendDir = path.join(process.cwd(), 'src', 'app', '(frontend)')
     const staticRoutePaths = await collectFrontendStaticPaths(frontendDir)
+    const allStaticPaths = Array.from(new Set([...staticRoutePaths, ...REQUIRED_STATIC_PATHS]))
 
     const pagesResult = await payload.find({
       collection: 'pages',
@@ -96,7 +103,7 @@ const getPagesSitemap = unstable_cache(
 
     const dateFallback = new Date().toISOString()
 
-    const staticSitemap = staticRoutePaths.map((routePath) => ({
+    const staticSitemap = allStaticPaths.map((routePath) => ({
       loc: `${SITE_URL}${routePath}`,
       lastmod: dateFallback,
     }))
