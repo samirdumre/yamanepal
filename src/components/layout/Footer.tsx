@@ -31,16 +31,16 @@ const destinations = [
 const contacts = [
   {
     country: 'ネパール',
-    name: 'シャンタ マガル',
+    name: 'マガル　サンタ',
     phone: '+977-9866937865',
     avatar: IMAGES.avatarNepal,
   },
-  {
-    country: '日本',
-    name: 'ビマル マガル',
-    phone: '+080-96321073',
-    avatar: IMAGES.avatarJapan,
-  },
+  // {
+  //   country: '日本',
+  //   name: 'ビマル マガル',
+  //   phone: '+080-96321073',
+  //   avatar: IMAGES.avatarJapan,
+  // },
 ]
 
 export function Footer() {
@@ -83,21 +83,22 @@ export function Footer() {
           {/* Main grid */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-0">
             {/* Brand column */}
-            <div className="flex flex-col gap-4 col-span-2">
+            <div className="flex flex-col gap-2.5 col-span-2">
               <h2 className="text-white text-[24px] tracking-[0.5px]" style={{ fontWeight: 600 }}>
-                ヤマネパール
+                日本へのお問い合わせ
               </h2>
-              <div className="flex flex-col gap-3">
-                <p className="text-[#e2e8f0] text-[14px]">所在地: ネパール・スワヤンブー</p>
+              <div className="flex flex-col gap-2.5">
+                {/* <p className="text-[#e2e8f0] text-[14px]">所在地: ネパール・スワヤンブー</p> */}
                 <p className="text-[#e2e8f0] text-[14px]">
                   メール:{' '}
                   <a
-                    href="mailto:info@yamatravel.com"
+                    href="mailto:bimalgm336@gmail.com"
                     className="hover:text-white transition-colors"
                   >
-                    yamanepal633@gmail.com
+                    bimalgm336@gmail.com
                   </a>
                 </p>
+                <div className="text-[#e2e8f0] text-[18px]">携帯番号: +080-96321073</div>
               </div>
               <div className="relative w-[218px] h-[218px] mt-2">
                 <Image fill alt="連絡先QRコード" className="object-cover" src={IMAGES.qrContact} />
@@ -144,7 +145,7 @@ export function Footer() {
             {/* Contact */}
             <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
-                お問い合わせ
+                ネパールへのお問い合わせ
               </h3>
               <div className="flex flex-col gap-4">
                 {contacts.map((contact) => (
@@ -157,7 +158,7 @@ export function Footer() {
                         src={contact.avatar}
                       />
                     </div> */}
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-2.5">
                       <p className="text-[#e2e8f0] text-[14px]" style={{ fontWeight: 600 }}>
                         {contact.country}
                       </p>
@@ -166,7 +167,16 @@ export function Footer() {
                           {contact.name}
                         </span>
                       </div>
+                      <a
+                        href="mailto:yamanepal633@gmail.com"
+                        className="hover:text-white transition-colors"
+                      >
+                        yamanepal633@gmail.com
+                      </a>
                       <span className="text-[#e2e8f0] text-[18px]">{contact.phone}</span>
+                      <span className="text-[#e2e8f0] text-[14px]">
+                        所在地: ネパール・スワヤンブー
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -177,7 +187,8 @@ export function Footer() {
           {/* Copyright */}
           <div className="mt-8 mb-4 text-center">
             <p className="text-[#e2e8f0] text-[14px]">
-              © {new Date().getFullYear()} Yama Nepal. All rights reserved.
+              © {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd. All rights
+              reserved.
             </p>
           </div>
 

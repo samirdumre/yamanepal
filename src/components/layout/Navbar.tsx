@@ -187,12 +187,12 @@ export function Navbar({
               height={88}
               className="w-15 h-15 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px] object-contain"
             />
-            <div className="flex flex-col">
+            <div className="flex">
+              {/* <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
+                Yama 
+              </span> */}
               <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
-                Yama
-              </span>
-              <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">
-                Nepal
+                Yama Nepal Trek
               </span>
             </div>
           </Link>

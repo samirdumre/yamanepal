@@ -104,11 +104,11 @@ export default async function RegionPage({ params }: PageProps) {
         {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-6">
           <Link href="/" className="text-[#0cb6d8] text-[14px]">
-            Home
+            ホーム
           </Link>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
           <Link href="/regions" className="text-[#0cb6d8] text-[14px]">
-            Regions
+            地域
           </Link>
           <ChevronRight className="size-5 text-[#0cb6d8]" />
           <span className="text-[#0cb6d8] text-[14px]">{region.name}</span>
@@ -123,7 +123,7 @@ export default async function RegionPage({ params }: PageProps) {
             <p className="text-black text-[16px] leading-[29px]">{region.description}</p>
           )}
           <p className="text-[#0cb6d8] text-[14px]">
-            {treks.length} {treks.length === 1 ? 'trek' : 'treks'} available
+            {treks.length} {treks.length === 1 ? 'トレッキング' : 'トレッキングコース'} 利用可能
           </p>
         </div>
 
