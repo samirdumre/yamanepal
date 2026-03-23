@@ -57,7 +57,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `${serverUrl}/regions/${slug}`
   const title = `${region.name} | Yama Nepal Trek`
   const description =
-    region.description ?? `Explore all treks and activities in the ${region.name} with Yama Nepal Trek.`
+    region.description ??
+    `Explore all treks and activities in the ${region.name} with Yama Nepal Trek.`
 
   const regionImage = region.image as Media | null | undefined
   const ogImage = regionImage?.url ? serverUrl + regionImage.url : undefined
@@ -87,11 +88,11 @@ export default async function RegionPage({ params }: PageProps) {
   return (
     <div className="bg-white w-full">
       {/* Hero image */}
-      <div className="w-full h-[567px] overflow-hidden relative">
+      <div className="w-full h-[290px]  lg:h-[567px] overflow-hidden relative">
         {regionImage?.url ? (
           <img
             alt={region.name}
-            className="absolute w-full h-full object-cover object-center"
+            className="absolute h-[290px] lg:w-full lg:h-full object-cover object-center"
             src={regionImage.url}
           />
         ) : (
