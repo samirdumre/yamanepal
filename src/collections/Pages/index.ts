@@ -24,6 +24,7 @@ import {
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
+    admin: () => true,
     create: authenticated,
     delete: authenticated,
     read: authenticatedOrPublished,
@@ -37,7 +38,8 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
-    group: 'Content',
+    group: 'Globals',
+    hidden: false,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

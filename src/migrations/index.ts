@@ -13,6 +13,8 @@ import * as migration_20260311_172550___name from './20260311_172550___name'
 import * as migration_20260311_173001 from './20260311_173001'
 import * as migration_20260313_090058 from './20260313_090058'
 import * as migration_20260313_160200_difficulty_japanese from './20260313_160200_difficulty_japanese'
+import * as migration_20260322_133900_climbing_dropdown_trek from './20260322_133900_climbing_dropdown_trek'
+import * as migration_20260323_191500_bhutan_dropdown_trek from './20260323_191500_bhutan_dropdown_trek'
 
 export const migrations = [
   {
@@ -89,5 +91,15 @@ export const migrations = [
     up: migration_20260313_160200_difficulty_japanese.up,
     down: migration_20260313_160200_difficulty_japanese.down,
     name: '20260313_160200_difficulty_japanese',
+  },
+  {
+    up: migration_20260322_133900_climbing_dropdown_trek.up,
+    down: migration_20260322_133900_climbing_dropdown_trek.down,
+    name: '20260322_133900_climbing_dropdown_trek',
+  },
+  {
+    up: migration_20260323_191500_bhutan_dropdown_trek.up,
+    down: migration_20260323_191500_bhutan_dropdown_trek.down,
+    name: '20260323_191500_bhutan_dropdown_trek',
   },
 ]

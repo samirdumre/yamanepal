@@ -34,6 +34,7 @@ export const Posts: CollectionConfig<'posts'> = {
     plural: 'Blogs',
   },
   access: {
+    admin: () => true,
     create: authenticated,
     delete: authenticated,
     read: authenticatedOrPublished,
@@ -54,7 +55,8 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
-    group: 'Content',
+    group: 'Globals',
+    hidden: false,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

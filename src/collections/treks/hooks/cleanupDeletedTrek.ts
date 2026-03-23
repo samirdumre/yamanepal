@@ -66,11 +66,30 @@ export const cleanupTrekReferencesBeforeDelete: CollectionBeforeDeleteHook = asy
       trek: toTrekId(item?.trek) as number,
     }))
 
-  if (filteredTopTreks.length !== topTreks.length) {
+  const bhutanTreks = header?.bhutanTreksDropdownItems ?? []
+  const filteredBhutanTreks = bhutanTreks
+    .filter((item) => {
+      const trekId = toTrekId(item?.trek)
+      return trekId != null && trekId !== deletedTrekId
+    })
+    .map((item) => ({
+      ...(item?.id ? { id: item.id } : {}),
+      trek: toTrekId(item?.trek) as number,
+    }))
+
+  if (
+    filteredTopTreks.length !== topTreks.length ||
+    filteredBhutanTreks.length !== bhutanTreks.length
+  ) {
     await req.payload.updateGlobal({
       slug: 'header',
       data: {
-        topTreksDropdownItems: filteredTopTreks,
+        ...(filteredTopTreks.length !== topTreks.length
+          ? { topTreksDropdownItems: filteredTopTreks }
+          : {}),
+        ...(filteredBhutanTreks.length !== bhutanTreks.length
+          ? { bhutanTreksDropdownItems: filteredBhutanTreks }
+          : {}),
       },
       req,
       overrideAccess: false,

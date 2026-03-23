@@ -2184,7 +2184,7 @@ export interface Header {
       }[]
     | null;
   /**
-   * Treks displayed in the "Bhutan" navigation dropdown. Add/remove/reorder here.
+   * Treks displayed in the "Tibet" navigation dropdown. Add/remove/reorder here.
    */
   topTreksDropdownItems?:
     | {
@@ -2193,15 +2193,20 @@ export interface Header {
       }[]
     | null;
   /**
-   * Links displayed in the "Travel Info" navigation dropdown.
+   * Treks displayed in the "Bhutan" navigation dropdown. Add/remove/reorder here.
+   */
+  bhutanTreksDropdownItems?:
+    | {
+        trek: number | Trek;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Treks displayed in the "Climbing" navigation dropdown. Add/remove/reorder here.
    */
   travelInfoDropdownItems?:
     | {
-        label: string;
-        /**
-         * Use a relative path (e.g. /travel-info/visas) or full URL.
-         */
-        url: string;
+        trek: number | Trek;
         id?: string | null;
       }[]
     | null;
@@ -2295,11 +2300,16 @@ export interface HeaderSelect<T extends boolean = true> {
         trek?: T;
         id?: T;
       };
+  bhutanTreksDropdownItems?:
+    | T
+    | {
+        trek?: T;
+        id?: T;
+      };
   travelInfoDropdownItems?:
     | T
     | {
-        label?: T;
-        url?: T;
+        trek?: T;
         id?: T;
       };
   companyDropdownItems?:

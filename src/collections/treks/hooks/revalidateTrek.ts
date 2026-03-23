@@ -1,8 +1,23 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
-
 import { revalidatePath, revalidateTag } from 'next/cache'
-
 import type { Region, Trek } from '@/payload-types'
+
+// ✅ Safe wrappers — no-op outside Next.js request context
+const safeRevalidatePath = (...args: Parameters<typeof revalidatePath>) => {
+  try {
+    revalidatePath(...args)
+  } catch {
+    // Running outside Next.js (e.g. seed scripts) — skip silently
+  }
+}
+
+const safeRevalidateTag = (...args: Parameters<typeof revalidateTag>) => {
+  try {
+    revalidateTag(...args)
+  } catch {
+    // Running outside Next.js (e.g. seed scripts) — skip silently
+  }
+}
 
 type RegionRelation = number | Region | null | undefined
 
@@ -46,12 +61,12 @@ const resolveRegionSlug = async (
 
 const revalidateRegionPath = (slug: string | null) => {
   if (!slug) return
-  revalidatePath(`/regions/${slug}`)
+  safeRevalidatePath(`/regions/${slug}`)
 }
 
 const revalidateTrekPath = (slug: string | null | undefined) => {
   if (!slug) return
-  revalidatePath(`/treks/${slug}`)
+  safeRevalidatePath(`/treks/${slug}`)
 }
 
 export const revalidateTrek: CollectionAfterChangeHook<Trek> = async ({
@@ -80,8 +95,8 @@ export const revalidateTrek: CollectionAfterChangeHook<Trek> = async ({
     revalidateRegionPath(previousRegionSlug)
   }
 
-  revalidateTag('pages-sitemap')
-  revalidateTag('global_header')
+  safeRevalidateTag('pages-sitemap')
+  safeRevalidateTag('global_header')
 
   return doc
 }
@@ -91,15 +106,15 @@ export const revalidateTrekAfterDelete: CollectionAfterDeleteHook<Trek> = async 
 
   req.payload.logger.info(`Revalidating deleted trek: ${doc?.slug ?? doc?.id}`)
 
-  revalidatePath('/')
+  safeRevalidatePath('/')
   revalidateTrekPath(doc?.slug)
 
   const regionSlug = await resolveRegionSlug(doc?.region as RegionRelation, req)
   revalidateRegionPath(regionSlug)
 
-  revalidateTag('pages-sitemap')
-  revalidateTag('global_header')
-  revalidateTag('global_homepage')
+  safeRevalidateTag('pages-sitemap')
+  safeRevalidateTag('global_header')
+  safeRevalidateTag('global_homepage')
 
   return doc
 }

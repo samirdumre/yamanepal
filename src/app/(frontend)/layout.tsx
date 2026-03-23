@@ -44,6 +44,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return []
   })
 
+  const bhutanTreksItems = (headerData?.bhutanTreksDropdownItems ?? []).flatMap((item) => {
+    const trek = item.trek
+    if (typeof trek === 'object' && trek !== null) {
+      return [{ name: trek.name, slug: trek.slug ?? '', days: trek.days }]
+    }
+    return []
+  })
+
+  const climbingItems = (headerData?.travelInfoDropdownItems ?? []).flatMap((item) => {
+    const trek = item.trek
+    if (typeof trek === 'object' && trek !== null) {
+      return [{ name: trek.name, slug: trek.slug ?? '', days: trek.days }]
+    }
+    return []
+  })
+
   // Build region-grouped dropdown from trekkingDropdownRegions
   const regionEntries = (headerData?.trekkingDropdownRegions ?? []).filter(
     (entry) => typeof entry.region === 'object' && entry.region !== null,
@@ -77,9 +93,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     }))
   }
 
-  const travelInfoItems: LinkDropdownItem[] = (headerData?.travelInfoDropdownItems ?? []).map(
-    (item) => ({ label: item.label, url: item.url }),
-  )
   const companyItems: LinkDropdownItem[] = (headerData?.companyDropdownItems ?? []).map((item) => ({
     label: item.label,
     url: item.url,
@@ -107,7 +120,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             trekkingItems={[]}
             trekkingRegionGroups={trekkingRegionGroups}
             topTreksItems={topTreksItems}
-            travelInfoItems={travelInfoItems}
+            bhutanTreksItems={bhutanTreksItems}
+            climbingItems={climbingItems}
             companyItems={companyItems}
           />
           {children}

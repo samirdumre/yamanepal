@@ -33,6 +33,24 @@ export const Header: GlobalConfig = {
     {
       name: 'topTreksDropdownItems',
       type: 'array',
+      label: 'Tibet Dropdown Items',
+      maxRows: 30,
+      admin: {
+        description: 'Treks displayed in the "Tibet" navigation dropdown. Add/remove/reorder here.',
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'trek',
+          type: 'relationship',
+          relationTo: 'treks',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'bhutanTreksDropdownItems',
+      type: 'array',
       label: 'Bhutan Dropdown Items',
       maxRows: 30,
       admin: {
@@ -52,25 +70,19 @@ export const Header: GlobalConfig = {
     {
       name: 'travelInfoDropdownItems',
       type: 'array',
-      label: 'Travel Info Dropdown Items',
+      label: 'Climbing Dropdown Items',
       maxRows: 30,
       admin: {
-        description: 'Links displayed in the "Travel Info" navigation dropdown.',
+        description:
+          'Treks displayed in the "Climbing" navigation dropdown. Add/remove/reorder here.',
         initCollapsed: true,
       },
       fields: [
         {
-          name: 'label',
-          type: 'text',
+          name: 'trek',
+          type: 'relationship',
+          relationTo: 'treks',
           required: true,
-        },
-        {
-          name: 'url',
-          type: 'text',
-          required: true,
-          admin: {
-            description: 'Use a relative path (e.g. /travel-info/visas) or full URL.',
-          },
         },
       ],
     },
@@ -103,5 +115,4 @@ export const Header: GlobalConfig = {
   hooks: {
     afterChange: [revalidateHeader],
   },
-  
 }

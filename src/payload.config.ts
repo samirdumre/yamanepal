@@ -27,6 +27,7 @@ export default buildConfig({
   admin: {
     theme: 'light',
     components: {
+      afterNavLinks: ['@/components/AdminSidebarAutoExpand'],
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
     },

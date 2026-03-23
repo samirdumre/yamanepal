@@ -27,7 +27,7 @@ export default async function HomePage() {
     { docs: allTreks },
   ] = await Promise.all([
     payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
-    payload.find({ collection: 'regions', limit: 6 }),
+    payload.find({ collection: 'regions', limit: 6, sort: 'id' }),
     payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
     payload.find({ collection: 'testimonials', limit: 3 }),
     payload.findGlobal({ slug: 'homepage', depth: 2 }),

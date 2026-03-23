@@ -29,15 +29,17 @@ type NavbarProps = {
   trekkingItems?: TrekkingDropdownItem[]
   trekkingRegionGroups?: TrekRegionGroup[]
   topTreksItems?: TrekkingDropdownItem[]
-  travelInfoItems?: LinkDropdownItem[]
+  bhutanTreksItems?: TrekkingDropdownItem[]
+  climbingItems?: TrekkingDropdownItem[]
   companyItems?: LinkDropdownItem[]
 }
 
 const navItems = [
   { label: 'ホーム', hasDropdown: false },
   { label: 'ネパールトレッキング', hasDropdown: true },
-  { label: 'トップトレッキング', hasDropdown: true },
-  { label: '旅行情報', hasDropdown: true },
+  { label: 'チベット', hasDropdown: true },
+  { label: 'ブータン', hasDropdown: true },
+  { label: 'クライミング', hasDropdown: true },
   { label: '会社について', hasDropdown: true },
 ]
 
@@ -162,7 +164,8 @@ export function Navbar({
   trekkingItems = [],
   trekkingRegionGroups = [],
   topTreksItems = [],
-  travelInfoItems = [],
+  bhutanTreksItems = [],
+  climbingItems = [],
   companyItems = [],
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -203,8 +206,9 @@ export function Navbar({
               const hasItems =
                 (item.label === 'ネパールトレッキング' &&
                   (trekkingRegionGroups.length > 0 || trekkingItems.length > 0)) ||
-                (item.label === 'トップトレッキング' && topTreksItems.length > 0) ||
-                (item.label === '旅行情報' && travelInfoItems.length > 0) ||
+                (item.label === 'チベット' && topTreksItems.length > 0) ||
+                item.label === 'ブータン' ||
+                (item.label === 'クライミング' && climbingItems.length > 0) ||
                 (item.label === '会社について' && companyItems.length > 0)
 
               if (item.hasDropdown && hasItems) {
@@ -216,10 +220,12 @@ export function Navbar({
                     ) : (
                       <TrekDropdown items={trekkingItems} />
                     )
-                } else if (item.label === 'トップトレッキング') {
+                } else if (item.label === 'チベット') {
                   dropdown = <TrekDropdown items={topTreksItems} />
-                } else if (item.label === '旅行情報') {
-                  dropdown = <LinkDropdown items={travelInfoItems} />
+                } else if (item.label === 'ブータン') {
+                  dropdown = <TrekDropdown items={bhutanTreksItems} />
+                } else if (item.label === 'クライミング') {
+                  dropdown = <TrekDropdown items={climbingItems} />
                 } else if (item.label === '会社について') {
                   dropdown = <LinkDropdown items={companyItems} />
                 }
@@ -350,8 +356,8 @@ export function Navbar({
                   )
                 }
 
-                /* Bhutan accordion */
-                if (item.label === 'トップトレッキング' && topTreksItems.length > 0) {
+                /* Tibet accordion */
+                if (item.label === 'チベット' && topTreksItems.length > 0) {
                   const isOpen = openAccordion === item.label
                   return (
                     <div key={item.label} className="border-b border-gray-100">
@@ -393,9 +399,57 @@ export function Navbar({
                   )
                 }
 
+                /* Bhutan accordion */
+                if (item.label === 'ブータン') {
+                  const isOpen = openAccordion === item.label
+                  return (
+                    <div key={item.label} className="border-b border-gray-100">
+                      <button
+                        className="w-full flex items-center justify-between py-2.5"
+                        onClick={() => setOpenAccordion(isOpen ? null : item.label)}
+                      >
+                        <span className="font-medium text-[15px] text-black">{item.label}</span>
+                        <ChevronDown
+                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-200 ${
+                          isOpen ? 'max-h-[600px]' : 'max-h-0'
+                        }`}
+                      >
+                        <div className="pb-3">
+                          <div className="bg-white border border-gray-100 rounded shadow-sm">
+                            {bhutanTreksItems.length > 0 ? (
+                              <div className="p-3 flex flex-col sm:grid sm:grid-cols-2 gap-x-6">
+                                {bhutanTreksItems.map((trek) => (
+                                  <NextLink
+                                    key={trek.slug}
+                                    href={`/treks/${trek.slug}`}
+                                    className="py-1.5 text-[13px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    {trek.name}
+                                    {trek.days ? ` – ${trek.days}` : ''}
+                                  </NextLink>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="p-3 text-[13px] text-gray-500">
+                                トレックは準備中です。
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+
                 /* Travel Info / Company accordion */
                 const mobileLinkItems: Record<string, LinkDropdownItem[]> = {
-                  旅行情報: travelInfoItems,
                   会社について: companyItems,
                 }
                 if (item.label in mobileLinkItems && mobileLinkItems[item.label]!.length > 0) {
@@ -430,6 +484,48 @@ export function Navbar({
                               {link.label}
                             </NextLink>
                           ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+
+                if (item.label === 'クライミング' && climbingItems.length > 0) {
+                  const isOpen = openAccordion === item.label
+                  return (
+                    <div key={item.label} className="border-b border-gray-100">
+                      <button
+                        className="w-full flex items-center justify-between py-2.5"
+                        onClick={() => setOpenAccordion(isOpen ? null : item.label)}
+                      >
+                        <span className="font-medium text-[15px] text-black">{item.label}</span>
+                        <ChevronDown
+                          className={`w-[18px] h-[18px] text-black transition-transform duration-200 ${
+                            isOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-200 ${
+                          isOpen ? 'max-h-[600px]' : 'max-h-0'
+                        }`}
+                      >
+                        <div className="pb-3">
+                          <div className="bg-white border border-gray-100 rounded shadow-sm">
+                            <div className="p-3 flex flex-col sm:grid sm:grid-cols-2 gap-x-6">
+                              {climbingItems.map((trek) => (
+                                <NextLink
+                                  key={trek.slug}
+                                  href={`/treks/${trek.slug}`}
+                                  className="py-1.5 text-[13px] text-slate-700 hover:text-[#3b82f6] transition-colors leading-snug"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  {trek.name}
+                                  {trek.days ? ` – ${trek.days}` : ''}
+                                </NextLink>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

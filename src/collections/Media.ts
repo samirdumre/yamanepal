@@ -4,14 +4,27 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { authenticated } from '@/access/authenticated'
+import { populateMediaAlt } from '@/hooks/populateMediaAlt'
 import { processUploadedImage } from '@/hooks/processUploadedImage'
 import { revalidateMedia } from '@/hooks/revalidateMedia'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  access: { read: () => true },
+  labels: {
+    singular: 'Media',
+    plural: 'Media',
+  },
+  access: {
+    admin: () => true,
+    create: authenticated,
+    delete: authenticated,
+    read: () => true,
+    update: authenticated,
+  },
   admin: {
-    group: 'Content',
+    group: 'Globals',
+    hidden: false,
   },
   fields: [
     {
@@ -32,6 +45,7 @@ export const Media: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeValidate: [populateMediaAlt],
     beforeOperation: [processUploadedImage],
     afterChange: [revalidateMedia],
   },

@@ -11,9 +11,7 @@ interface ItineraryAccordionProps {
 }
 
 export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
-  const [openDays, setOpenDays] = useState<Set<number>>(
-    () => new Set(itinerary.map((item) => item.day)),
-  )
+  const [openDays, setOpenDays] = useState<Set<number>>(() => new Set())
 
   const [lightbox, setLightbox] = useState<{ photos: string[]; index: number } | null>(null)
 
