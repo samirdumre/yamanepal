@@ -106,6 +106,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Blogs | Yama Nepal',
+    title: 'Blogs | Yama Nepal Trek',
   }
 }

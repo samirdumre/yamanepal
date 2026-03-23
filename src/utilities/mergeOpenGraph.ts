@@ -3,14 +3,14 @@ import { getServerSideURL } from './getURL'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  description: 'Discover Nepal treks with Yama Nepal.',
+  description: 'Discover Nepal treks with Yama Nepal Trek.',
   images: [
     {
       url: `${getServerSideURL()}/website-template-OG.webp`,
     },
   ],
-  siteName: 'Yama Nepal',
-  title: 'Yama Nepal',
+  siteName: 'Yama Nepal Trek',
+  title: 'Yama Nepal Trek',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {

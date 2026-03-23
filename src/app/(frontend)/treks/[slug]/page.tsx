@@ -69,12 +69,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `${serverUrl}/treks/${trek.slug}`
 
   const description =
-    trek.description || lexicalToText(trek.overview) || `Yama Nepalで${trek.name}を体験しませんか。`
+    trek.description || lexicalToText(trek.overview) || `Yama Nepal Trekで${trek.name}を体験しませんか。`
 
   const trekImage = trek.image as Media | null | undefined
   const ogImage = trekImage?.url ? serverUrl + trekImage.url : undefined
 
-  const title = `${trek.name} | Yama Nepal`
+  const title = `${trek.name} | Yama Nepal Trek`
 
   return {
     title,
@@ -123,7 +123,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
   const trekUrl = `${serverUrl}/treks/${trek.slug}`
 
   const metaDescription =
-    trek.description || lexicalToText(trek.overview) || `Yama Nepalで${trek.name}を体験しませんか。`
+    trek.description || lexicalToText(trek.overview) || `Yama Nepal Trekで${trek.name}を体験しませんか。`
 
   const touristTripSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',

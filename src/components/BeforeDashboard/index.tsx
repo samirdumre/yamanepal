@@ -24,7 +24,7 @@ const BeforeDashboard: React.FC = () => {
   return (
     <div className={baseClass}>
       <Banner className={`${baseClass}__banner`} type="success">
-        <h4>Welcome to Yama Nepal</h4>
+        <h4>Welcome to Yama Nepal Trek</h4>
       </Banner>
       <p className={`${baseClass}__subtitle`}>Quick links to get started:</p>
       <ul className={`${baseClass}__links`}>

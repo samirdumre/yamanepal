@@ -55,9 +55,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { region } = result
   const serverUrl = getServerSideURL()
   const url = `${serverUrl}/regions/${slug}`
-  const title = `${region.name} | Yama Nepal`
+  const title = `${region.name} | Yama Nepal Trek`
   const description =
-    region.description ?? `Explore all treks and activities in the ${region.name} with Yama Nepal.`
+    region.description ?? `Explore all treks and activities in the ${region.name} with Yama Nepal Trek.`
 
   const regionImage = region.image as Media | null | undefined
   const ogImage = regionImage?.url ? serverUrl + regionImage.url : undefined
