@@ -40,6 +40,8 @@ export function TrekCard({
         <div className="self-stretch h-52 md:h-80 rounded overflow-hidden flex-shrink-0 relative">
           <Image
             fill
+            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             alt={name}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             src={imgSrc}
@@ -74,6 +76,7 @@ export function TrekCard({
               <div className="w-px h-5 bg-cyan-500 flex-shrink-0" />
               <div className="flex items-center gap-3">
                 <Image
+                  unoptimized
                   alt={difficulty}
                   className="w-5 h-4 md:w-8 md:h-5 object-contain flex-shrink-0"
                   src={icon}

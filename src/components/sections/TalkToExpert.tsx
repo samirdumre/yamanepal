@@ -21,6 +21,7 @@ export function TalkToExpert({
       <div className="self-stretch flex flex-col justify-start items-center gap-3">
         {qrSrc && (
           <Image
+            unoptimized
             src={qrSrc}
             alt="専門スタッフに相談するためのQRコード"
             className="p-2.5"

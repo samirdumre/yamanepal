@@ -145,6 +145,7 @@ export default async function HomePage() {
               <div className="relative rounded-lg overflow-hidden h-[180px] md:h-[258px] w-full lg:w-[522px] flex-shrink-0">
                 {tripImage?.url && (
                   <Image
+                    unoptimized
                     alt={tripOfTheMonthTrek.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     src={tripImage.url}
@@ -167,6 +168,7 @@ export default async function HomePage() {
                   <div className="flex flex-col items-center gap-1">
                     <span className="text-white text-[14px]">
                       <Image
+                        unoptimized
                         alt={tripOfTheMonthTrek.difficulty}
                         className="w-10 h-6 object-contain flex-shrink-0"
                         src={
@@ -254,6 +256,7 @@ export default async function HomePage() {
                 {(featuredPost.image as Media)?.url && (
                   <Image
                     fill
+                    unoptimized
                     alt={featuredPost.title}
                     className="object-cover group-hover:scale-103 transition-transform duration-300"
                     priority
@@ -287,6 +290,7 @@ export default async function HomePage() {
                     {(post.image as Media)?.url && (
                       <Image
                         fill
+                        unoptimized
                         alt={post.title}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                         sizes="160px"

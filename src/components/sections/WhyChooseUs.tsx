@@ -78,7 +78,7 @@ function ImageCard({
 }) {
   return (
     <div className={`relative rounded-3xl overflow-hidden w-full shrink-0 ${className}`}>
-      <Image fill src={src} alt={alt} className="object-cover" />
+      <Image fill unoptimized sizes="(max-width: 1024px) 100vw, 33vw" src={src} alt={alt} className="object-cover" />
     </div>
   )
 }
@@ -161,6 +161,8 @@ export default function WhyChooseUs() {
           <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0 order-first lg:order-none h-64 md:h-80 md:col-span-2 lg:h-auto">
             <Image
               fill
+              unoptimized
+              sizes="(max-width: 1024px) 100vw, 50vw"
               src={IMAGE_HIKER_SCENIC_ROCK}
               alt="景観の良い岩場のハイカー"
               className="object-cover"

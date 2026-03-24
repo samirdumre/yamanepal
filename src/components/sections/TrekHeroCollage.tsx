@@ -47,6 +47,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
             {slot1 ? (
               <Image
                 fill
+                unoptimized
                 src={slot1}
                 alt={trekName}
                 priority
@@ -68,6 +69,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                 >
                   <Image
                     fill
+                    unoptimized
                     src={slot2}
                     alt={`${trekName} — 写真 2`}
                     priority
@@ -86,6 +88,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   >
                     <Image
                       fill
+                      unoptimized
                       src={slot3}
                       alt={`${trekName} — 写真 3`}
                       priority
@@ -171,6 +174,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
 
             {/* Active image */}
             <Image
+              unoptimized
               alt={`${trekName} — 写真 ${selectedIndex + 1}`}
               className="max-h-full max-w-full object-contain select-none"
               src={images[selectedIndex]!}
@@ -217,6 +221,7 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                 onClick={() => setSelectedIndex(i)}
               >
                 <Image
+                  unoptimized
                   alt={`サムネイル ${i + 1}`}
                   className="w-full h-full object-cover"
                   src={src}

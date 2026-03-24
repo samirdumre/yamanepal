@@ -184,6 +184,7 @@ export function Navbar({
             className="flex items-center gap-2"
           >
             <Image
+              unoptimized
               src="/images/logo.jpeg"
               alt="Logo"
               width={88}

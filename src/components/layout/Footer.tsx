@@ -52,6 +52,7 @@ export function Footer() {
       {/* Mountain silhouette images — stacked absolutely on top of each other */}
       <div className="relative w-full aspect-[2160/453] min-h-[60px] lg:aspect-[4320/453]">
         <Image
+          unoptimized
           alt=""
           className="absolute inset-0 w-full object-cover"
           src={IMAGES.footerMountain1}
@@ -101,7 +102,7 @@ export function Footer() {
                 <div className="text-[#e2e8f0] text-[18px]">携帯番号: +080-96321073</div>
               </div>
               <div className="relative w-[218px] h-[218px] mt-2">
-                <Image fill alt="連絡先QRコード" className="object-cover" src={IMAGES.qrContact} />
+                <Image fill unoptimized sizes="218px" alt="連絡先QRコード" className="object-cover" src={IMAGES.qrContact} />
               </div>
             </div>
             {/* Quick Links */}

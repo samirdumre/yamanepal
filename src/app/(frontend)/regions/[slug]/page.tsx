@@ -88,11 +88,11 @@ export default async function RegionPage({ params }: PageProps) {
   return (
     <div className="bg-white w-full">
       {/* Hero image */}
-      <div className="w-full h-[290px]  lg:h-[567px] overflow-hidden relative">
+      <div className="w-full h-[290px] lg:h-[567px] overflow-hidden relative">
         {regionImage?.url ? (
           <img
             alt={region.name}
-            className="absolute h-[290px] lg:w-full lg:h-full object-cover object-center"
+            className="absolute h-[290px] w-full lg:h-full object-cover object-center"
             src={regionImage.url}
           />
         ) : (

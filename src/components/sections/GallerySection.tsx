@@ -68,6 +68,8 @@ export function GallerySection({ images }: GallerySectionProps) {
               >
                 <Image
                   fill
+                  unoptimized
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   alt={`ギャラリー画像 ${i + 1}`}
                   className="object-cover hover:opacity-90 transition-opacity"
                   src={src}
@@ -88,6 +90,8 @@ export function GallerySection({ images }: GallerySectionProps) {
                 >
                   <Image
                     fill
+                    unoptimized
+                    sizes="208px"
                     alt={`ギャラリー画像 ${i + 1}`}
                     className="object-cover rounded hover:opacity-90 transition-opacity"
                     src={src}
@@ -106,6 +110,8 @@ export function GallerySection({ images }: GallerySectionProps) {
                   >
                     <Image
                       fill
+                      unoptimized
+                      sizes="208px"
                       alt={`ギャラリー画像 ${i + 7}`}
                       className="object-cover rounded hover:opacity-90 transition-opacity"
                       src={src}
@@ -181,6 +187,7 @@ export function GallerySection({ images }: GallerySectionProps) {
               src={images[selectedIndex]}
               width={1920}
               height={1080}
+              unoptimized
               onClick={(e) => e.stopPropagation()}
             />
 
@@ -227,6 +234,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                   src={src}
                   width={64}
                   height={48}
+                  unoptimized
                 />
               </button>
             ))}

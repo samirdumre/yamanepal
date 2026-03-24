@@ -64,7 +64,7 @@ export default async function Post({ params: paramsPromise }: Args) {
       {/* Hero Image */}
       <div className="w-full h-[290px] lg:h-[567px] overflow-hidden relative">
         {heroImage?.url ? (
-          <Image fill alt={post.title} className="object-cover" src={heroImage.url} priority />
+          <Image fill unoptimized sizes="100vw" alt={post.title} className="object-cover" src={heroImage.url} priority />
         ) : (
           <div className="w-full h-full bg-[#e2e8f0]" />
         )}
