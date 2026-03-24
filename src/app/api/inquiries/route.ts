@@ -1,5 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { getClientIp, rateLimit } from '@/utilities/rateLimit'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -11,6 +12,16 @@ function sanitize(value: unknown): string {
 export async function POST(req: Request): Promise<Response> {
   try {
     const body = await req.json()
+
+    const ip = getClientIp(req)
+    const { success } = rateLimit(ip, { windowMs: 60 * 1000, max: 10, key: 'inquiries' })
+
+    if (!success) {
+      return Response.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 },
+      )
+    }
 
     // Honeypot check — bots fill this hidden field; humans leave it empty
     if (body?.honeypot) {

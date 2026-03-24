@@ -2,6 +2,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { revalidatePath } from 'next/cache'
 import type { Trek } from '@/payload-types'
+import { getClientIp, rateLimit } from '@/utilities/rateLimit'
 
 const RATING_LABELS: Record<string, string> = {
   '1': 'Poor',
@@ -55,6 +56,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const trekId = Number(id)
     if (!Number.isInteger(trekId) || trekId < 1) {
       return Response.json({ error: 'Invalid trek ID.' }, { status: 400 })
+    }
+
+    const ip = getClientIp(req)
+    const { success } = rateLimit(ip, { windowMs: 60 * 1000, max: 10, key: 'reviews' })
+
+    if (!success) {
+      return Response.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 },
+      )
     }
 
     const body = await req.json()

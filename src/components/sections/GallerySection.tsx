@@ -67,11 +67,12 @@ export function GallerySection({ images }: GallerySectionProps) {
                 onClick={() => setSelectedIndex(i)}
               >
                 <Image
-                  fill
                   unoptimized
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  width={400}
+                  height={533}
                   alt={`ギャラリー画像 ${i + 1}`}
-                  className="object-cover hover:opacity-90 transition-opacity"
+                  className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                   src={src}
                 />
               </div>
@@ -85,15 +86,16 @@ export function GallerySection({ images }: GallerySectionProps) {
               {row1.map((src, i) => (
                 <div
                   key={i}
-                  className="relative w-52 h-69 flex-shrink-0 cursor-pointer"
+                  className="relative w-52 aspect-[3/4] flex-shrink-0 cursor-pointer"
                   onClick={() => setSelectedIndex(i)}
                 >
                   <Image
-                    fill
                     unoptimized
+                    width={208}
+                    height={277}
                     sizes="208px"
                     alt={`ギャラリー画像 ${i + 1}`}
-                    className="object-cover rounded hover:opacity-90 transition-opacity"
+                    className="w-full h-full object-cover rounded hover:opacity-90 transition-opacity"
                     src={src}
                   />
                 </div>
@@ -105,15 +107,16 @@ export function GallerySection({ images }: GallerySectionProps) {
                 {row2.map((src, i) => (
                   <div
                     key={i}
-                    className="relative w-52 h-69 flex-shrink-0 cursor-pointer"
+                    className="relative w-52 aspect-[3/4] flex-shrink-0 cursor-pointer"
                     onClick={() => setSelectedIndex(i + 6)}
                   >
                     <Image
-                      fill
                       unoptimized
+                      width={208}
+                      height={277}
                       sizes="208px"
                       alt={`ギャラリー画像 ${i + 7}`}
-                      className="object-cover rounded hover:opacity-90 transition-opacity"
+                      className="w-full h-full object-cover rounded hover:opacity-90 transition-opacity"
                       src={src}
                     />
                   </div>

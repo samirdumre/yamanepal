@@ -1,10 +1,21 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { getClientIp, rateLimit } from '@/utilities/rateLimit'
 import type { Media } from '@/payload-types'
 
 export async function GET(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')?.trim() ?? ''
+
+  const ip = getClientIp(request)
+  const { success } = rateLimit(ip, { windowMs: 60 * 1000, max: 100, key: 'search' })
+
+  if (!success) {
+    return Response.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 },
+    )
+  }
 
   if (!q) {
     return Response.json([])

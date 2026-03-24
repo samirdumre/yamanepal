@@ -34,6 +34,7 @@ declare global {
       Player: new (
         el: HTMLElement,
         opts: {
+          host?: string
           videoId: string
           playerVars?: Record<string, number | string>
           events?: {
@@ -164,6 +165,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
 
       new window.YT.Player(playerContainerRef.current, {
         videoId,
+        host: 'https://www.youtube.com',
         playerVars: {
           autoplay: 1,
           mute: 1,
@@ -176,6 +178,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
           cc_load_policy: 0,
           enablejsapi: 1,
           origin: window.location.origin,
+          widget_referrer: window.location.href,
         },
         events: {
           onReady: (e) => {

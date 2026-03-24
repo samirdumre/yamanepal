@@ -31,7 +31,13 @@ export default async function HomePage() {
     payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
     payload.find({ collection: 'testimonials', limit: 3 }),
     payload.findGlobal({ slug: 'homepage', depth: 2 }),
-    payload.find({ collection: 'media', limit: 11, sort: 'id' }),
+    payload.find({
+      collection: 'media',
+      limit: 11,
+      where: {
+        id: { in: [238, 236, 235, 233, 222, 189, 183, 176, 182, 9, 10] },
+      },
+    }),
     payload.find({
       collection: 'treks',
       depth: 0,
@@ -217,7 +223,9 @@ export default async function HomePage() {
 
       {/* Gallery */}
       <GallerySection
-        images={galleryMedia.map((m) => m.url).filter((u): u is string => u != null)}
+        images={[238, 236, 235, 233, 222, 189, 183, 176, 182, 9, 10]
+          .map((id) => galleryMedia.find((m) => m.id === id)?.url)
+          .filter((u): u is string => u != null)}
       />
 
       {/* Testimonials */}
