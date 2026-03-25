@@ -30,6 +30,8 @@ import config from '@payload-config'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { Navbar } from '@/components/layout/Navbar'
+import { PageLoader } from '@/components/ui/PageLoader'
+import { RouteProgressBar } from '@/components/ui/RouteProgressBar'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
@@ -108,6 +110,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://s.ytimg.com" />
       </head>
       <body suppressHydrationWarning>
+        <PageLoader />
+        <RouteProgressBar />
         <Script src="https://www.youtube.com/iframe_api" strategy="afterInteractive" />
         <Providers>
           <AdminBar

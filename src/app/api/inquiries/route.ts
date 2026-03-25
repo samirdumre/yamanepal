@@ -17,10 +17,7 @@ export async function POST(req: Request): Promise<Response> {
     const { success } = rateLimit(ip, { windowMs: 60 * 1000, max: 10, key: 'inquiries' })
 
     if (!success) {
-      return Response.json(
-        { error: 'Too many requests. Please try again later.' },
-        { status: 429 },
-      )
+      return Response.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
 
     // Honeypot check — bots fill this hidden field; humans leave it empty
