@@ -12,7 +12,6 @@ import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ScrollReveal } from '@/components/ui/ScrollReveal'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
@@ -83,7 +82,6 @@ export default async function HomePage() {
       />
 
       {/* Best Seller Treks */}
-      <ScrollReveal>
       <section className="max-w-[1320px] mx-auto px-5 md:px-10 py-10 lg:py-16 overflow-hidden">
         <TrekCarousel
           treks={bestSellerTreks as Trek[]}
@@ -91,10 +89,8 @@ export default async function HomePage() {
           title="人気トレッキング"
         />
       </section>
-      </ScrollReveal>
 
       {/* Explore Destinations */}
-      <ScrollReveal delay={50}>
       <section className="relative bg-[#e2e8f0] py-10 lg:py-16 overflow-hidden">
         {/* Content */}
         <div className="relative z-10 max-w-[1320px] mx-auto px-5 md:px-10">
@@ -117,19 +113,15 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      </ScrollReveal>
 
       {/* Why Choose Us */}
-      <ScrollReveal delay={50}>
       <section className="py-10 lg:py-16">
         <div className="max-w-[1320px] mx-auto px-2 md:px-10">
           <WhyChooseUs />
         </div>
       </section>
-      </ScrollReveal>
 
       {/* Last Minute Deals */}
-      <ScrollReveal>
       <section className="max-w-[1320px] mx-auto px-5 md:px-10 pb-8 lg:pb-16 overflow-hidden">
         <TrekCarousel
           treks={lastMinuteDeals as Trek[]}
@@ -137,11 +129,9 @@ export default async function HomePage() {
           title="直前割引プラン"
         />
       </section>
-      </ScrollReveal>
 
       {/* Trip of the Month */}
       {tripOfTheMonthTrek && (
-        <ScrollReveal>
         <section className="relative bg-[#020617] w-full overflow-hidden">
           {/* Grid Pattern Overlay */}
           <div
@@ -229,20 +219,16 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
-        </ScrollReveal>
       )}
 
       {/* Gallery */}
-      <ScrollReveal>
       <GallerySection
         images={[238, 236, 235, 233, 222, 189, 183, 176, 182, 9, 10]
           .map((id) => galleryMedia.find((m) => m.id === id)?.url)
           .filter((u): u is string => u != null)}
       />
-      </ScrollReveal>
 
       {/* Testimonials */}
-      <ScrollReveal>
       <section className="relative bg-gradient-to-b from-[#dbeafe] to-white py-10 lg:py-16 overflow-hidden">
         {/* Grid Pattern Overlay — fades out going down via mask */}
         <div
@@ -263,11 +249,9 @@ export default async function HomePage() {
           <TestimonialCarousel testimonials={testimonials as Testimonial[]} />
         </div>
       </section>
-      </ScrollReveal>
 
       {/* Blog Section */}
       {blogPosts.length > 0 && (
-        <ScrollReveal>
         <section className="max-w-[1320px] mx-auto px-5 md:px-10 lg:pb-20">
           <SectionHeading label="ブログ" title="ヒマラヤからのブログ" />
           <div className="flex flex-col lg:flex-row gap-5 mt-8">
@@ -335,7 +319,6 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
-        </ScrollReveal>
       )}
     </div>
   )
