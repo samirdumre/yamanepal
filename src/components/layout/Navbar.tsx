@@ -184,7 +184,6 @@ export function Navbar({
             className="flex items-center gap-2"
           >
             <Image
-              unoptimized
               src="/images/logo.webp"
               alt="Logo"
               width={88}

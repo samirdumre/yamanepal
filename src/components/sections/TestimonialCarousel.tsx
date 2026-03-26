@@ -241,9 +241,11 @@ export function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) 
                     author={t.name}
                     location={t.location}
                     avatarSrc={
-                      t.avatar && typeof t.avatar === 'object'
-                        ? (t.avatar.url ?? undefined)
-                        : undefined
+                      typeof (t as any).avatar === 'string'
+                        ? (t as any).avatar
+                        : t.avatar && typeof t.avatar === 'object'
+                          ? (t.avatar.url ?? undefined)
+                          : undefined
                     }
                     avatarAlt={t.avatar && typeof t.avatar === 'object' ? t.avatar.alt : t.name}
                   />

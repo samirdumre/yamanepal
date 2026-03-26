@@ -39,7 +39,7 @@ const placeholderBlur =
  *        `https://cdn.example.com${src}?w=${width}&q=${quality ?? 75}`
  *      <Image loader={imageLoader} src="/media/hero.webp" width={1200} height={600} alt="" />
  *   C) Skip optimization:
- *      <Image unoptimized src="https://cdn.example.com/hero.webp" width={1200} height={600} alt="" />
+ *      <Image  src="https://cdn.example.com/hero.webp" width={1200} height={600} alt="" />
  *
  * TL;DR: Template uses relative URLs + getMediaUrl() to construct full URLs, then relies on
  * remotePatterns for optimization. Only add `loader` if using external CDNs with custom transforms.
@@ -87,7 +87,6 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   return (
     <picture className={cn(pictureClassName)}>
       <NextImage
-        unoptimized
         alt={alt || ''}
         className={cn(imgClassName)}
         fill={fill}

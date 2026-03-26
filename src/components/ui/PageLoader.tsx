@@ -57,7 +57,6 @@ export function PageLoader() {
           width={80}
           height={80}
           priority
-          unoptimized
           className="page-loader__logo"
         />
         <div className="page-loader__dots">

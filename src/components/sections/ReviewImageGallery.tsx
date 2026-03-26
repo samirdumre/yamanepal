@@ -49,7 +49,6 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
           >
             <Image
               fill
-              unoptimized
               sizes="128px"
               src={img.src}
               alt={img.alt}
@@ -120,7 +119,6 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
 
             {/* Active image */}
             <Image
-              unoptimized
               alt={images[selectedIndex]!.alt}
               className="max-h-full max-w-full object-contain select-none"
               src={images[selectedIndex]!.src}
@@ -170,7 +168,6 @@ export function ReviewImageGallery({ images }: ReviewImageGalleryProps) {
                   onClick={() => setSelectedIndex(i)}
                 >
                   <Image
-                    unoptimized
                     alt={`サムネイル ${i + 1}`}
                     className="w-full h-full object-cover"
                     src={img.src}

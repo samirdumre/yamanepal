@@ -37,7 +37,13 @@ export function ImageCard({ image, alt = '' }: ImageCardProps) {
   const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
   return (
     <div className="relative rounded-3xl overflow-hidden h-[192px]">
-      <Image fill unoptimized sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" alt={alt} className="object-cover" src={imgSrc} />
+      <Image
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        alt={alt}
+        className="object-cover"
+        src={imgSrc}
+      />
     </div>
   )
 }

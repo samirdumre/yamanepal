@@ -91,7 +91,7 @@ export default function About() {
           <img
             alt="ネパールでのトレッキング"
             className="absolute w-full h-full object-cover"
-            src="/images/manaslu-trek.jpeg"
+            src="/images/manaslu-trek.webp"
           />
         </div>
 
@@ -107,7 +107,7 @@ export default function About() {
           <img
             alt="ネパールでのトレッキング"
             className="absolute w-full h-full object-cover object-bottom"
-            src="/images/travel1.jpeg"
+            src="/images/travel1.webp"
           />
         </div>
       </div>

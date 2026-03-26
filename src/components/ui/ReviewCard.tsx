@@ -73,7 +73,6 @@ export default function ReviewCard({
           >
             {avatarSrc ? (
               <Image
-                unoptimized
                 src={avatarSrc}
                 alt={avatarAlt}
                 fill

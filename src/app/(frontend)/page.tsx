@@ -13,51 +13,119 @@ import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+export const revalidate = 604800 // Cache this page statically for 7 days
+
+
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
   // Fetch all data in parallel
-  const [
-    { docs: bestSellerTreks },
-    { docs: regions },
-    { docs: lastMinuteDeals },
-    { docs: testimonials },
-    homepage,
-    { docs: galleryMedia },
-    { docs: allTreks },
-  ] = await Promise.all([
+  const [{ docs: bestSellerTreks }, { docs: lastMinuteDeals }, homepage] = await Promise.all([
     payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
-    payload.find({ collection: 'regions', limit: 6, sort: 'id' }),
-    payload.find({ collection: 'treks', where: { isLastMinuteDeal: { equals: true } }, limit: 6 }),
-    payload.find({ collection: 'testimonials', limit: 3 }),
-    payload.findGlobal({ slug: 'homepage', depth: 2 }),
-    payload.find({
-      collection: 'media',
-      limit: 11,
-      where: {
-        id: { in: [238, 236, 235, 233, 222, 189, 183, 176, 182, 9, 10] },
-      },
-    }),
     payload.find({
       collection: 'treks',
-      depth: 0,
-      pagination: false,
-      select: {
-        region: true,
-      },
+      where: { isLastMinuteDeal: { equals: true } },
+      limit: 6,
     }),
+    payload.findGlobal({ slug: 'homepage', depth: 2 }),
   ])
 
-  const regionTrekCounts = new Map<number | string, number>()
-  for (const trek of allTreks as Array<Pick<Trek, 'region'>>) {
-    const regionId = typeof trek.region === 'object' ? trek.region?.id : trek.region
-    if (regionId != null) {
-      regionTrekCounts.set(regionId, (regionTrekCounts.get(regionId) ?? 0) + 1)
-    }
+  const placeholderRegions = [
+    {
+      id: 1,
+      image: '/regions/langtang region.webp',
+      name: 'ランタン地域',
+      slug: 'langtang-region',
+      trekCount: 3,
+    },
+    {
+      id: 2,
+      image: '/regions/annapurna region.webp',
+      name: 'アンナプルナ地方',
+      slug: 'annapurna-region',
+      trekCount: 7,
+    },
+    {
+      id: 3,
+      image: '/regions/everest region.webp',
+      name: 'エベレスト地域',
+      slug: 'everest-region',
+      trekCount: 9,
+    },
+    {
+      id: 4,
+      image: '/regions/dolpa region.webp',
+      name: 'ドルパ地方',
+      slug: 'dolpa-region',
+      trekCount: 2,
+    },
+    {
+      id: 5,
+      image: '/regions/manaslu region.webp',
+      name: 'マナスル地方',
+      slug: 'manaslu-region',
+      trekCount: 2,
+    },
+    {
+      id: 6,
+      image: '/regions/chitwan region.webp',
+      name: 'ファミリーツアー',
+      slug: 'family-tour',
+      trekCount: 3,
+    },
+  ]
+
+  const placeholderTripOfTheMonth = {
+    trek: {
+      name: 'ランタン谷トレッキング',
+      slug: '/langtang-valley-trek',
+      days: '7 日間',
+      difficulty: '中級',
+      price: 945,
+    },
+    image: { url: '/images/camping.webp' },
+    description:
+      'ランタン谷トレッキングは、ネパールで最も美しいトレッキングコースの一つです。キャンジン・リ（4,400m）とツェルコ・リ（5,700m）への玄関口となっています...',
   }
 
-  const tripOfTheMonthTrek = homepage?.tripOfTheMonth?.trek as Trek | null
-  const tripImage = tripOfTheMonthTrek?.image as Media | null
+  const tripOfTheMonthTrek = placeholderTripOfTheMonth.trek as any
+  const tripImage = placeholderTripOfTheMonth.image as any
+  const tripOfTheMonthDescription = placeholderTripOfTheMonth.description
+
+  const placeholderTestimonials = [
+    {
+      id: 1,
+      name: '鈴木明子',
+      location: 'Sendai, Japan',
+      quote:
+        'アイランドピーク、最高でした 正直めちゃくちゃ不安だったけど、ガイドさんがずっと支えてくれて、無事に登頂できました。山頂に立ったときは泣きそうになりました笑。このエージェンシー、ほんとにおすすめです',
+      avatar: '/regions/island peak morning.webp',
+    },
+    {
+      id: 2,
+      name: '佐藤花',
+      location: 'Shinjuku, Japan',
+      quote:
+        '初めての海外トレッキングで超不安だったけど、ガイドさんのおかげで全部吹き飛びました笑。ずっと気にかけてくれてアドバイスも的確で、ほんとに心強かったです。一人だったら絶対こんなに楽しめなかった。ありがとうございました！',
+      avatar: '/images/trekking nepal.webp',
+    },
+    {
+      id: 3,
+      name: '田中結愛',
+      location: 'Chiba, Japan',
+      quote:
+        'ランタン谷トレッキングは本当に素晴らしい体験でした。タマン族の文化やチェルコリからのヒマラヤの絶景に感動し、ガイドさんのサポートのおかげで安心して楽しめました。このエージェンシーを選んで大正解でした。心からおすすめします!',
+      avatar: '/images/camping.webp',
+    },
+    {
+      id: 4,
+      name: '山本 浩',
+      location: 'Tokyo, Japan',
+      quote:
+        'グループでのアンナプルナベースキャンプ、最高すぎました！最初はみんなと歩けるか不安だったけど、気づいたら仲間と笑いながら歩いてて、しんどさも全然気にならなかった笑。ガイドさんもグループ全員のペースをしっかり見てくれて、誰も置いてけぼりにしない安心感がありました。ベースキャンプで見たアンナプルナの景色は、言葉にならないくらい感動的でした。このツアーに参加して本当によかった。友達にも絶対すすめます！',
+      avatar: '/images/annapurna4.webp',
+    },
+  ]
 
   const blogPosts = (homepage?.featuredBlogs ?? []).filter(
     (p): p is Post => typeof p === 'object',
@@ -101,13 +169,13 @@ export default async function HomePage() {
             title="素晴らしい目的地を探索"
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5 mt-4 md:mt-6 lg:mt-8 mb-6">
-            {regions.map((region: Region) => (
+            {placeholderRegions.map((region) => (
               <RegionCard
                 key={region.id}
-                image={region.image ?? null}
+                image={region.image}
                 name={region.name}
-                slug={region.slug ?? ''}
-                trekCount={regionTrekCounts.get(region.id) ?? 0}
+                slug={region.slug}
+                trekCount={region.trekCount}
               />
             ))}
           </div>
@@ -151,7 +219,6 @@ export default async function HomePage() {
               <div className="relative rounded-lg overflow-hidden h-[180px] md:h-[258px] w-full lg:w-[522px] flex-shrink-0">
                 {tripImage?.url && (
                   <Image
-                    unoptimized
                     alt={tripOfTheMonthTrek.name}
                     className="absolute inset-0 w-full h-full object-cover"
                     src={tripImage.url}
@@ -174,11 +241,10 @@ export default async function HomePage() {
                   <div className="flex flex-col items-center gap-1">
                     <span className="text-white text-[14px]">
                       <Image
-                        unoptimized
                         alt={tripOfTheMonthTrek.difficulty}
                         className="w-10 h-6 object-contain flex-shrink-0"
                         src={
-                          difficultyConfig[tripOfTheMonthTrek.difficulty]?.icon ??
+                          difficultyConfig[tripOfTheMonthTrek.difficulty as keyof typeof difficultyConfig]?.icon ??
                           difficultyConfig.中級.icon
                         }
                         width={32}
@@ -208,7 +274,7 @@ export default async function HomePage() {
                   </h2>
                 </div>
                 <p className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[22px]">
-                  {homepage?.tripOfTheMonth?.description}
+                  {tripOfTheMonthDescription}
                 </p>
                 <Link href={`/treks/${tripOfTheMonthTrek.slug ?? ''}`} className="w-fit">
                   <Button variant="primary" className="w-fit mt-2">
@@ -223,9 +289,19 @@ export default async function HomePage() {
 
       {/* Gallery */}
       <GallerySection
-        images={[238, 236, 235, 233, 222, 189, 183, 176, 182, 9, 10]
-          .map((id) => galleryMedia.find((m) => m.id === id)?.url)
-          .filter((u): u is string => u != null)}
+        images={[
+          '/images/annapurna4.webp',
+          '/images/breakfast on everest trail.webp',
+          '/images/camping.webp',
+          '/images/island peak with guide.webp',
+          '/images/annapurna mountain.webp',
+          '/images/yak on everest.webp',
+          '/images/trekking nepal.webp',
+          '/images/travel1.webp',
+          '/images/nepal-hill.webp',
+          '/images/kyanjinri.webp',
+          '/images/everest base camp.webp',
+        ]}
       />
 
       {/* Testimonials */}
@@ -246,7 +322,7 @@ export default async function HomePage() {
 
         {/* Content stays on top */}
         <div className="relative z-10">
-          <TestimonialCarousel testimonials={testimonials as Testimonial[]} />
+          <TestimonialCarousel testimonials={placeholderTestimonials as any} />
         </div>
       </section>
 
@@ -264,7 +340,6 @@ export default async function HomePage() {
                 {(featuredPost.image as Media)?.url && (
                   <Image
                     fill
-                    unoptimized
                     alt={featuredPost.title}
                     className="object-cover group-hover:scale-103 transition-transform duration-300"
                     priority
@@ -298,7 +373,6 @@ export default async function HomePage() {
                     {(post.image as Media)?.url && (
                       <Image
                         fill
-                        unoptimized
                         alt={post.title}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                         sizes="160px"

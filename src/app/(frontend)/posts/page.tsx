@@ -32,7 +32,6 @@ export default async function Page() {
       <div className="relative w-full h-[290px] lg:h-[567px] overflow-hidden">
         <Image
           fill
-          unoptimized
           sizes="100vw"
           alt="Blogs from the Himalayas"
           className="object-cover"
@@ -70,7 +69,6 @@ export default async function Page() {
                     {image?.url ? (
                       <Image
                         fill
-                        unoptimized
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         alt={post.title}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"

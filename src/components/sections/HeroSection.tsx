@@ -246,7 +246,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       <div className="absolute inset-0 overflow-hidden">
         <Image
           fill
-          unoptimized
           sizes="100vw"
           priority
           alt=""
@@ -323,7 +322,6 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
                         <div className="relative w-12 h-12 flex-shrink-0 rounded-md overflow-hidden bg-slate-100">
                           {trek.imageUrl ? (
                             <Image
-                              unoptimized
                               src={trek.imageUrl}
                               alt={trek.name}
                               fill

@@ -102,7 +102,6 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                           {item.distance && (
                             <div className="flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1">
                               <Image
-                                unoptimized
                                 src="/images/hiking-icon.svg"
                                 alt="距離"
                                 width={16}
@@ -144,7 +143,6 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                             >
                               <Image
                                 fill
-                                unoptimized
                                 sizes="33vw"
                                 src={url}
                                 alt={`${item.day}日目の写真 ${i + 1}`}
@@ -219,7 +217,6 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
               </button>
             )}
             <Image
-              unoptimized
               alt={`画像 ${lightbox.index + 1}`}
               className="max-h-full max-w-full object-contain select-none"
               src={lightbox.photos[lightbox.index]!}
@@ -267,7 +264,6 @@ export function ItineraryAccordion({ itinerary }: ItineraryAccordionProps) {
                   onClick={() => setLightbox((lb) => (lb ? { ...lb, index: i } : null))}
                 >
                   <Image
-                    unoptimized
                     alt={`サムネイル ${i + 1}`}
                     className="w-full h-full object-cover"
                     src={src}

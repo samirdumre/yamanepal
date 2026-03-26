@@ -32,7 +32,6 @@ export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
       <div className="self-stretch h-64 md:h-96 rounded overflow-hidden flex-shrink-0 relative">
         <Image
           fill
-          unoptimized
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           alt={name}
           className="object-cover group-hover:scale-103 transition-transform duration-300"
