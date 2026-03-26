@@ -36,7 +36,7 @@ export default async function Page() {
           sizes="100vw"
           alt="Blogs from the Himalayas"
           className="object-cover"
-          src="/images/coverimage.jpg"
+          src="/images/coverimage.webp"
           priority
         />
       </div>

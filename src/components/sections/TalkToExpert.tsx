@@ -7,7 +7,7 @@ interface TalkToExpertProps {
 }
 
 export function TalkToExpert({
-  qrSrc = '/images/contact-qr.jpg',
+  qrSrc = '/images/contact-qr.webp',
   whatsapp = '+9779849289569',
   call = '+08096321073',
 }: TalkToExpertProps) {

@@ -14,9 +14,9 @@ interface TrekCardProps {
 }
 
 const difficultyConfig = {
-  初級: { icon: '/images/easy.png', color: 'text-green-500' },
-  中級: { icon: '/images/moderate.png', color: 'text-yellow-500' },
-  上級: { icon: '/images/hard.png', color: 'text-red-500' },
+  初級: { icon: '/images/easy.webp', color: 'text-green-500' },
+  中級: { icon: '/images/moderate.webp', color: 'text-yellow-500' },
+  上級: { icon: '/images/hard.webp', color: 'text-red-500' },
 }
 
 export function TrekCard({

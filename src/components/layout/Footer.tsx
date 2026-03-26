@@ -5,10 +5,10 @@ import Link from 'next/link'
 // IMAGE PLACEHOLDERS — replace these paths with your actual images
 // ============================================================
 const IMAGES = {
-  footerMountain1: '/images/footer-image.png', // Background mountain layer 1
-  qrContact: '/images/qrcontact.jpeg', // QR code for contact
-  avatarNepal: '/images/shantamagar.jpeg', // Nepal contact person avatar
-  avatarJapan: '/images/shantamagar.jpeg', // Japan contact person avatar
+  footerMountain1: '/images/footer-image.webp', // Background mountain layer 1
+  qrContact: '/images/qrcontact.webp', // QR code for contact
+  avatarNepal: '/images/shantamagar.webp', // Nepal contact person avatar
+  avatarJapan: '/images/shantamagar.webp', // Japan contact person avatar
 }
 // ============================================================
 
@@ -102,7 +102,14 @@ export function Footer() {
                 <div className="text-[#e2e8f0] text-[18px]">携帯番号: +080-96321073</div>
               </div>
               <div className="relative w-[218px] h-[218px] mt-2">
-                <Image fill unoptimized sizes="218px" alt="連絡先QRコード" className="object-cover" src={IMAGES.qrContact} />
+                <Image
+                  fill
+                  unoptimized
+                  sizes="218px"
+                  alt="連絡先QRコード"
+                  className="object-cover"
+                  src={IMAGES.qrContact}
+                />
               </div>
             </div>
             {/* Quick Links */}

@@ -185,7 +185,7 @@ export function Navbar({
           >
             <Image
               unoptimized
-              src="/images/logo.jpeg"
+              src="/images/logo.webp"
               alt="Logo"
               width={88}
               height={88}

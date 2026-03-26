@@ -49,13 +49,10 @@ export function PageLoader() {
   if (!visible) return null
 
   return (
-    <div
-      className={`page-loader ${fadeOut ? 'page-loader--fade-out' : ''}`}
-      aria-hidden="true"
-    >
+    <div className={`page-loader ${fadeOut ? 'page-loader--fade-out' : ''}`} aria-hidden="true">
       <div className="page-loader__content">
         <Image
-          src="/images/logo.jpeg"
+          src="/images/logo.webp"
           alt=""
           width={80}
           height={80}

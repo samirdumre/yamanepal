@@ -22,9 +22,9 @@ const svgPaths = {
 }
 
 // ─── 🖼️ IMAGE PLACEHOLDERS — replace these with your actual image paths ───────
-const IMAGE_TRAVEL_PLANNING = '/images/annapurna4.jpg'
-const IMAGE_HIKER_SCENIC_ROCK = '/images/langtang1.jpg'
-const IMAGE_FAMILY_TRAVELERS = '/images/camping.jpg'
+const IMAGE_TRAVEL_PLANNING = '/images/annapurna4.webp'
+const IMAGE_HIKER_SCENIC_ROCK = '/images/langtang1.webp'
+const IMAGE_FAMILY_TRAVELERS = '/images/camping.webp'
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
@@ -78,7 +78,14 @@ function ImageCard({
 }) {
   return (
     <div className={`relative rounded-3xl overflow-hidden w-full shrink-0 ${className}`}>
-      <Image fill unoptimized sizes="(max-width: 1024px) 100vw, 33vw" src={src} alt={alt} className="object-cover" />
+      <Image
+        fill
+        unoptimized
+        sizes="(max-width: 1024px) 100vw, 33vw"
+        src={src}
+        alt={alt}
+        className="object-cover"
+      />
     </div>
   )
 }

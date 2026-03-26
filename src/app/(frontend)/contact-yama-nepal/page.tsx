@@ -33,7 +33,7 @@ const ContactSection = () => {
         <img
           alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/coverimage.jpg"
+          src="/images/coverimage.webp"
         />
       </div>
 

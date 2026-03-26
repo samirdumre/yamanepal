@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useDebounce } from '@/utilities/useDebounce'
 
-const HERO_IMAGE_SRC = '/images/heromax.jpg'
+const HERO_IMAGE_SRC = '/images/heromax.webp'
 const HERO_VIDEO_ID = 'R_V9gKlZAZc'
 
 function extractYouTubeId(urlOrId: string): string {
