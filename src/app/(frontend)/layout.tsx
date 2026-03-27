@@ -13,7 +13,7 @@ const notoSansJP = Noto_Sans_JP({
 
 import { AdminBar } from '@/components/AdminBar'
 import { Providers } from '@/providers'
-import { InitTheme } from '@/providers/Theme/InitTheme'
+
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 import { Footer } from '@/components/layout/Footer'
@@ -101,9 +101,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }))
 
   return (
-    <html className={cn(notoSansJP.variable)} lang="ja" suppressHydrationWarning>
+    <html className={cn(notoSansJP.variable)} lang="ja">
       <head>
-        <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
         <link rel="preconnect" href="https://www.youtube.com" />
