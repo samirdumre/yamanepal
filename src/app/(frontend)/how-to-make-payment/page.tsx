@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react'
+import { Metadata } from 'next'
 
 interface SectionProps {
   title: string
@@ -20,12 +21,16 @@ function Section({ title, paragraphs }: SectionProps) {
   )
 }
 
+export const metadata: Metadata = {
+  title: 'How to make payment to Yama Nepal Trek (ヤマ・ネパール・トレック)',
+}
+
 export default function HowToMakePayment() {
   const sections: SectionProps[] = [
     {
       title: 'お支払い方法',
       paragraphs: [
-        'Yama Nepal Trek は、ネパールで信頼される旅行会社として、ネパールトレッキング、ネパール周遊パッケージ、文化ツアー、野生動物サファリ、アドベンチャーホリデー、そしてヒマラヤ各地へのオーダーメイド旅行を提供しています。',
+        'Yama Nepal Trek (ヤマ・ネパール・トレック) は、ネパールで信頼される旅行会社として、ネパールトレッキング、ネパール周遊パッケージ、文化ツアー、野生動物サファリ、アドベンチャーホリデー、そしてヒマラヤ各地へのオーダーメイド旅行を提供しています。',
         '私たちは、一人旅、カップル、家族、グループなど、あらゆる旅行者の皆さまに、安全で綿密に計画された本物志向の旅を通してネパールの魅力をお届けします。代表的なヒマラヤのトレッキングルートや古代遺産から、静かな村々、国立公園、スピリチュアルな聖地まで、ネパールの真の美しさと多様性を体感できる旅をつくります。',
         '私たちのチームは、楽しいだけでなく心に残る意味のある旅を提供することに情熱を注いでいます。豊富な地域知識、きめ細やかなサービス、そして責任ある観光への取り組みにより、Yama Nepalはすべての旅がスムーズで忘れられないものとなり、ネパールの人々・文化・風景と深くつながる体験になるよう努めています。',
       ],
@@ -46,7 +51,7 @@ export default function HowToMakePayment() {
       paragraphs: [
         '私たちのミッションは、安全性、サービス品質、本物らしさ、柔軟性を重視しながら、高品質なネパールツアーとトレッキングパッケージを提供することです。旅行者一人ひとりの興味、旅のスタイル、日程、快適さに合わせて、綿密に計画した旅程とオーダーメイドのツアーパッケージを設計します。',
         '経験豊富な現地ガイド、信頼できるドライバー、宿泊パートナー、地域に根ざしたサービスと連携することで、すべての旅を快適でスムーズ、かつ文化的に豊かな体験へと高めています。短期旅行、遺産巡り、野生動物体験、長期のヒマラヤトレッキングまで、細部にまで配慮し、旅行者の皆さまが旅そのものを楽しめるようにしています。',
-        'Yama Nepal Trek は、ネパールにおける責任ある観光にも力を入れています。旅は旅行者と地域社会の双方に良い影響をもたらすべきだと考え、敬意ある文化交流、地域雇用、環境に配慮した旅行体験を支援しています。私たちは、企画するすべての旅を通して、忘れられない思い出を生み出すと同時に、ネパール観光の長期的な価値向上に貢献することを使命としています。',
+        'Yama Nepal Trek (ヤマ・ネパール・トレック) は、ネパールにおける責任ある観光にも力を入れています。旅は旅行者と地域社会の双方に良い影響をもたらすべきだと考え、敬意ある文化交流、地域雇用、環境に配慮した旅行体験を支援しています。私たちは、企画するすべての旅を通して、忘れられない思い出を生み出すと同時に、ネパール観光の長期的な価値向上に貢献することを使命としています。',
       ],
     },
   ]
@@ -78,7 +83,8 @@ export default function HowToMakePayment() {
             <div className=" text-black text-[16px] leading-[28px]">
               <h3 className="font-semibold mb-2">SWIFT送金:</h3>
               <div>
-                受取人: Yama Nepal Trek & Expedition Pvt.Ltd. (Shanta Bahadur Pun) <br />
+                受取人: Yama Nepal Trek & Expedition Pvt.Ltd. (ヤマ・ネパール・トレック) (Shanta
+                Bahadur Pun) <br />
                 口座番号: 3100310374600001 <br /> 口座名義: Shanta Bahadur Pun <br />
                 取扱銀行: Kumari Bank Ltd <br /> 支店名: Dallu Branch, Kathmandu Nepal <br />
                 <div className="flex gap-1">

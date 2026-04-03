@@ -9,8 +9,8 @@ const defaultOpenGraph: Metadata['openGraph'] = {
       url: `${getServerSideURL()}/website-template-OG.webp`,
     },
   ],
-  siteName: 'Yama Nepal Trek',
-  title: 'Yama Nepal Trek',
+  siteName: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
+  title: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {

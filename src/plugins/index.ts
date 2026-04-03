@@ -16,8 +16,8 @@ import { getServerSideURL } from '@/utilities/getURL'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title
-    ? `${doc.title} | Yama Nepal Trek - Trekking in Nepal`
-    : 'Yama Nepal Trek - Trekking in Nepal'
+    ? `${doc.title} | Yama Nepal Trek (ヤマ・ネパール・トレック) - Trekking in Nepal`
+    : 'Yama Nepal Trek (ヤマ・ネパール・トレック) - Trekking in Nepal'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

@@ -1,6 +1,11 @@
 import { Phone, Mail, MapPin, Clock, ChevronRight } from 'lucide-react'
+import { Metadata } from 'next'
 import Map from '@/components/ui/Map'
 import { ContactInquiryForm } from '@/components/sections/ContactInquiryForm'
+
+export const metadata: Metadata = {
+  title: 'Contact Yama Nepal Trek (ヤマ・ネパール・トレック)',
+}
 
 const contactDetails = [
   {

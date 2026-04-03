@@ -127,8 +127,20 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const post = await queryPostBySlug({ slug: decodedSlug })
+  const baseMeta = await generateMeta({ doc: post })
 
-  return generateMeta({ doc: post })
+  const title = post?.title
+    ? `Yama Nepal Trek (ヤマ・ネパール・トレック) | ${post.title}`
+    : 'Yama Nepal Trek (ヤマ・ネパール・トレック)'
+
+  return {
+    ...baseMeta,
+    title,
+    openGraph: {
+      ...baseMeta.openGraph,
+      title,
+    },
+  }
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {

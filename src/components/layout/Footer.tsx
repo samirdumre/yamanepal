@@ -21,11 +21,11 @@ const quickLinks = [
 ]
 
 const destinations = [
-  'エベレスト地域',
-  'ランタン地域',
-  'チトワン地域',
-  'アンナプルナ地域',
-  'カトマンズ',
+  { label: 'エベレスト地域', href: '/regions/everest-region' },
+  { label: 'ランタン地域', href: '/regions/langtang-region' },
+  { label: 'ファミリーツアー', href: '/regions/family-tour' },
+  { label: 'アンナプルナ地域', href: '/regions/annapurna-region' },
+  { label: 'ドルパ地方', href: '/regions/dolpa-region' },
 ]
 
 const contacts = [
@@ -137,17 +137,18 @@ export function Footer() {
               </h3>
               <ul className="flex flex-col gap-2.5">
                 {destinations.map((dest) => (
-                  <li key={dest}>
-                    <a
-                      href="#"
+                  <li key={dest.href}>
+                    <Link
+                      href={dest.href}
                       className="text-[#d1d5dc] text-[14px] hover:text-white transition-colors"
                     >
-                      {dest}
-                    </a>
+                      {dest.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
+
             {/* Contact */}
             <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
               <h3 className="text-white text-[18px]" style={{ fontWeight: 600 }}>
@@ -173,10 +174,7 @@ export function Footer() {
                           {contact.name}
                         </span>
                       </div>
-                      <a
-                        href="mailto:yamanepal633@gmail.com"
-                        className="hover:text-white transition-colors"
-                      >
+                      <a href="mailto:yamanepal633@gmail.com" className="text-[#e2e8f0]">
                         yamanepal633@gmail.com
                       </a>
                       <span className="text-[#e2e8f0] text-[18px]">{contact.phone}</span>
@@ -189,15 +187,28 @@ export function Footer() {
               </div>
             </div>
           </div>
+          {/* Copyright */}=
+          <div className="mt-8 mb-4 flex flex-col items-center gap-2 md:grid md:grid-cols-3 md:items-center md:gap-0">
+            {/* Empty spacer — mirrors the right column's width to keep copyright truly centered */}
+            <div className="hidden md:block" />
 
-          {/* Copyright */}
-          <div className="mt-8 mb-4 text-center">
-            <p className="text-[#e2e8f0] text-[14px]">
+            <p className="text-[#e2e8f0] text-[14px] text-center whitespace-nowrap">
               © {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd. All rights
               reserved.
             </p>
-          </div>
 
+            <p className="text-[#e2e8f0] text-[14px] text-center md:text-right">
+              Website by{' '}
+              <a
+                href="https://www.atomikweb.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0cb6d8] hover:underline"
+              >
+                AtomikWeb
+              </a>
+            </p>
+          </div>
           {/* Large brand text */}
           {/* <div className="mt-6 overflow-hidden h-[155px] flex items-start justify-center">
             <p

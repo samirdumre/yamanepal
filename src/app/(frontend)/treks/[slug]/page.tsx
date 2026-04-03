@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const trekImage = trek.image as Media | null | undefined
   const ogImage = trekImage?.url ? serverUrl + trekImage.url : undefined
 
-  const title = `${trek.name} | Yama Nepal Trek`
+  const title = `${trek.name} | Yama Nepal Trek (ヤマ・ネパール・トレック)`
 
   return {
     title,
