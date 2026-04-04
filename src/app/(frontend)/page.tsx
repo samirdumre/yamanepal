@@ -145,7 +145,7 @@ export default async function HomePage() {
 
       {/* Hero */}
       <HeroSection
-        headline={'地元ガイドと一緒にネパールを探検しよう'}
+        headline={'ネパール トレッキング ローカルガイド付き'}
         subheading={'ネパールのトレッキングを今すぐ予約！'}
       />
 
@@ -244,8 +244,9 @@ export default async function HomePage() {
                         alt={tripOfTheMonthTrek.difficulty}
                         className="w-10 h-6 object-contain flex-shrink-0"
                         src={
-                          difficultyConfig[tripOfTheMonthTrek.difficulty as keyof typeof difficultyConfig]?.icon ??
-                          difficultyConfig.中級.icon
+                          difficultyConfig[
+                            tripOfTheMonthTrek.difficulty as keyof typeof difficultyConfig
+                          ]?.icon ?? difficultyConfig.中級.icon
                         }
                         width={32}
                         height={20}

@@ -191,11 +191,14 @@ export function Footer() {
           <div className="mt-8 mb-4 flex flex-col items-center gap-2 md:grid md:grid-cols-3 md:items-center md:gap-0">
             {/* Empty spacer — mirrors the right column's width to keep copyright truly centered */}
             <div className="hidden md:block" />
-
-            <p className="text-[#e2e8f0] text-[14px] text-center whitespace-nowrap">
-              © {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd. All rights
-              reserved.
-            </p>
+            <div className="text-[#e2e8f0] text-[14px] text-center flex flex-col md:flex-row md:gap-1 lg:whitespace-nowrap">
+              <p>
+              © {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd. 
+              </p>
+              <p>
+              All rights reserved.
+              </p>
+            </div>
 
             <p className="text-[#e2e8f0] text-[14px] text-center md:text-right">
               Website by{' '}
