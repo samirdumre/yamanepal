@@ -52,7 +52,7 @@ export function PageLoader() {
     <div className={`page-loader ${fadeOut ? 'page-loader--fade-out' : ''}`} aria-hidden="true">
       <div className="page-loader__content">
         <Image
-          src="/images/logo.webp"
+          src="/images/logo.avif"
           alt=""
           width={80}
           height={80}

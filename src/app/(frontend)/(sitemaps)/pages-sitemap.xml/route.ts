@@ -2,6 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import { CANONICAL_BASE_URL } from '@/utilities/alternates'
 
 const REQUIRED_STATIC_PATHS = [
   '/',
@@ -13,10 +14,7 @@ const REQUIRED_STATIC_PATHS = [
 const getPagesSitemap = unstable_cache(
   async () => {
     const payload = await getPayload({ config })
-    const SITE_URL =
-      process.env.NEXT_PUBLIC_SERVER_URL ||
-      process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-      'https://example.com'
+    const SITE_URL = CANONICAL_BASE_URL
 
     const allStaticPaths = Array.from(new Set(REQUIRED_STATIC_PATHS))
 

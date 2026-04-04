@@ -22,15 +22,11 @@ const svgPaths = {
 }
 
 // ─── 🖼️ IMAGE PLACEHOLDERS — replace these with your actual image paths ───────
-const IMAGE_TRAVEL_PLANNING = '/images/annapurna4.webp'
-const IMAGE_HIKER_SCENIC_ROCK = '/images/langtang1.webp'
-const IMAGE_FAMILY_TRAVELERS = '/images/camping.webp'
+const IMAGE_TRAVEL_PLANNING = '/images/annapurna4.avif'
+const IMAGE_HIKER_SCENIC_ROCK = '/images/langtang1.avif'
+const IMAGE_FAMILY_TRAVELERS = '/images/camping.avif'
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
-
-// function Divider() {
-//   return <div className="w-11 h-px bg-[#0CB6D8] shrink-0" />
-// }
 
 function IconCircle({ children }: { children: React.ReactNode }) {
   return (
@@ -105,7 +101,7 @@ export default function WhyChooseUs() {
       </div>
 
       {/* Content Grid */}
-      <div className="bg-white w-full max-w-[1320px] flex justify-center mt-4 md:mt-6 lg:mt-8  overflow-hidden">
+      <div className="bg-white w-full max-w-[1320px] flex justify-center mt-4 md:mt-6 lg:mt-8 overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row gap-5 max-w-[1320px] w-full px-4">
           {/* Left Column */}
           <div className="flex flex-col sm:flex-row md:flex-col lg:flex-col gap-3 lg:gap-5 flex-1 justify-center">
@@ -164,7 +160,8 @@ export default function WhyChooseUs() {
 
           {/* Center Column — Hero Image */}
           {/* 🖼️ IMAGE SLOT 2 — Hiker at scenic rock formation (hero/tall image) */}
-          <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0 order-first lg:order-none h-64 md:h-80 md:col-span-2 lg:h-auto">
+          {/* ✅ lg:aspect-[3/4] reserves height before image loads, eliminating CLS */}
+          <div className="relative flex-[0.80] rounded-3xl overflow-hidden shrink-0 order-first lg:order-none h-64 md:h-80 md:col-span-2 lg:aspect-[3/4] lg:h-auto">
             <Image
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

@@ -8,6 +8,7 @@ import type { Region, Trek, Media } from '@/payload-types'
 import { TrekCard } from '@/components/cards/TrekCard'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -53,20 +54,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!result) return {}
 
   const { region } = result
-  const serverUrl = getServerSideURL()
-  const url = `${serverUrl}/regions/${slug}`
+  const url = buildCanonicalURL(`/regions/${slug}`)
   const title = `${region.name} | Yama Nepal Trek (ヤマ・ネパール・トレック)`
   const description =
     region.description ??
     `Explore all treks and activities in the ${region.name} with Yama Nepal Trek (ヤマ・ネパール・トレック).`
 
   const regionImage = region.image as Media | null | undefined
+  const serverUrl = getServerSideURL()
   const ogImage = regionImage?.url ? serverUrl + regionImage.url : undefined
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: buildJapaneseAlternates(`/regions/${slug}`),
     openGraph: mergeOpenGraph({
       title,
       description,

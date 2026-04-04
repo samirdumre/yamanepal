@@ -48,9 +48,8 @@ export function GallerySection({ images }: GallerySectionProps) {
                 className="relative w-52 aspect-[3/4] flex-shrink-0"
               >
                 <Image
-                  width={208}
-                  height={277}
-                  sizes="208px"
+                  width={1080}
+                  height={1920}
                   alt={`ギャラリー画像 ${i + 1}`}
                   className="w-full h-full object-cover rounded"
                   src={src}

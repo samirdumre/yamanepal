@@ -184,11 +184,12 @@ export function Navbar({
             className="flex items-center gap-2"
           >
             <Image
-              src="/images/logo.webp"
+              src="/images/logo.avif"
+              priority
               alt="Logo"
               width={88}
               height={88}
-              className="w-15 h-15 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px] object-contain"
+              className="w-14 h-14 sm:w-14 sm:h-14 lg:w-[80px] lg:h-[80px] object-contain"
             />
             <div className="flex">
               {/* <span className="lg:hidden font-semibold text-[17px] sm:text-[19px] text-gray-900 leading-tight">

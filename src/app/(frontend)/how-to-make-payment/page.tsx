@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
+import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 interface SectionProps {
   title: string
@@ -23,6 +24,7 @@ function Section({ title, paragraphs }: SectionProps) {
 
 export const metadata: Metadata = {
   title: 'How to make payment to Yama Nepal Trek (ヤマ・ネパール・トレック)',
+  alternates: buildJapaneseAlternates('/how-to-make-payment'),
 }
 
 export default function HowToMakePayment() {
@@ -63,7 +65,7 @@ export default function HowToMakePayment() {
         <img
           alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/coverimage.webp"
+          src="/images/coverimage.avif"
         />
       </div>
 

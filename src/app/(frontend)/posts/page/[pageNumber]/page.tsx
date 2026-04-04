@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 export const revalidate = 600
 
@@ -64,8 +65,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { pageNumber } = await paramsPromise
+  const pathname = pageNumber === '1' ? '/posts' : `/posts/page/${pageNumber}`
+
   return {
     title: `Yama Nepal Trek (ヤマ・ネパール・トレック) Posts Page ${pageNumber || ''}`,
+    alternates: buildJapaneseAlternates(pathname),
   }
 }
 

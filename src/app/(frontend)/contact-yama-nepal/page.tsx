@@ -2,9 +2,11 @@ import { Phone, Mail, MapPin, Clock, ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
 import Map from '@/components/ui/Map'
 import { ContactInquiryForm } from '@/components/sections/ContactInquiryForm'
+import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 export const metadata: Metadata = {
   title: 'Contact Yama Nepal Trek (ヤマ・ネパール・トレック)',
+  alternates: buildJapaneseAlternates('/contact-yama-nepal'),
 }
 
 const contactDetails = [
@@ -38,7 +40,7 @@ const ContactSection = () => {
         <img
           alt="ネパールの山岳風景"
           className="absolute w-full h-full object-cover"
-          src="/images/coverimage.webp"
+          src="/images/coverimage.avif"
         />
       </div>
 

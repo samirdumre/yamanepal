@@ -28,7 +28,7 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 
 import './globals.css'
-import { getServerSideURL } from '@/utilities/getURL'
+import { CANONICAL_BASE_URL, buildJapaneseAlternates } from '@/utilities/alternates'
 import { Navbar } from '@/components/layout/Navbar'
 import { PageLoader } from '@/components/ui/PageLoader'
 import { RouteProgressBar } from '@/components/ui/RouteProgressBar'
@@ -136,8 +136,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph(),
+  metadataBase: new URL(CANONICAL_BASE_URL),
+  alternates: buildJapaneseAlternates('/'),
+  openGraph: mergeOpenGraph({
+    locale: 'ja_JP',
+    url: `${CANONICAL_BASE_URL}/`,
+  }),
   twitter: {
     card: 'summary_large_image',
     creator: '@payloadcms',

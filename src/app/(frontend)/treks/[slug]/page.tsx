@@ -15,10 +15,11 @@ import { TrekSectionNav } from '@/components/sections/TrekSectionNav'
 import { RecommendedTreks } from '@/components/sections/RecommendedTreks'
 import RichText from '@/components/RichText'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
-import type { Trek, Media, Category } from '@/payload-types'
+import type { Trek, Media, Category, Region } from '@/payload-types'
 import { lexicalToText } from '@/utilities/lexicalToText'
 import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
 
 import { Check, X, ChevronRight, Star, ArrowRight } from 'lucide-react'
 
@@ -46,7 +47,7 @@ async function getTrek(slug: string): Promise<TrekLookupResult> {
 
   const legacy = await payload.find({
     collection: 'treks',
-    where: { legacySlugs: { contains: slug } },
+    where: { legacySlugs: { in: [slug] } },
     limit: 1,
     depth: 2,
   })
@@ -65,13 +66,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { trek } = await getTrek(slug)
   if (!trek) return {}
 
-  const serverUrl = getServerSideURL()
-  const url = `${serverUrl}/treks/${trek.slug}`
+  const url = buildCanonicalURL(`/treks/${trek.slug}`)
 
   const description =
-    trek.description || lexicalToText(trek.overview) || `Yama Nepal Trekで${trek.name}を体験しませんか。`
+    trek.description ||
+    lexicalToText(trek.overview) ||
+    `Yama Nepal Trekで${trek.name}を体験しませんか。`
 
   const trekImage = trek.image as Media | null | undefined
+  const serverUrl = getServerSideURL()
   const ogImage = trekImage?.url ? serverUrl + trekImage.url : undefined
 
   const title = `${trek.name} | Yama Nepal Trek (ヤマ・ネパール・トレック)`
@@ -79,7 +82,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: buildJapaneseAlternates(`/treks/${trek.slug}`),
     openGraph: mergeOpenGraph({
       title,
       description,
@@ -115,23 +118,56 @@ export default async function TrekDetailPage({ params }: PageProps) {
   const category = trek.category as Category | null | undefined
   const categoryTitle = category && typeof category === 'object' ? category.title : null
   const categorySlug = category && typeof category === 'object' ? category.slug : null
+  const region = trek.region as Region | null | undefined
+  const regionName = region && typeof region === 'object' ? region.name : null
   const rating = trek.rating
   const reviewCount = trek.reviewCount
 
   // ── JSON-LD structured data ─────────────────────────────────────────────
   const serverUrl = getServerSideURL()
-  const trekUrl = `${serverUrl}/treks/${trek.slug}`
+  const trekUrl = buildCanonicalURL(`/treks/${trek.slug}`)
+  const homepageUrl = buildCanonicalURL('/')
+
+  const schemaImages = allImages
+    .map((url) => (url.startsWith('http') ? url : `${serverUrl}${url}`))
+    .filter(Boolean)
+
+  const trekDays = Number.parseInt(String(trek.days).replace(/[^0-9]/g, ''), 10)
+  const duration = Number.isFinite(trekDays) && trekDays > 0 ? `P${trekDays}D` : undefined
+
+  const keywordParts = [categoryTitle, regionName, trek.difficulty, 'ネパール トレッキング'].filter(
+    Boolean,
+  )
+  const keywords = keywordParts.length > 0 ? keywordParts.join(', ') : undefined
 
   const metaDescription =
-    trek.description || lexicalToText(trek.overview) || `Yama Nepal Trekで${trek.name}を体験しませんか。`
+    trek.description ||
+    lexicalToText(trek.overview) ||
+    `Yama Nepal Trekで${trek.name}を体験しませんか。`
 
   const touristTripSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'TouristTrip',
+    '@id': `${trekUrl}#tourist-trip`,
     name: trek.name,
     description: metaDescription,
     url: trekUrl,
-    image: allImages.length > 0 ? allImages : undefined,
+    mainEntityOfPage: trekUrl,
+    inLanguage: 'ja',
+    image: schemaImages.length > 0 ? schemaImages : undefined,
+    category: categoryTitle ?? 'トレッキング',
+    keywords,
+    touristType: 'Trekking',
+    duration,
+    provider: {
+      '@type': 'Organization',
+      name: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
+      url: homepageUrl,
+    },
+    availableAtOrFrom: {
+      '@type': 'Place',
+      name: regionName ? `${regionName}, Nepal` : 'Nepal',
+    },
     offers: {
       '@type': 'Offer',
       price: String(trek.price),
@@ -169,18 +205,49 @@ export default async function TrekDetailPage({ params }: PageProps) {
       : {}),
   }
 
+  const trekReviewSchema =
+    rating != null && reviewCount != null
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          '@id': `${trekUrl}#product`,
+          name: trek.name,
+          description: metaDescription,
+          url: trekUrl,
+          image: schemaImages.length > 0 ? schemaImages : undefined,
+          brand: {
+            '@type': 'Brand',
+            name: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
+          },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: rating,
+            reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+          offers: {
+            '@type': 'Offer',
+            price: String(trek.price),
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+            url: trekUrl,
+          },
+        }
+      : null
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${serverUrl}/` },
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: homepageUrl },
       ...(categorySlug
         ? [
             {
               '@type': 'ListItem',
               position: 2,
               name: categoryTitle ?? 'トレッキング',
-              item: `${serverUrl}/treks?category=${categorySlug}`,
+              item: `${buildCanonicalURL('/treks')}?category=${categorySlug}`,
             },
             { '@type': 'ListItem', position: 3, name: trek.name },
           ]
@@ -212,6 +279,12 @@ export default async function TrekDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(touristTripSchema) }}
       />
+      {trekReviewSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(trekReviewSchema) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

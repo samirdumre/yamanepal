@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import type { Media } from '@/payload-types'
+import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -35,7 +36,7 @@ export default async function Page() {
           sizes="100vw"
           alt="Blogs from the Himalayas"
           className="object-cover"
-          src="/images/coverimage.webp"
+          src="/images/coverimage.avif"
           priority
         />
       </div>
@@ -109,5 +110,6 @@ export default async function Page() {
 export function generateMetadata(): Metadata {
   return {
     title: 'Blogs | Yama Nepal Trek | (ヤマ・ネパール・トレック)',
+    alternates: buildJapaneseAlternates('/posts'),
   }
 }

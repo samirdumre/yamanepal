@@ -12,63 +12,118 @@ import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
 
 export const revalidate = 604800 // Cache this page statically for 7 days
 
+export const metadata: Metadata = {
+  alternates: buildJapaneseAlternates('/'),
+}
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
   // Fetch all data in parallel
-  const [{ docs: bestSellerTreks }, { docs: lastMinuteDeals }, homepage] = await Promise.all([
-    payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
-    payload.find({
-      collection: 'treks',
-      where: { isLastMinuteDeal: { equals: true } },
-      limit: 6,
-    }),
-    payload.findGlobal({ slug: 'homepage', depth: 2 }),
-  ])
+  const [{ docs: bestSellerTreks }, { docs: lastMinuteDeals }, homepage, { docs: trekRatings }] =
+    await Promise.all([
+      payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
+      payload.find({
+        collection: 'treks',
+        where: { isLastMinuteDeal: { equals: true } },
+        limit: 6,
+      }),
+      payload.findGlobal({ slug: 'homepage', depth: 2 }),
+      payload.find({
+        collection: 'treks',
+        depth: 0,
+        limit: 1000,
+        pagination: false,
+        overrideAccess: false,
+        select: {
+          rating: true,
+          reviewCount: true,
+        },
+      }),
+    ])
+
+  const homepageUrl = buildCanonicalURL('/')
+
+  const ratings = (trekRatings ?? []).flatMap((trek) => {
+    const rating = typeof trek.rating === 'number' ? trek.rating : null
+    const reviewCount = typeof trek.reviewCount === 'number' ? trek.reviewCount : 0
+
+    if (rating == null || !Number.isFinite(rating) || reviewCount <= 0) {
+      return []
+    }
+
+    return [{ rating, reviewCount }]
+  })
+
+  const totalReviewCount = ratings.reduce((sum, item) => sum + item.reviewCount, 0)
+  const weightedRatingSum = ratings.reduce((sum, item) => sum + item.rating * item.reviewCount, 0)
+  const averageRating =
+    totalReviewCount > 0 ? Number((weightedRatingSum / totalReviewCount).toFixed(1)) : null
+  const homepageSchemaReviewCount = 6
+
+  const homepageReviewSchema =
+    averageRating != null
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'TravelAgency',
+          '@id': `${homepageUrl}#travel-agency`,
+          name: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
+          url: homepageUrl,
+          inLanguage: 'ja',
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: averageRating,
+            reviewCount: homepageSchemaReviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : null
 
   const placeholderRegions = [
     {
       id: 1,
-      image: '/regions/langtang region.webp',
+      image: '/regions/langtang region.avif',
       name: 'ランタン地域',
       slug: 'langtang-region',
       trekCount: 3,
     },
     {
       id: 2,
-      image: '/regions/annapurna region.webp',
+      image: '/regions/annapurna region.avif',
       name: 'アンナプルナ地方',
       slug: 'annapurna-region',
       trekCount: 7,
     },
     {
       id: 3,
-      image: '/regions/everest region.webp',
+      image: '/regions/everest region.avif',
       name: 'エベレスト地域',
       slug: 'everest-region',
       trekCount: 9,
     },
     {
       id: 4,
-      image: '/regions/dolpa region.webp',
+      image: '/regions/dolpa region.avif',
       name: 'ドルパ地方',
       slug: 'dolpa-region',
       trekCount: 2,
     },
     {
       id: 5,
-      image: '/regions/manaslu region.webp',
+      image: '/regions/manaslu region.avif',
       name: 'マナスル地方',
       slug: 'manaslu-region',
       trekCount: 2,
     },
     {
       id: 6,
-      image: '/regions/chitwan region.webp',
+      image: '/regions/chitwan region.avif',
       name: 'ファミリーツアー',
       slug: 'family-tour',
       trekCount: 3,
@@ -83,7 +138,7 @@ export default async function HomePage() {
       difficulty: '中級',
       price: 945,
     },
-    image: { url: '/images/camping.webp' },
+    image: { url: '/images/camping.avif' },
     description:
       'ランタン谷トレッキングは、ネパールで最も美しいトレッキングコースの一つです。キャンジン・リ（4,400m）とツェルコ・リ（5,700m）への玄関口となっています...',
   }
@@ -98,8 +153,8 @@ export default async function HomePage() {
       name: '鈴木明子',
       location: 'Sendai, Japan',
       quote:
-        'アイランドピーク、最高でした 正直めちゃくちゃ不安だったけど、ガイドさんがずっと支えてくれて、無事に登頂できました。山頂に立ったときは泣きそうになりました笑。このエージェンシー、ほんとにおすすめです',
-      avatar: '/regions/island peak morning.webp',
+        'アイランドピーク、最高でした！正直めちゃくちゃ不安だったけど、ガイドさんがずっと支えてくれて、無事に登頂できました。装備のチェックも丁寧にしてくれて、本当に心強かったです。山頂に立ったときは泣きそうになりました笑。このエージェンシー、ほんとにおすすめです！',
+      avatar: '/regions/island peak morning.avif',
     },
     {
       id: 2,
@@ -107,7 +162,7 @@ export default async function HomePage() {
       location: 'Shinjuku, Japan',
       quote:
         '初めての海外トレッキングで超不安だったけど、ガイドさんのおかげで全部吹き飛びました笑。ずっと気にかけてくれてアドバイスも的確で、ほんとに心強かったです。一人だったら絶対こんなに楽しめなかった。ありがとうございました！',
-      avatar: '/images/trekking nepal.webp',
+      avatar: '/images/trekking nepal.avif',
     },
     {
       id: 3,
@@ -115,7 +170,7 @@ export default async function HomePage() {
       location: 'Chiba, Japan',
       quote:
         'ランタン谷トレッキングは本当に素晴らしい体験でした。タマン族の文化やチェルコリからのヒマラヤの絶景に感動し、ガイドさんのサポートのおかげで安心して楽しめました。このエージェンシーを選んで大正解でした。心からおすすめします!',
-      avatar: '/images/camping.webp',
+      avatar: '/images/camping.avif',
     },
     {
       id: 4,
@@ -123,7 +178,31 @@ export default async function HomePage() {
       location: 'Tokyo, Japan',
       quote:
         'グループでのアンナプルナベースキャンプ、最高すぎました！最初はみんなと歩けるか不安だったけど、気づいたら仲間と笑いながら歩いてて、しんどさも全然気にならなかった笑。ガイドさんもグループ全員のペースをしっかり見てくれて、誰も置いてけぼりにしない安心感がありました。ベースキャンプで見たアンナプルナの景色は、言葉にならないくらい感動的でした。このツアーに参加して本当によかった。友達にも絶対すすめます！',
-      avatar: '/images/annapurna4.webp',
+      avatar: '/images/annapurna4.avif',
+    },
+    {
+      id: 5,
+      name: 'マイケル・レイスナー',
+      location: 'Florida, USA',
+      quote:
+        'エベレストベースキャンプ、夢が叶いました！カラパタールからの景色はもう言葉にならないです。高山病が心配で正直ビビってたんですが、ガイドさんが毎日体調チェックしてくれて、ペース配分も完璧で安心して歩けました。テントの中で飲んだ温かいチャイが忘れられない笑。また絶対ネパールに来ます！',
+      avatar: '/images/everest-testimonial.avif',
+    },
+    {
+      id: 6,
+      name: '中村 美咲',
+      location: 'Kyoto, Japan',
+      quote:
+        'プーンヒルトレッキング、最高の旅でした！早朝の展望台からダウラギリとアンナプルナが朝焼けに染まる瞬間、思わず息をのみました。初心者向けって聞いてたけど、実際歩いてみるとなかなかハードで笑。でもガイドさんがずっと励ましてくれて、地元の文化や村の話もたくさん教えてもらえてすごく充実してました。山も村も人も、全部が温かくて。このエージェンシーに任せて本当によかったです。',
+      avatar: '/images/poonhill.avif',
+    },
+    {
+      id: 7,
+      name: '高橋 龍',
+      location: 'Sapporo, Japan',
+      quote:
+        'ゴーキョトレッキング最高でした。エベレストベースキャンプより静かで、湖の透明度とチョ・オユーの眺めが想像以上に美しくて圧倒されました。英語があまり得意じゃない私にも、ガイドさんが辛抱強く対応してくれてすごく助かりました笑。来年は家族を連れてまた来たいと思ってます！',
+      avatar: '/images/shantamagar.avif',
     },
   ]
 
@@ -134,13 +213,19 @@ export default async function HomePage() {
   const sidePosts = blogPosts.slice(1, 4)
 
   const difficultyConfig = {
-    初級: { icon: '/images/easy.webp', color: 'text-green-500' },
-    中級: { icon: '/images/moderate.webp', color: 'text-yellow-500' },
-    上級: { icon: '/images/hard.webp', color: 'text-red-500' },
+    初級: { icon: '/images/easy.avif', color: 'text-green-500' },
+    中級: { icon: '/images/moderate.avif', color: 'text-yellow-500' },
+    上級: { icon: '/images/hard.avif', color: 'text-red-500' },
   }
 
   return (
     <div className="min-h-screen bg-white font-['Noto_Sans_JP',sans-serif]">
+      {homepageReviewSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(homepageReviewSchema) }}
+        />
+      )}
       {/* <Navbar /> */}
 
       {/* Hero */}
@@ -291,17 +376,17 @@ export default async function HomePage() {
       {/* Gallery */}
       <GallerySection
         images={[
-          '/images/annapurna4.webp',
-          '/images/breakfast on everest trail.webp',
-          '/images/camping.webp',
-          '/images/island peak with guide.webp',
-          '/images/annapurna mountain.webp',
-          '/images/yak on everest.webp',
-          '/images/trekking nepal.webp',
-          '/images/travel1.webp',
-          '/images/nepal-hill.webp',
-          '/images/kyanjinri.webp',
-          '/images/everest base camp.webp',
+          '/images/annapurna4.avif',
+          '/images/breakfast on everest trail.avif',
+          '/images/camping.avif',
+          '/images/island peak with guide.avif',
+          '/images/annapurna mountain.avif',
+          '/images/yak on everest.avif',
+          '/images/trekking nepal.avif',
+          '/images/travel1.avif',
+          '/images/nepal-hill.avif',
+          '/images/kyanjinri.avif',
+          '/images/everest base camp.avif',
         ]}
       />
 

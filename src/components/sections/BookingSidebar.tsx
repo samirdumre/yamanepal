@@ -133,7 +133,7 @@ export function BookingSidebar({
           </div>
         </div>
       </div>
-      <TalkToExpert qrSrc={'/images/qrcontact.webp'} />
+      <TalkToExpert qrSrc={'/images/qrcontact.avif'} />
       <BookingFormModal open={modalOpen} onClose={() => setModalOpen(false)} trekName={trekName} />
     </div>
   )

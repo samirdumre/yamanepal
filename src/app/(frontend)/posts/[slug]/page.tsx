@@ -14,6 +14,7 @@ import { ChevronRight } from 'lucide-react'
 import type { Media } from '@/payload-types'
 
 import { generateMeta } from '@/utilities/generateMeta'
+import { buildJapaneseAlternates } from '@/utilities/alternates'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -127,7 +128,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const post = await queryPostBySlug({ slug: decodedSlug })
-  const baseMeta = await generateMeta({ doc: post })
+  const baseMeta = await generateMeta({ doc: post, pathname: `/posts/${decodedSlug}` })
 
   const title = post?.title
     ? `Yama Nepal Trek (ヤマ・ネパール・トレック) | ${post.title}`
@@ -136,6 +137,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return {
     ...baseMeta,
     title,
+    alternates: buildJapaneseAlternates(`/posts/${decodedSlug}`),
     openGraph: {
       ...baseMeta.openGraph,
       title,

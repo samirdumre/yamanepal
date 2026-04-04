@@ -5,10 +5,10 @@ import Link from 'next/link'
 // IMAGE PLACEHOLDERS — replace these paths with your actual images
 // ============================================================
 const IMAGES = {
-  footerMountain1: '/images/footer-image.webp', // Background mountain layer 1
-  qrContact: '/images/qrcontact.webp', // QR code for contact
-  avatarNepal: '/images/shantamagar.webp', // Nepal contact person avatar
-  avatarJapan: '/images/shantamagar.webp', // Japan contact person avatar
+  footerMountain1: '/images/footer-image.avif', // Background mountain layer 1
+  qrContact: '/images/qrcontact.avif', // QR code for contact
+  avatarNepal: '/images/shantamagar.avif', // Nepal contact person avatar
+  avatarJapan: '/images/shantamagar.avif', // Japan contact person avatar
 }
 // ============================================================
 
@@ -192,12 +192,8 @@ export function Footer() {
             {/* Empty spacer — mirrors the right column's width to keep copyright truly centered */}
             <div className="hidden md:block" />
             <div className="text-[#e2e8f0] text-[14px] text-center flex flex-col md:flex-row md:gap-1 lg:whitespace-nowrap">
-              <p>
-              © {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd. 
-              </p>
-              <p>
-              All rights reserved.
-              </p>
+              <p>© {new Date().getFullYear()} Yama Nepal Trek & Expedition Pvt. Ltd.</p>
+              <p>All rights reserved.</p>
             </div>
 
             <p className="text-[#e2e8f0] text-[14px] text-center md:text-right">
