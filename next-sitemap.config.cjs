@@ -1,8 +1,4 @@
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'https://www.yamanepaltrek.com')
+const SITE_URL = 'https://yamanepaltrek.com'
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
