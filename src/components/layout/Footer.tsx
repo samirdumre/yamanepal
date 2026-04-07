@@ -32,7 +32,7 @@ const contacts = [
   {
     country: 'ネパール',
     name: 'マガル　サンタ',
-    phone: '+977-9743290500',
+    phone: '+977-9849289569',
     avatar: IMAGES.avatarNepal,
   },
   // {
