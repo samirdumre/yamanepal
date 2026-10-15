@@ -3,50 +3,11 @@
 import { Search, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import Link from '@/components/ProgressLink'
 import { useDebounce } from '@/utilities/useDebounce'
 
-const HERO_IMAGE_SRC = '/images/heromax.avif'
-const HERO_VIDEO_ID = 'R_V9gKlZAZc'
-
-function extractYouTubeId(urlOrId: string): string {
-  const shortMatch = urlOrId.match(/youtu\.be\/([^?&]+)/)
-  if (shortMatch) return shortMatch[1]!
-  const longMatch = urlOrId.match(/[?&]v=([^?&]+)/)
-  if (longMatch) return longMatch[1]!
-  return urlOrId
-}
-
-interface YTPlayer {
-  playVideo: () => void
-  seekTo: (seconds: number, allowSeekAhead?: boolean) => void
-  getDuration: () => number
-  getCurrentTime: () => number
-  getIframe: () => HTMLIFrameElement
-  getAvailableQualityLevels?: () => string[]
-  setPlaybackQuality: (suggestedQuality: string) => void
-  setPlaybackQualityRange?: (suggestedQuality: string) => void
-}
-
-declare global {
-  interface Window {
-    YT: {
-      Player: new (
-        el: HTMLElement,
-        opts: {
-          host?: string
-          videoId: string
-          playerVars?: Record<string, number | string>
-          events?: {
-            onReady?: (e: { target: YTPlayer }) => void
-            onStateChange?: (e: { target: YTPlayer; data: number }) => void
-          }
-        },
-      ) => void
-    }
-    onYouTubeIframeAPIReady: () => void
-  }
-}
+const HeroBackgroundVideo = dynamic(() => import('./HeroBackgroundVideo'), { ssr: false })
 
 interface TrekResult {
   id: number
@@ -63,12 +24,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ headline, subheading }: HeroSectionProps) {
-  const [isActive, setIsActive] = useState(false)
-  const playerRef = useRef<YTPlayer | null>(null)
-  const playerContainerRef = useRef<HTMLDivElement>(null)
-  const hasStartedRef = useRef(false)
-  const rewindTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
+  const [videoEnabled, setVideoEnabled] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TrekResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -123,118 +79,38 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
     }
   }, [])
 
-  function scheduleRewind(player: YTPlayer) {
-    if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
-    const remaining = player.getDuration() - player.getCurrentTime()
-    if (remaining > 0.3) {
-      rewindTimerRef.current = setTimeout(() => player.seekTo(0), (remaining - 0.2) * 1000)
-    }
-  }
-
   useEffect(() => {
-    const isDesktop = () =>
-      typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches
-
-    const qualityOrder = ['hd1080', 'hd720']
-
-    function forcePreferredQuality(player: YTPlayer) {
-      const preferredMinQuality = isDesktop() ? 'hd1080' : 'hd720'
-      const available = player.getAvailableQualityLevels?.() ?? []
-
-      // Pick the best available quality that still satisfies the desktop/mobile minimum target.
-      const minIndex = qualityOrder.indexOf(preferredMinQuality)
-      const chosen = qualityOrder.find((level) => {
-        const levelIndex = qualityOrder.indexOf(level)
-        return levelIndex >= 0 && levelIndex <= minIndex && available.includes(level)
-      })
-
-      const target = chosen ?? preferredMinQuality
-      player.setPlaybackQuality(target)
-      player.setPlaybackQualityRange?.(target)
-
-      // Re-assert once after startup because YouTube may auto-adjust shortly after play begins.
-      setTimeout(() => {
-        player.setPlaybackQuality(target)
-        player.setPlaybackQualityRange?.(target)
-      }, 1200)
+    const media = window.matchMedia(
+      '(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+    )
+    const connection = (
+      navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
+    ).connection
+    if (
+      !media.matches ||
+      connection?.saveData ||
+      /(^|-)2g|3g/.test(connection?.effectiveType ?? '')
+    )
+      return
+    let idle: number | undefined
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const enable = () => {
+      if ('requestIdleCallback' in window)
+        idle = window.requestIdleCallback(() => setVideoEnabled(media.matches), { timeout: 3000 })
+      else timer = setTimeout(() => setVideoEnabled(media.matches), 1000)
     }
-
-    function createPlayer() {
-      if (!playerContainerRef.current || playerRef.current) return
-      const videoId = extractYouTubeId(HERO_VIDEO_ID)
-
-      new window.YT.Player(playerContainerRef.current, {
-        videoId,
-        host: 'https://www.youtube.com',
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          controls: 0,
-          disablekb: 1,
-          playsinline: 1,
-          rel: 0,
-          iv_load_policy: 3,
-          fs: 0,
-          cc_load_policy: 0,
-          enablejsapi: 1,
-          origin: window.location.origin,
-          widget_referrer: window.location.href,
-        },
-        events: {
-          onReady: (e) => {
-            playerRef.current = e.target
-            forcePreferredQuality(e.target)
-            e.target.playVideo()
-            const iframe = e.target.getIframe()
-            Object.assign(iframe.style, {
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: '100vw',
-              height: '56.25vw',
-              minHeight: '100%',
-              minWidth: '177.78vh',
-              transform: 'translate(-50%, -50%)',
-              pointerEvents: 'none',
-              touchAction: 'none',
-            })
-          },
-          onStateChange: (e) => {
-            if (e.data === 1) {
-              forcePreferredQuality(e.target)
-              if (!hasStartedRef.current) {
-                hasStartedRef.current = true
-                setIsActive(true)
-              }
-              scheduleRewind(e.target)
-            }
-          },
-        },
-      })
+    const onResize = () => {
+      if (!media.matches) setVideoEnabled(false)
     }
-
-    function loadAPI() {
-      if (window.YT?.Player) {
-        createPlayer()
-        return
-      }
-      const prevCallback = window.onYouTubeIframeAPIReady
-      window.onYouTubeIframeAPIReady = () => {
-        prevCallback?.()
-        createPlayer()
-      }
-      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-        const script = document.createElement('script')
-        script.src = 'https://www.youtube.com/iframe_api'
-        script.async = true
-        document.head.appendChild(script)
-      }
-    }
-
-    loadAPI()
-
+    // Decorative video must not compete with the poster or initial page resources.
+    if (document.readyState === 'complete') enable()
+    else window.addEventListener('load', enable, { once: true })
+    media.addEventListener('change', onResize)
     return () => {
-      if (rewindTimerRef.current) clearTimeout(rewindTimerRef.current)
+      window.removeEventListener('load', enable)
+      media.removeEventListener('change', onResize)
+      if (idle !== undefined) window.cancelIdleCallback(idle)
+      if (timer) clearTimeout(timer)
     }
   }, [])
 
@@ -244,34 +120,44 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
       style={{ touchAction: 'pan-y' }}
     >
       <div className="absolute inset-0 overflow-hidden">
-        <Image
-          fill
-          sizes="100vw"
-          priority
-          alt=""
-          className={`object-cover transition-opacity duration-500 ${
-            isActive ? 'opacity-0' : 'opacity-100'
-          }`}
-          src={HERO_IMAGE_SRC}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-mobile.avif"
+          media="(max-width: 1023px)"
+          fetchPriority="high"
         />
-
-        <div
-          className={`absolute inset-0 overflow-hidden transition-opacity duration-500 pointer-events-none ${
-            isActive ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <div ref={playerContainerRef} className="absolute inset-0 pointer-events-none" />
-        </div>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-desktop.avif"
+          media="(min-width: 1024px)"
+          fetchPriority="high"
+        />
+        <picture>
+          <source media="(max-width: 1023px)" srcSet="/images/hero-mobile.avif" />
+          <Image
+            fill
+            unoptimized
+            loading="eager"
+            fetchPriority="high"
+            sizes="100vw"
+            alt=""
+            className="object-cover"
+            src="/images/hero-desktop.avif"
+          />
+        </picture>
+        {videoEnabled && <HeroBackgroundVideo />}
 
         <div className="absolute inset-0 bg-black/20 pointer-events-none" />
       </div>
 
       <div className="relative z-10 w-full max-w-[1002px] flex flex-col items-center gap-3 md:gap-10 px-5">
         <div className="w-full flex flex-col items-center gap-3">
-          <h1 className="w-full font-bold text-center text-[32px] md:text-5xl text-white leading-tight font-['Noto_Sans_JP',sans-serif]">
+          <h1 className="w-full font-bold text-center text-[32px] md:text-5xl text-white leading-tight font-sans">
             {headline}
           </h1>
-          <p className="w-full lg:text-center font-['Noto_Sans_JP',sans-serif] font-medium text-lg text-white">
+          <p className="w-full lg:text-center font-sans font-medium text-lg text-white">
             {subheading}
           </p>
         </div>
@@ -284,7 +170,7 @@ export function HeroSection({ headline, subheading }: HeroSectionProps) {
               <Search className="w-6 h-6 flex-shrink-0 text-slate-950/30" />
             )}
             <input
-              className="flex-1 font-['Noto_Sans_JP',sans-serif] text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
+              className="flex-1 font-sans text-base text-slate-950 placeholder:text-slate-950/30 outline-none bg-transparent"
               placeholder="トレッキングを検索..."
               type="text"
               value={query}

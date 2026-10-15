@@ -201,12 +201,10 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
       {/* Section heading */}
       <div className="flex flex-col gap-1 md:gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-['Noto_Sans_JP',sans-serif] text-base text-cyan-500">{label}</span>
+          <span className="font-sans text-base text-cyan-500">{label}</span>
           <div className="w-11 h-px bg-cyan-500" />
         </div>
-        <h2 className="font-['Noto_Sans_JP',sans-serif] font-semibold text-2xl md:text-4xl text-[#020617]">
-          {title}
-        </h2>
+        <h2 className="font-sans font-semibold text-2xl md:text-4xl text-[#020617]">{title}</h2>
       </div>
 
       {/* Carousel */}
@@ -216,12 +214,9 @@ export function TrekCarousel({ treks, label, title }: TrekCarouselProps) {
             {treks.map((trek) => (
               <div
                 key={trek.id}
-                className="flex-shrink-0"
+                className="trek-carousel-card flex-shrink-0"
                 style={{
-                  width:
-                    cardW > 0
-                      ? `${cardW}px`
-                      : `calc((100% - ${DEFAULT_GAP * (DEFAULT_VISIBLE - 1)}px) / ${DEFAULT_VISIBLE})`,
+                  width: cardW > 0 ? `${cardW}px` : undefined,
                 }}
               >
                 <TrekCard

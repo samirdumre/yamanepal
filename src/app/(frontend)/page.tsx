@@ -227,7 +227,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white font-['Noto_Sans_JP',sans-serif]">
+    <div className="min-h-screen bg-white font-sans">
       {homepageReviewSchema && (
         <script
           type="application/ld+json"
@@ -316,7 +316,6 @@ export default async function HomePage() {
                     className="absolute inset-0 w-full h-full object-cover"
                     src={tripImage.url}
                     height={400}
-                    priority
                     sizes="(max-width: 1024px) 100vw, 522px"
                     width={600}
                   />
@@ -327,7 +326,7 @@ export default async function HomePage() {
                     <span className="text-white text-[14px]">
                       <CalendarCheck2 />
                     </span>
-                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-sans text-[14px] text-white leading-[20px]">
                       {tripOfTheMonthTrek.days}
                     </span>
                   </div>
@@ -345,13 +344,13 @@ export default async function HomePage() {
                         height={20}
                       />
                     </span>
-                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-sans text-[14px] text-white leading-[20px]">
                       {tripOfTheMonthTrek.difficulty}
                     </span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <Tag />
-                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[20px]">
+                    <span className="font-sans text-[14px] text-white leading-[20px]">
                       US ${tripOfTheMonthTrek.price}
                     </span>
                   </div>
@@ -367,7 +366,7 @@ export default async function HomePage() {
                     {tripOfTheMonthTrek.name}
                   </h2>
                 </div>
-                <p className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-white leading-[22px]">
+                <p className="font-sans text-[14px] text-white leading-[22px]">
                   {tripOfTheMonthDescription}
                 </p>
                 <Link href={`/treks/${tripOfTheMonthTrek.slug ?? ''}`} className="w-fit">
@@ -436,7 +435,6 @@ export default async function HomePage() {
                     fill
                     alt={featuredPost.title}
                     className="object-cover group-hover:scale-103 transition-transform duration-300"
-                    priority
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     src={(featuredPost.image as Media).url!}
                   />
@@ -444,11 +442,11 @@ export default async function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="bg-[#e2e8f0] rounded-full px-3 py-[3px] w-fit mb-3">
-                    <span className="font-['Noto_Sans_JP',sans-serif] text-[14px] text-[#020617]">
+                    <span className="font-sans text-[14px] text-[#020617]">
                       {featuredPost.tag}
                     </span>
                   </div>
-                  <h3 className="font-['Noto_Sans_JP',sans-serif] font-semibold text-[20px] text-white leading-[32px]">
+                  <h3 className="font-sans font-semibold text-[20px] text-white leading-[32px]">
                     {featuredPost.title}
                   </h3>
                 </div>

@@ -9,6 +9,7 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 import Image from 'next/image'
+import { getMediaImage } from '@/utilities/getMediaImage'
 import Link from '@/components/ProgressLink'
 import { ChevronRight } from 'lucide-react'
 
@@ -59,7 +60,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   const heroImage = (post.heroImage ?? post.image) as Media | null
 
   return (
-    <article className="bg-white w-full font-['Inter',sans-serif]">
+    <article className="bg-white w-full font-sans">
       <PageClient />
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
@@ -72,8 +73,9 @@ export default async function Post({ params: paramsPromise }: Args) {
             sizes="100vw"
             alt={post.title}
             className="object-cover"
-            src={heroImage.url}
+            src={getMediaImage(heroImage)}
             priority
+            fetchPriority="high"
           />
         ) : (
           <div className="w-full h-full bg-[#e2e8f0]" />

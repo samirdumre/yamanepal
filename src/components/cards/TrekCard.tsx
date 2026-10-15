@@ -1,5 +1,6 @@
 import Link from '@/components/ProgressLink'
 import Image from 'next/image'
+import { getMediaImage } from '@/utilities/getMediaImage'
 import type { Media } from '@/payload-types'
 
 interface TrekCardProps {
@@ -29,7 +30,7 @@ export function TrekCard({
   discountedPrice,
   isLastMinuteDeal,
 }: TrekCardProps) {
-  const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
+  const imgSrc = getMediaImage(image)
   const { icon, color } = difficultyConfig[difficulty] ?? difficultyConfig.中級
   const showDiscount = discountedPrice != null && discountedPrice < price
 
@@ -61,7 +62,7 @@ export function TrekCard({
         {/* Card body */}
         <div className="self-stretch flex flex-col justify-start items-start gap-1 md:gap-2">
           {/* Trek name */}
-          <div className="self-stretch text-slate-950 text-xl md:text-xl lg:text-2xl font-semibold font-['Noto_Sans_JP']">
+          <div className="self-stretch text-slate-950 text-xl md:text-xl lg:text-2xl font-semibold font-sans">
             {name}
           </div>
 
@@ -69,7 +70,7 @@ export function TrekCard({
           <div className="flex flex-col justify-start items-start gap-4">
             {/* Days + divider + difficulty */}
             <div className="flex items-center gap-4">
-              <span className="text-slate-950 text-sm md:text-base font-normal font-['Noto_Sans_JP']">
+              <span className="text-slate-950 text-sm md:text-base font-normal font-sans">
                 {days}
               </span>
               <div className="w-px h-5 bg-cyan-500 flex-shrink-0" />
@@ -81,7 +82,7 @@ export function TrekCard({
                   width={32}
                   height={20}
                 />
-                <span className={`text-sm md:text-base font-normal font-['Noto_Sans_JP'] ${color}`}>
+                <span className={`text-sm md:text-base font-normal font-sans ${color}`}>
                   {difficulty}
                 </span>
               </div>
@@ -91,15 +92,15 @@ export function TrekCard({
             <div className="inline-flex justify-start items-center gap-3">
               {showDiscount ? (
                 <>
-                  <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Noto_Sans_JP']">
+                  <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-sans">
                     US ${discountedPrice}
                   </span>
-                  <span className="text-slate-400 text-base font-normal font-['Noto_Sans_JP'] line-through">
+                  <span className="text-slate-400 text-base font-normal font-sans line-through">
                     US ${price}
                   </span>
                 </>
               ) : (
-                <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-['Noto_Sans_JP']">
+                <span className="text-cyan-500 text-lg md:text-xl lg:text-2xl font-bold font-sans">
                   US ${price}
                 </span>
               )}

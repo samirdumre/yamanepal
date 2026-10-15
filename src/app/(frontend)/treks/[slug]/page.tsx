@@ -1,3 +1,4 @@
+import { getMediaImage } from '@/utilities/getMediaImage'
 import { JAPANESE_KEYWORDS, resolveSEOImage } from '@/utilities/seo'
 import { cache } from 'react'
 import { findPublicContent } from '@/utilities/getPublicContent'
@@ -128,6 +129,17 @@ export default async function TrekDetailPage({ params }: PageProps) {
   const categorySlug = category && typeof category === 'object' ? category.slug : null
   const region = trek.region as Region | null | undefined
   const regionName = region && typeof region === 'object' ? region.name : null
+  const previewByURL = new Map<string, string>()
+  const thumbnailByURL = new Map<string, string>()
+  for (const media of [trek.image, ...(trek.gallery ?? []).map((item) => item.image)]) {
+    if (media && typeof media === 'object' && media.url) {
+      previewByURL.set(media.url, getMediaImage(media))
+      thumbnailByURL.set(media.url, getMediaImage(media, 'thumbnail'))
+    }
+  }
+  const previewImages = allImages.map((url) => previewByURL.get(url) || url)
+  const thumbnailImages = allImages.map((url) => thumbnailByURL.get(url) || url)
+
   const rating = trek.rating
   const reviewCount = trek.reviewCount
 
@@ -278,7 +290,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen font-['Inter',sans-serif] bg-gradient-to-b from-[#fdfcff] to-white">
+    <div className="min-h-screen font-sans bg-gradient-to-b from-[#fdfcff] to-white">
       {/* JSON-LD structured data */}
       <script
         type="application/ld+json"
@@ -301,7 +313,12 @@ export default async function TrekDetailPage({ params }: PageProps) {
         />
       )}
       {/* ── Hero: first 3 shown in collage, all images accessible in lightbox ── */}
-      <TrekHeroCollage images={allImages} trekName={trek.name} />
+      <TrekHeroCollage
+        images={allImages}
+        previews={previewImages}
+        thumbnails={thumbnailImages}
+        trekName={trek.name}
+      />
 
       {/* ── Sticky section nav ── */}
       <TrekSectionNav />
@@ -332,9 +349,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             </nav>
             {/* Title + star rating */}
             <div className="mt-3 mb-5">
-              <h1 className="font-['Inter',sans-serif] font-bold text-3xl text-[#020617]">
-                {trek.name}
-              </h1>
+              <h1 className="font-sans font-bold text-3xl text-[#020617]">{trek.name}</h1>
 
               {rating != null && (
                 <div className="flex items-center gap-3 mt-2">
@@ -408,9 +423,7 @@ export default async function TrekDetailPage({ params }: PageProps) {
             {/* Itinerary Accordion */}
             {trek.itinerary && trek.itinerary.length > 0 && (
               <section id="itinerary" className="mb-12 scroll-mt-16">
-                <h2 className="font-['Inter',sans-serif] font-semibold text-[28px] text-[#020617] mb-6">
-                  日程表
-                </h2>
+                <h2 className="font-sans font-semibold text-[28px] text-[#020617] mb-6">日程表</h2>
                 <ItineraryAccordion itinerary={trek.itinerary!} />
               </section>
             )}

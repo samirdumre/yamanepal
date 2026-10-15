@@ -25,7 +25,7 @@ export default async function Page() {
   })
 
   return (
-    <div className="min-h-screen bg-white font-['Inter',sans-serif]">
+    <div className="min-h-screen bg-white font-sans">
       {/* Hero */}
       <div className="relative w-full h-[290px] lg:h-[567px] overflow-hidden">
         <Image
@@ -79,12 +79,12 @@ export default async function Page() {
                   <div className="flex flex-col gap-3 p-5">
                     {post.tag && (
                       <div className="bg-[rgba(226,232,240,0.56)] rounded-full px-4 py-[3px] w-fit">
-                        <span className="font-['Inter',sans-serif] text-[13px] text-[#020617]">
+                        <span className="font-sans text-[13px] text-[#020617]">
                           {post.tag}
                         </span>
                       </div>
                     )}
-                    <h2 className="font-['Inter',sans-serif] font-semibold text-[16px] text-[#020617] leading-[24px]">
+                    <h2 className="font-sans font-semibold text-[16px] text-[#020617] leading-[24px]">
                       {post.title}
                     </h2>
                   </div>

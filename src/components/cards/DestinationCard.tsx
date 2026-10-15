@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { getMediaImage } from '@/utilities/getMediaImage'
 import Link from '@/components/ProgressLink'
 import type { Media } from '@/payload-types'
 
@@ -22,7 +23,7 @@ function StarRating() {
 }
 
 export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
-  const imgSrc = typeof image === 'string' ? image : ((image as Media)?.url ?? '')
+  const imgSrc = getMediaImage(image)
 
   return (
     <Link
@@ -45,12 +46,12 @@ export function RegionCard({ image, name, slug, trekCount }: RegionCardProps) {
       <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
         <div className="flex-1 flex flex-col items-start gap-1 md:gap-2">
           <StarRating />
-          <h3 className="font-['Noto_Sans_JP',sans-serif] font-semibold text-xl md:text-2xl text-white">
+          <h3 className="font-sans font-semibold text-xl md:text-2xl text-white">
             {name}
           </h3>
         </div>
         <div className="w-20 h-7 px-5 py-1.5 bg-[#0CB6D8] rounded-lg flex items-center justify-center">
-          <span className="font-['Noto_Sans_JP',sans-serif] font-semibold text-base text-white whitespace-nowrap">
+          <span className="font-sans font-semibold text-base text-white whitespace-nowrap">
             {trekCount} パック
           </span>
         </div>

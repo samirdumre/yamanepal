@@ -87,6 +87,8 @@
 }
 
 :root {
+  /* Native Japanese fonts paint immediately without a web-font swap. */
+  --font-noto-sans-jp: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, "Noto Sans CJK JP", sans-serif;
   --background: oklch(100% 0 0deg);
   --foreground: oklch(14.5% 0 0deg);
   --card: oklch(96.5% 0.005 265deg);
@@ -325,3 +327,8 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Match the carousel's measured layout before JavaScript hydrates. */
+.trek-carousel-card { width: 100%; }
+@media (min-width: 768px) { .trek-carousel-card { width: calc((100% - 16px) / 2); } }
+@media (min-width: 1024px) { .trek-carousel-card { width: calc((100% - 40px) / 3); } }

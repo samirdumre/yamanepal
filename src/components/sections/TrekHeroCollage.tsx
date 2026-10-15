@@ -1,39 +1,32 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
+import { GalleryLightbox } from './GalleryLightbox'
+import { prefetchGalleryImage } from '@/utilities/prefetchGalleryImage'
 import Image from 'next/image'
 import { Images } from 'lucide-react'
 
 interface TrekHeroCollageProps {
   images: string[]
+  previews?: string[]
+  thumbnails?: string[]
   trekName: string
 }
 
-export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
-  const [slot1, slot2, slot3] = images
-  const total = images.length
-
+export function TrekHeroCollage({
+  images,
+  previews = images,
+  thumbnails = previews,
+  trekName,
+}: TrekHeroCollageProps) {
+  const [slot1, slot2, slot3] = previews
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-
-  const close = () => setSelectedIndex(null)
-  const prev = () => setSelectedIndex((i) => (i === null ? 0 : (i - 1 + total) % total))
-  const next = () => setSelectedIndex((i) => (i === null ? 0 : (i + 1) % total))
-
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedIndex(null)
-      else if (e.key === 'ArrowLeft')
-        setSelectedIndex((i) => (i === null ? 0 : (i - 1 + total) % total))
-      else if (e.key === 'ArrowRight') setSelectedIndex((i) => (i === null ? 0 : (i + 1) % total))
-    },
-    [total],
-  )
-
-  useEffect(() => {
-    if (selectedIndex === null) return
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [selectedIndex, onKeyDown])
+  const warm = (index: number) => {
+    prefetchGalleryImage(previews[index])
+    prefetchGalleryImage(thumbnails[index])
+    if (!(navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData)
+      prefetchGalleryImage(previews[(index + 1) % images.length])
+  }
 
   return (
     <>
@@ -42,15 +35,29 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
           {/* Large left image */}
           <div
             className="flex-2 min-w-0 relative h-[240px] sm:h-[360px] md:h-[480px] cursor-pointer"
+            role="button"
+            tabIndex={0}
+            aria-label={`${trekName}の写真をすべて表示`}
+            onFocus={() => warm(0)}
+            onKeyDown={(event) => {
+              if ((event.key === 'Enter' || event.key === ' ') && slot1) {
+                event.preventDefault()
+                setSelectedIndex(0)
+              }
+            }}
+            onPointerEnter={() => warm(0)}
+            onPointerDown={() => warm(0)}
             onClick={() => slot1 && setSelectedIndex(0)}
           >
             {slot1 ? (
               <Image
                 fill
+                unoptimized
                 src={slot1}
                 alt={trekName}
                 priority
-                sizes="(max-width: 640px) calc(100vw - 40px), (max-width: 768px) calc(100vw - 80px), 996px"
+                fetchPriority="high"
+                sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1319px) calc(67vw - 54px), 826px"
                 className="object-cover rounded-xl hover:opacity-95 transition-opacity"
               />
             ) : (
@@ -68,9 +75,9 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                 >
                   <Image
                     fill
+                    unoptimized
                     src={slot2}
                     alt={`${trekName} — 写真 2`}
-                    priority
                     sizes="(max-width: 768px) 240px, 324px"
                     className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                   />
@@ -86,9 +93,9 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
                   >
                     <Image
                       fill
+                      unoptimized
                       src={slot3}
                       alt={`${trekName} — 写真 3`}
-                      priority
                       sizes="(max-width: 768px) 240px, 324px"
                       className="object-cover rounded-lg hover:opacity-95 transition-opacity"
                     />
@@ -112,121 +119,15 @@ export function TrekHeroCollage({ images, trekName }: TrekHeroCollageProps) {
         </div>
       </div>
 
-      {/* Lightbox modal */}
       {selectedIndex !== null && (
-        <div
-          aria-modal="true"
-          role="dialog"
-          className="fixed inset-0 z-50 flex flex-col bg-black/85"
-        >
-          {/* Top bar */}
-          <div
-            className="flex items-center justify-between px-6 py-3 text-white select-none"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span className="text-sm font-medium">
-              {selectedIndex + 1} / {total}
-            </span>
-            <button
-              aria-label="ライトボックスを閉じる"
-              className="p-1 rounded hover:cursor-pointer hover:bg-white/10 transition-colors"
-              onClick={close}
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Main image area */}
-          <div className="relative flex-1 flex items-center justify-center overflow-hidden">
-            {/* Transparent backdrop — clicking empty space closes the lightbox */}
-            <div className="absolute inset-0" onClick={close} />
-
-            {/* Previous arrow */}
-            <button
-              aria-label="前の画像"
-              className="absolute left-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
-              onClick={(e) => {
-                e.stopPropagation()
-                prev()
-              }}
-            >
-              <svg
-                className="w-7 h-7"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-
-            {/* Active image */}
-            <Image
-              alt={`${trekName} — 写真 ${selectedIndex + 1}`}
-              className="max-h-full max-w-full object-contain select-none"
-              src={images[selectedIndex]!}
-              width={1920}
-              height={1080}
-              onClick={(e) => e.stopPropagation()}
-            />
-
-            {/* Next arrow */}
-            <button
-              aria-label="次の画像"
-              className="absolute right-4 z-10 hover:cursor-pointer p-2 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors"
-              onClick={(e) => {
-                e.stopPropagation()
-                next()
-              }}
-            >
-              <svg
-                className="w-7 h-7"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Thumbnail strip */}
-          <div
-            className="flex justify-center items-center gap-2 px-6 py-3 overflow-x-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {images.map((src, i) => (
-              <button
-                key={i}
-                aria-label={`画像 ${i + 1} へ移動`}
-                className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden transition-all ${
-                  i === selectedIndex
-                    ? 'ring-2 ring-white opacity-100'
-                    : 'opacity-50 hover:opacity-80'
-                }`}
-                onClick={() => setSelectedIndex(i)}
-              >
-                <Image
-                  alt={`サムネイル ${i + 1}`}
-                  className="w-full h-full object-cover"
-                  src={src}
-                  width={64}
-                  height={48}
-                />
-              </button>
-            ))}
-          </div>
-        </div>
+        <GalleryLightbox
+          images={images}
+          previews={previews}
+          thumbnails={thumbnails}
+          initialIndex={selectedIndex}
+          trekName={trekName}
+          onClose={() => setSelectedIndex(null)}
+        />
       )}
     </>
   )

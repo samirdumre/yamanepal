@@ -184,8 +184,9 @@ export function Navbar({
             className="flex items-center gap-2"
           >
             <Image
-              src="/images/logo.avif"
-              priority
+              src="/images/logo-small.avif"
+              loading="eager"
+              sizes="(max-width: 1023px) 56px, 80px"
               alt="Logo"
               width={88}
               height={88}
