@@ -1,16 +1,17 @@
 import type { Metadata } from 'next'
-import { getServerSideURL } from './getURL'
+import { JAPANESE_DESCRIPTION, JAPANESE_SITE_TITLE, resolveSEOImage } from './seo'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  description: 'Discover Nepal treks with Yama Nepal Trek.',
+  description: JAPANESE_DESCRIPTION,
+  locale: 'ja_JP',
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: resolveSEOImage(),
     },
   ],
   siteName: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
-  title: 'Yama Nepal Trek (ヤマ・ネパール・トレック)',
+  title: JAPANESE_SITE_TITLE,
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {

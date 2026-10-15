@@ -43,8 +43,11 @@ const getPostsSitemap = unstable_cache(
   ['posts-sitemap'],
   {
     tags: ['posts-sitemap'],
+    revalidate: 3600,
   },
 )
+
+export const revalidate = 3600
 
 export async function GET() {
   const sitemap = await getPostsSitemap()

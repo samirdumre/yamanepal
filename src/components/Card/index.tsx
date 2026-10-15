@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import React, { Fragment } from 'react'
 
 import type { Post } from '@/payload-types'

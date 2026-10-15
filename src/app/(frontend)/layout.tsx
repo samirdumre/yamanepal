@@ -1,5 +1,7 @@
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { JAPANESE_DESCRIPTION, JAPANESE_KEYWORDS, JAPANESE_SITE_TITLE } from '@/utilities/seo'
 
 import { cn } from '@/utilities/ui'
 import { Noto_Sans_JP } from 'next/font/google'
@@ -24,13 +26,10 @@ import type {
   LinkDropdownItem,
   TrekRegionGroup,
 } from '@/components/layout/Navbar'
-import { getPayload } from 'payload'
-import config from '@payload-config'
 
 import './globals.css'
 import { CANONICAL_BASE_URL, buildJapaneseAlternates } from '@/utilities/alternates'
 import { Navbar } from '@/components/layout/Navbar'
-import { PageLoader } from '@/components/ui/PageLoader'
 import { RouteProgressBar } from '@/components/ui/RouteProgressBar'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -70,11 +69,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let trekkingRegionGroups: TrekRegionGroup[] = []
   if (regionEntries.length > 0) {
     const regionIds = regionEntries.map((entry) => entry.region.id)
-    const payload = await getPayload({ config })
-    const { docs: regionTreks } = await payload.find({
+    const { docs: regionTreks } = await findPublicContent({
       collection: 'treks',
       where: { region: { in: regionIds } },
+      select: { name: true, slug: true, days: true, region: true },
       limit: 200,
+      pagination: false,
       depth: 0,
       overrideAccess: false,
     })
@@ -109,7 +109,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preconnect" href="https://s.ytimg.com" />
       </head>
       <body suppressHydrationWarning>
-        <PageLoader />
         <RouteProgressBar />
         <Script src="https://www.youtube.com/iframe_api" strategy="afterInteractive" />
         <Providers>
@@ -137,6 +136,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(CANONICAL_BASE_URL),
+  title: JAPANESE_SITE_TITLE,
+  description: JAPANESE_DESCRIPTION,
+  keywords: JAPANESE_KEYWORDS,
   alternates: buildJapaneseAlternates('/'),
   openGraph: mergeOpenGraph({
     locale: 'ja_JP',
@@ -144,6 +146,8 @@ export const metadata: Metadata = {
   }),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+    title: JAPANESE_SITE_TITLE,
+    description: JAPANESE_DESCRIPTION,
+    images: ['/images/coverimage.avif'],
   },
 }

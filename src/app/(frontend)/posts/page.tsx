@@ -1,20 +1,17 @@
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next/types'
+import { japaneseMetadata } from '@/utilities/seo'
 import { Pagination } from '@/components/Pagination'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import { ChevronRight } from 'lucide-react'
 import type { Media } from '@/payload-types'
-import { buildJapaneseAlternates } from '@/utilities/alternates'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  const posts = await findPublicContent({
     collection: 'posts',
     depth: 1,
     limit: 12,
@@ -108,8 +105,6 @@ export default async function Page() {
 }
 
 export function generateMetadata(): Metadata {
-  return {
-    title: 'Blogs | Yama Nepal Trek | (ヤマ・ネパール・トレック)',
-    alternates: buildJapaneseAlternates('/posts'),
-  }
+  return japaneseMetadata('ネパール旅行・トレッキングブログ | ヤマ・ネパール・トレック',
+    'ネパール旅行とヒマラヤトレッキングの情報を日本語でご紹介。コース選びや旅の準備に役立つ記事をお届けします。', '/posts')
 }

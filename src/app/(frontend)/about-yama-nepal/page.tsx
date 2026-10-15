@@ -1,6 +1,6 @@
+import { japaneseMetadata } from '@/utilities/seo'
 import { ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
-import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 interface SectionProps {
   title: string
@@ -22,12 +22,11 @@ function Section({ title, paragraphs }: SectionProps) {
   )
 }
 
-export const metadata: Metadata = {
-  title: 'About Yama Nepal Trek (ヤマ・ネパール・トレック)',
-  description:
-    'ネパール旅行会社ヤマ・ネパール・トレックの紹介ページ。日本語対応ガイドによるネパール トレッキング ツアー、ヒマラヤ トレッキング ツアー、オーダーメイド手配、安全で丁寧な安心サポートを提供しています。',
-  alternates: buildJapaneseAlternates('/about-yama-nepal'),
-}
+export const metadata: Metadata = japaneseMetadata(
+  '会社案内・日本語対応のネパール旅行会社 | ヤマ・ネパール・トレック',
+  '日本語対応のネパール旅行会社、ヤマ・ネパール・トレックの会社案内。ネパールトレッキングやヒマラヤ登山の旅づくりをご紹介します。',
+  '/about-yama-nepal',
+)
 
 export default function About() {
   const sections: SectionProps[] = [

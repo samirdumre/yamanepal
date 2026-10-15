@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/hooks/useProgressRouter'
 import { Star } from 'lucide-react'
 import { Button } from '../ui/button'
 

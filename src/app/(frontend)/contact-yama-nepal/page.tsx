@@ -1,13 +1,14 @@
+import { japaneseMetadata } from '@/utilities/seo'
 import { Phone, Mail, MapPin, Clock, ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
 import Map from '@/components/ui/Map'
 import { ContactInquiryForm } from '@/components/sections/ContactInquiryForm'
-import { buildJapaneseAlternates } from '@/utilities/alternates'
 
-export const metadata: Metadata = {
-  title: 'Contact Yama Nepal Trek (ヤマ・ネパール・トレック)',
-  alternates: buildJapaneseAlternates('/contact-yama-nepal'),
-}
+export const metadata: Metadata = japaneseMetadata(
+  'ネパール旅行・トレッキングのご相談 | ヤマ・ネパール・トレック',
+  'ネパール旅行やトレッキングの日程・料金・手配について日本語でお問い合わせいただけます。ご希望のコースや旅の計画をご相談ください。',
+  '/contact-yama-nepal',
+)
 
 const contactDetails = [
   {

@@ -1,21 +1,28 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
-import { revalidatePath, revalidateTag } from 'next/cache'
+import {
+  revalidatePath as nextRevalidatePath,
+  revalidateTag as nextRevalidateTag,
+} from 'next/cache'
+import { collectionTag } from '@/utilities/cachePolicy'
 import type { Region, Trek } from '@/payload-types'
 
-// ✅ Safe wrappers — no-op outside Next.js request context
-const safeRevalidatePath = (...args: Parameters<typeof revalidatePath>) => {
+// Existing trek migration/seed scripts also use this hook outside Next.js.
+// Ignore only the missing request-store error; production invalidation errors surface.
+const outsideNext = (error: unknown) =>
+  error instanceof Error &&
+  error.message.startsWith('Invariant: static generation store missing in ')
+const revalidatePath = (...args: Parameters<typeof nextRevalidatePath>) => {
   try {
-    revalidatePath(...args)
-  } catch {
-    // Running outside Next.js (e.g. seed scripts) — skip silently
+    nextRevalidatePath(...args)
+  } catch (error) {
+    if (!outsideNext(error)) throw error
   }
 }
-
-const safeRevalidateTag = (...args: Parameters<typeof revalidateTag>) => {
+const revalidateTag = (...args: Parameters<typeof nextRevalidateTag>) => {
   try {
-    revalidateTag(...args)
-  } catch {
-    // Running outside Next.js (e.g. seed scripts) — skip silently
+    nextRevalidateTag(...args)
+  } catch (error) {
+    if (!outsideNext(error)) throw error
   }
 }
 
@@ -61,12 +68,12 @@ const resolveRegionSlug = async (
 
 const revalidateRegionPath = (slug: string | null) => {
   if (!slug) return
-  safeRevalidatePath(`/regions/${slug}`)
+  revalidatePath(`/regions/${slug}`)
 }
 
 const revalidateTrekPath = (slug: string | null | undefined) => {
   if (!slug) return
-  safeRevalidatePath(`/treks/${slug}`)
+  revalidatePath(`/treks/${slug}`)
 }
 
 export const revalidateTrek: CollectionAfterChangeHook<Trek> = async ({
@@ -95,8 +102,12 @@ export const revalidateTrek: CollectionAfterChangeHook<Trek> = async ({
     revalidateRegionPath(previousRegionSlug)
   }
 
-  safeRevalidateTag('pages-sitemap')
-  safeRevalidateTag('global_header')
+  revalidatePath('/treks')
+  revalidateTag(collectionTag('treks'))
+  revalidateTag('global_homepage')
+  revalidatePath('/')
+  revalidateTag('pages-sitemap')
+  revalidateTag('global_header')
 
   return doc
 }
@@ -106,15 +117,17 @@ export const revalidateTrekAfterDelete: CollectionAfterDeleteHook<Trek> = async 
 
   req.payload.logger.info(`Revalidating deleted trek: ${doc?.slug ?? doc?.id}`)
 
-  safeRevalidatePath('/')
   revalidateTrekPath(doc?.slug)
 
   const regionSlug = await resolveRegionSlug(doc?.region as RegionRelation, req)
   revalidateRegionPath(regionSlug)
 
-  safeRevalidateTag('pages-sitemap')
-  safeRevalidateTag('global_header')
-  safeRevalidateTag('global_homepage')
+  revalidatePath('/treks')
+  revalidateTag(collectionTag('treks'))
+  revalidateTag('global_homepage')
+  revalidatePath('/')
+  revalidateTag('pages-sitemap')
+  revalidateTag('global_header')
 
   return doc
 }

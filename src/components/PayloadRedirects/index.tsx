@@ -23,7 +23,10 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
 
     let redirectUrl: string
 
-    if (typeof redirectItem.to?.reference?.value === 'string') {
+    if (
+      typeof redirectItem.to?.reference?.value === 'string' ||
+      typeof redirectItem.to?.reference?.value === 'number'
+    ) {
       const collection = redirectItem.to?.reference?.relationTo
       const id = redirectItem.to?.reference?.value
 

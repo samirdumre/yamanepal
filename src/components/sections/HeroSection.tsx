@@ -3,7 +3,7 @@
 import { Search, Loader2 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import { useDebounce } from '@/utilities/useDebounce'
 
 const HERO_IMAGE_SRC = '/images/heromax.avif'

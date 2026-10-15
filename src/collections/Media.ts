@@ -7,7 +7,7 @@ import {
 import { authenticated } from '@/access/authenticated'
 import { populateMediaAlt } from '@/hooks/populateMediaAlt'
 import { processUploadedImage } from '@/hooks/processUploadedImage'
-import { revalidateMedia } from '@/hooks/revalidateMedia'
+import { revalidateMedia, revalidateMediaDelete } from '@/hooks/revalidateMedia'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -48,6 +48,7 @@ export const Media: CollectionConfig = {
     beforeValidate: [populateMediaAlt],
     beforeOperation: [processUploadedImage],
     afterChange: [revalidateMedia],
+    afterDelete: [revalidateMediaDelete],
   },
   upload: {
     imageSizes: [

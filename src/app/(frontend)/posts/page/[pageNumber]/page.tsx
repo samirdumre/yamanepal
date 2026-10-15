@@ -1,4 +1,6 @@
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next/types'
+import { japaneseMetadata } from '@/utilities/seo'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
@@ -20,13 +22,12 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
-  const payload = await getPayload({ config: configPromise })
 
   const sanitizedPageNumber = Number(pageNumber)
 
-  if (!Number.isInteger(sanitizedPageNumber)) notFound()
+  if (!Number.isInteger(sanitizedPageNumber) || sanitizedPageNumber < 1) notFound()
 
-  const posts = await payload.find({
+  const posts = await findPublicContent({
     collection: 'posts',
     depth: 1,
     limit: 12,
@@ -68,7 +69,11 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const pathname = pageNumber === '1' ? '/posts' : `/posts/page/${pageNumber}`
 
   return {
-    title: `Yama Nepal Trek (ヤマ・ネパール・トレック) Posts Page ${pageNumber || ''}`,
+    ...japaneseMetadata(
+      `ネパール旅行ブログ ${pageNumber}ページ | ヤマ・ネパール・トレック`,
+      'ネパール旅行・ヒマラヤトレッキングの情報を日本語でご紹介します。',
+      pathname,
+    ),
     alternates: buildJapaneseAlternates(pathname),
   }
 }
@@ -80,7 +85,7 @@ export async function generateStaticParams() {
     overrideAccess: false,
   })
 
-  const totalPages = Math.ceil(totalDocs / 10)
+  const totalPages = Math.ceil(totalDocs / 12)
 
   const pages: { pageNumber: string }[] = []
 

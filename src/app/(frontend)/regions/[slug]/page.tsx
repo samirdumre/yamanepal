@@ -1,46 +1,51 @@
+import { JAPANESE_KEYWORDS, resolveSEOImage } from '@/utilities/seo'
+import { cache } from 'react'
+import { trekCardSelect } from '@/utilities/trekCardSelect'
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import type { Region, Trek, Media } from '@/payload-types'
 import { TrekCard } from '@/components/cards/TrekCard'
-import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
+
+export const revalidate = 3600
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-async function getRegionWithTreks(slug: string): Promise<{ region: Region; treks: Trek[] } | null> {
-  const payload = await getPayload({ config })
+const getRegionWithTreks = cache(
+  async (slug: string): Promise<{ region: Region; treks: Trek[] } | null> => {
+    const { docs: regions } = await findPublicContent({
+      collection: 'regions',
+      where: { slug: { equals: slug } },
+      limit: 1,
+      pagination: false,
+      depth: 1,
+    })
 
-  const { docs: regions } = await payload.find({
-    collection: 'regions',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 1,
-  })
+    const region = regions[0] as Region | undefined
+    if (!region) return null
 
-  const region = regions[0] as Region | undefined
-  if (!region) return null
+    const { docs: treks } = await findPublicContent({
+      collection: 'treks',
+      where: { region: { equals: region.id } },
+      sort: 'name',
+      select: trekCardSelect,
+      limit: 100,
+      pagination: false,
+      depth: 1,
+    })
 
-  const { docs: treks } = await payload.find({
-    collection: 'treks',
-    where: { region: { equals: region.id } },
-    sort: 'name',
-    limit: 100,
-    depth: 1,
-  })
-
-  return { region, treks: treks as Trek[] }
-}
+    return { region, treks: treks as Trek[] }
+  },
+)
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({
+  const { docs } = await findPublicContent({
     collection: 'regions',
     limit: 100,
     depth: 0,
@@ -55,18 +60,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { region } = result
   const url = buildCanonicalURL(`/regions/${slug}`)
-  const title = `${region.name} | Yama Nepal Trek (ヤマ・ネパール・トレック)`
+  const title = `${region.name} | ヤマ・ネパール・トレック`
   const description =
     region.description ??
-    `Explore all treks and activities in the ${region.name} with Yama Nepal Trek (ヤマ・ネパール・トレック).`
+    `${region.name}のトレッキングコース・ツアー一覧。日程や料金を比較して、ネパール・ヒマラヤの旅をご検討ください。`
 
   const regionImage = region.image as Media | null | undefined
-  const serverUrl = getServerSideURL()
-  const ogImage = regionImage?.url ? serverUrl + regionImage.url : undefined
+  const ogImage = regionImage?.url ? resolveSEOImage(regionImage.url) : undefined
 
   return {
     title,
     description,
+    keywords: [...JAPANESE_KEYWORDS, region.name],
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage || resolveSEOImage()],
+    },
     alternates: buildJapaneseAlternates(`/regions/${slug}`),
     openGraph: mergeOpenGraph({
       title,
@@ -132,7 +143,7 @@ export default async function RegionPage({ params }: PageProps) {
         {/* Treks grid — max 3 per row */}
         {treks.length === 0 ? (
           <p className="text-gray-500 text-center py-12">
-            No treks available in this region yet. Check back soon!
+            現在、この地域でご案内できるトレッキングコースはありません。
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-16">

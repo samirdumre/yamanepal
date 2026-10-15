@@ -1,8 +1,9 @@
+import { JAPANESE_KEYWORDS, resolveSEOImage } from '@/utilities/seo'
+import { cache } from 'react'
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { notFound, permanentRedirect } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import { ItineraryAccordion } from '@/components/sections/ItineraryAccordion'
 import { TrekHeroCollage } from '@/components/sections/TrekHeroCollage'
 import { BookingSidebar, MobileBookingBar } from '@/components/sections/BookingSidebar'
@@ -17,11 +18,12 @@ import RichText from '@/components/RichText'
 import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import type { Trek, Media, Category, Region } from '@/payload-types'
 import { lexicalToText } from '@/utilities/lexicalToText'
-import { getServerSideURL } from '@/utilities/getURL'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
 
 import { Check, X, ChevronRight, Star, ArrowRight } from 'lucide-react'
+
+export const revalidate = 3600
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -32,23 +34,23 @@ type TrekLookupResult = {
   matchedLegacySlug: boolean
 }
 
-async function getTrek(slug: string): Promise<TrekLookupResult> {
-  const payload = await getPayload({ config })
-
-  const exact = await payload.find({
+const getTrek = cache(async (slug: string): Promise<TrekLookupResult> => {
+  const exact = await findPublicContent({
     collection: 'treks',
     where: { slug: { equals: slug } },
     limit: 1,
+    pagination: false,
     depth: 2,
   })
 
   const exactTrek = exact.docs[0] as Trek | undefined
   if (exactTrek) return { trek: exactTrek, matchedLegacySlug: false }
 
-  const legacy = await payload.find({
+  const legacy = await findPublicContent({
     collection: 'treks',
     where: { legacySlugs: { in: [slug] } },
     limit: 1,
+    pagination: false,
     depth: 2,
   })
 
@@ -59,7 +61,7 @@ async function getTrek(slug: string): Promise<TrekLookupResult> {
     trek,
     matchedLegacySlug: trek.slug !== slug,
   }
-}
+})
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
@@ -74,14 +76,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `Yama Nepal Trekで${trek.name}を体験しませんか。`
 
   const trekImage = trek.image as Media | null | undefined
-  const serverUrl = getServerSideURL()
-  const ogImage = trekImage?.url ? serverUrl + trekImage.url : undefined
+  const ogImage = trekImage?.url ? resolveSEOImage(trekImage.url) : undefined
 
-  const title = `${trek.name} | Yama Nepal Trek (ヤマ・ネパール・トレック)`
+  const title = `${trek.name} | ヤマ・ネパール・トレック`
 
   return {
     title,
     description,
+    keywords: [...JAPANESE_KEYWORDS, trek.name],
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage || resolveSEOImage()],
+    },
     alternates: buildJapaneseAlternates(`/treks/${trek.slug}`),
     openGraph: mergeOpenGraph({
       title,
@@ -124,13 +132,10 @@ export default async function TrekDetailPage({ params }: PageProps) {
   const reviewCount = trek.reviewCount
 
   // ── JSON-LD structured data ─────────────────────────────────────────────
-  const serverUrl = getServerSideURL()
   const trekUrl = buildCanonicalURL(`/treks/${trek.slug}`)
   const homepageUrl = buildCanonicalURL('/')
 
-  const schemaImages = allImages
-    .map((url) => (url.startsWith('http') ? url : `${serverUrl}${url}`))
-    .filter(Boolean)
+  const schemaImages = allImages.map(resolveSEOImage).filter(Boolean)
 
   const trekDays = Number.parseInt(String(trek.days).replace(/[^0-9]/g, ''), 10)
   const duration = Number.isFinite(trekDays) && trekDays > 0 ? `P${trekDays}D` : undefined
@@ -499,7 +504,12 @@ export default async function TrekDetailPage({ params }: PageProps) {
 
 // Generate static paths for all treks at build time
 export async function generateStaticParams() {
-  const payload = await getPayload({ config })
-  const { docs } = await payload.find({ collection: 'treks', limit: 100 })
+  const { docs } = await findPublicContent({
+    collection: 'treks',
+    limit: 1000,
+    depth: 0,
+    pagination: false,
+    select: { slug: true },
+  })
   return docs.map((trek: Trek) => ({ slug: trek.slug }))
 }

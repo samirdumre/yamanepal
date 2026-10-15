@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation'
 import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import Image from 'next/image'
-import NextLink from 'next/link'
-import Link from 'next/link'
+import NextLink from '@/components/ProgressLink'
+import Link from '@/components/ProgressLink'
 
 export type TrekkingDropdownItem = {
   name: string
@@ -234,9 +234,18 @@ export function Navbar({
                 return (
                   <div key={item.label} className="relative group">
                     <div className="flex items-center gap-1 cursor-pointer">
-                      <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
-                        {item.label}
-                      </span>
+                      {item.label === 'ネパールトレッキング' ? (
+                        <Link
+                          href="/treks"
+                          className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <span className="font-medium text-[15px] text-black group-hover:text-[#3b82f6] transition-colors">
+                          {item.label}
+                        </span>
+                      )}
                       <ChevronDown className="w-[18px] h-[18px] text-black group-hover:text-[#3b82f6] transition-transform duration-200 group-hover:rotate-180" />
                     </div>
                     {dropdown}
@@ -286,6 +295,13 @@ export function Navbar({
         >
           <div className="bg-white border-t border-gray-100 px-4 sm:px-8 pb-5 overflow-y-auto max-h-[80vh] shadow-md">
             <div className="flex flex-col gap-1 py-3">
+              <Link
+                href="/treks"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-3 text-[15px] font-medium"
+              >
+                トレッキング一覧
+              </Link>
               {navItems.map((item) => {
                 /* Plain link */
                 if (!item.hasDropdown) {

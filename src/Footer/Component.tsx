@@ -1,5 +1,5 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import React from 'react'
 
 import type { Footer } from '@/payload-types'

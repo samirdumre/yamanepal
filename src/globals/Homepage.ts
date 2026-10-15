@@ -1,7 +1,9 @@
 import type { GlobalConfig } from 'payload'
+import { revalidateHomepage } from '@/hooks/revalidateContent'
 
 export const Homepage: GlobalConfig = {
   slug: 'homepage',
+  hooks: { afterChange: [revalidateHomepage] },
   admin: {
     description: 'Hero section, trip of the month, and featured content.',
   },

@@ -6,6 +6,8 @@ import { CANONICAL_BASE_URL } from '@/utilities/alternates'
 
 const REQUIRED_STATIC_PATHS = [
   '/',
+  '/posts',
+  '/treks',
   '/about-yama-nepal',
   '/contact-yama-nepal',
   '/how-to-make-payment',
@@ -64,7 +66,6 @@ const getPagesSitemap = unstable_cache(
 
     const staticSitemap = allStaticPaths.map((routePath) => ({
       loc: `${SITE_URL}${routePath}`,
-      lastmod: dateFallback,
     }))
 
     const pageDocsSitemap = pagesResult.docs
@@ -96,7 +97,7 @@ const getPagesSitemap = unstable_cache(
           }))
       : []
 
-    const deduped = new Map<string, { loc: string; lastmod: string }>()
+    const deduped = new Map<string, { loc: string; lastmod?: string }>()
 
     for (const item of [...staticSitemap, ...pageDocsSitemap, ...trekSitemap, ...regionSitemap]) {
       deduped.set(item.loc, item)
@@ -107,8 +108,11 @@ const getPagesSitemap = unstable_cache(
   ['pages-sitemap'],
   {
     tags: ['pages-sitemap'],
+    revalidate: 3600,
   },
 )
+
+export const revalidate = 3600
 
 export async function GET() {
   const sitemap = await getPagesSitemap()

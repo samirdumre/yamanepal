@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 
 // ============================================================
 // IMAGE PLACEHOLDERS — replace these paths with your actual images
@@ -14,6 +14,7 @@ const IMAGES = {
 
 const quickLinks = [
   { label: 'ホーム', href: '/' },
+  { label: 'トレッキング一覧', href: '/treks' },
   { label: '会社概要', href: '/about-yama-nepal' },
   { label: 'ブログ', href: '/posts' },
   { label: 'お支払い情報', href: '/how-to-make-payment' },

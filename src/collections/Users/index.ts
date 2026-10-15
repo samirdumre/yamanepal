@@ -1,9 +1,11 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateRelatedContent } from '@/hooks/revalidateContent'
 
 import { authenticated } from '../../access/authenticated'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  hooks: revalidateRelatedContent('users'),
   access: {
     admin: authenticated,
     create: authenticated,

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateRegion, revalidateRegionDelete } from '@/hooks/revalidateContent'
 import { authenticated } from '@/access/authenticated'
 
 function toSlug(str: string): string {
@@ -24,6 +25,8 @@ export const Regions: CollectionConfig = {
     delete: authenticated,
   },
   hooks: {
+    afterChange: [revalidateRegion],
+    afterDelete: [revalidateRegionDelete],
     beforeValidate: [
       ({ data, operation: _operation }) => {
         if (data) {

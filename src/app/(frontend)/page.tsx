@@ -1,5 +1,6 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { trekCardSelect } from '@/utilities/trekCardSelect'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { findPublicContent } from '@/utilities/getPublicContent'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { SectionHeading } from '@/components/ui/SectionLabel'
 import { RegionCard } from '@/components/cards/DestinationCard'
@@ -7,34 +8,41 @@ import { TestimonialCarousel } from '@/components/sections/TestimonialCarousel'
 import { GallerySection } from '@/components/sections/GallerySection'
 import { TrekCarousel } from '@/components/sections/TrekCarousel'
 import { Button } from '@/components/ui/button'
-import type { Trek, Region, Testimonial, Post, Media } from '@/payload-types'
+import type { Trek, Post, Media } from '@/payload-types'
 import WhyChooseUs from '@/components/sections/WhyChooseUs'
 import { CalendarCheck2, Tag } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import type { Metadata } from 'next'
-import { buildCanonicalURL, buildJapaneseAlternates } from '@/utilities/alternates'
+import { japaneseMetadata, JAPANESE_SITE_TITLE, JAPANESE_DESCRIPTION } from '@/utilities/seo'
+import { buildCanonicalURL } from '@/utilities/alternates'
 
-export const revalidate = 604800 // Cache this page statically for 7 days
+export const revalidate = 3600 // On-demand CMS invalidation, with an hourly fallback
 
-export const metadata: Metadata = {
-  alternates: buildJapaneseAlternates('/'),
-}
+export const metadata: Metadata = japaneseMetadata(JAPANESE_SITE_TITLE, JAPANESE_DESCRIPTION, '/')
 
 export default async function HomePage() {
-  const payload = await getPayload({ config })
-
   // Fetch all data in parallel
   const [{ docs: bestSellerTreks }, { docs: lastMinuteDeals }, homepage, { docs: trekRatings }] =
     await Promise.all([
-      payload.find({ collection: 'treks', where: { isBestSeller: { equals: true } }, limit: 6 }),
-      payload.find({
+      findPublicContent({
+        collection: 'treks',
+        where: { isBestSeller: { equals: true } },
+        limit: 6,
+        pagination: false,
+        depth: 1,
+        select: trekCardSelect,
+      }),
+      findPublicContent({
         collection: 'treks',
         where: { isLastMinuteDeal: { equals: true } },
+        depth: 1,
+        select: trekCardSelect,
         limit: 6,
+        pagination: false,
       }),
-      payload.findGlobal({ slug: 'homepage', depth: 2 }),
-      payload.find({
+      getCachedGlobal('homepage', 2)(),
+      findPublicContent({
         collection: 'treks',
         depth: 0,
         limit: 1000,
@@ -64,7 +72,7 @@ export default async function HomePage() {
   const weightedRatingSum = ratings.reduce((sum, item) => sum + item.rating * item.reviewCount, 0)
   const averageRating =
     totalReviewCount > 0 ? Number((weightedRatingSum / totalReviewCount).toFixed(1)) : null
-  const homepageSchemaReviewCount = 6
+  const homepageSchemaReviewCount = totalReviewCount
 
   const homepageReviewSchema =
     averageRating != null

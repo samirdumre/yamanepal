@@ -1,3 +1,4 @@
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
@@ -11,6 +12,8 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -48,11 +51,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
+  const page: RequiredDataFromCollectionSlug<'pages'> | null = await queryPageBySlug(decodedSlug)
 
   if (!page) {
     return <PayloadRedirects url={url} />
@@ -78,31 +77,30 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = 'home' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
-    slug: decodedSlug,
-  })
+  const page = await queryPageBySlug(decodedSlug)
   const pathname = decodedSlug === 'home' ? '/' : `/${decodedSlug}`
 
   return generateMeta({ doc: page, pathname })
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async (slug: string) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'pages',
-    draft,
+  const query = {
+    collection: 'pages' as const,
     limit: 1,
     pagination: false,
-    overrideAccess: draft,
     where: {
       slug: {
         equals: slug,
       },
     },
-  })
+  }
+  const result = draft
+    ? await payload.find({ ...query, draft: true, overrideAccess: true })
+    : await findPublicContent(query)
 
   return result.docs?.[0] || null
 })

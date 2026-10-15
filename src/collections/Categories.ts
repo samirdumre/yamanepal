@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateRelatedContent } from '@/hooks/revalidateContent'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
@@ -26,6 +27,7 @@ export const Categories: CollectionConfig = {
     useAsTitle: 'title',
   },
   hooks: {
+    ...revalidateRelatedContent('categories'),
     beforeValidate: [
       ({ data }) => {
         if (data && !data.slug && data.title) {

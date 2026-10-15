@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import Image from 'next/image'
 import type { Media } from '@/payload-types'
 

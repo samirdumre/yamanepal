@@ -1,3 +1,4 @@
+import { revalidateRelatedContent } from '@/hooks/revalidateContent'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
@@ -5,25 +6,23 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { Plugin } from 'payload'
-import { revalidateRedirects } from '@/hooks/revalidateRedirects'
+import { revalidateRedirects, revalidateRedirectDelete } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
-import { getServerSideURL } from '@/utilities/getURL'
+import { buildCanonicalURL } from '@/utilities/alternates'
+import { defaultJapaneseDescription, JAPANESE_SITE_TITLE } from '@/utilities/seo'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title
-    ? `${doc.title} | Yama Nepal Trek (ヤマ・ネパール・トレック) - Trekking in Nepal`
-    : 'Yama Nepal Trek (ヤマ・ネパール・トレック) - Trekking in Nepal'
+  return doc?.title ? `${doc.title} | ヤマ・ネパール・トレック` : JAPANESE_SITE_TITLE
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
-  const url = getServerSideURL()
-
-  return doc?.slug ? `${url}/${doc.slug}` : url
+const generateURL: GenerateURL<Post | Page> = ({ doc, collectionSlug }) => {
+  if (!doc?.slug || doc.slug === 'home') return buildCanonicalURL('/')
+  return buildCanonicalURL(`${collectionSlug === 'posts' ? '/posts' : ''}/${doc.slug}`)
 }
 
 export const plugins: Plugin[] = [
@@ -59,7 +58,7 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                description: 'Redirects are revalidated automatically when saved or deleted.',
               },
             }
           }
@@ -68,6 +67,7 @@ export const plugins: Plugin[] = [
       },
       hooks: {
         afterChange: [revalidateRedirects],
+        afterDelete: [revalidateRedirectDelete],
       },
     },
   }),
@@ -77,6 +77,7 @@ export const plugins: Plugin[] = [
   }),
   seoPlugin({
     generateTitle,
+    generateDescription: ({ doc }) => defaultJapaneseDescription(doc),
     generateURL,
   }),
   formBuilderPlugin({
@@ -84,6 +85,7 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      hooks: revalidateRelatedContent('forms'),
       admin: {
         group: 'Admin',
       },

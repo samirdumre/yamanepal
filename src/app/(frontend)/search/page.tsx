@@ -84,7 +84,8 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Yama Nepal Trek (ヤマ・ネパール・トレック) Search`,
+    title: 'サイト内検索 | ヤマ・ネパール・トレック',
+    robots: { index: false, follow: true },
     alternates: buildJapaneseAlternates('/search'),
   }
 }

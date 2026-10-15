@@ -6,7 +6,7 @@ import { cn } from '@/utilities/ui'
 import { useSelectedLayoutSegments } from 'next/navigation'
 import { PayloadAdminBar } from '@payloadcms/admin-bar'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/hooks/useProgressRouter'
 
 import './index.scss'
 

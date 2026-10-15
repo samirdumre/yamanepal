@@ -7,7 +7,6 @@ import {
 } from '@payloadcms/richtext-lexical'
 import {
   JSXConvertersFunction,
-  LinkJSXConverter,
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
@@ -21,6 +20,7 @@ import type {
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
+import Link from '@/components/ProgressLink'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -37,7 +37,28 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
 
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) => ({
   ...defaultConverters,
-  ...LinkJSXConverter({ internalDocToHref }),
+  link: ({ node, nodesToJSX }) => (
+    <Link
+      href={
+        node.fields.linkType === 'internal'
+          ? internalDocToHref({ linkNode: node })
+          : node.fields.url || '#'
+      }
+      target={node.fields.newTab ? '_blank' : undefined}
+      rel={node.fields.newTab ? 'noopener noreferrer' : undefined}
+    >
+      {nodesToJSX({ nodes: node.children })}
+    </Link>
+  ),
+  autolink: ({ node, nodesToJSX }) => (
+    <Link
+      href={node.fields.url || '#'}
+      target={node.fields.newTab ? '_blank' : undefined}
+      rel={node.fields.newTab ? 'noopener noreferrer' : undefined}
+    >
+      {nodesToJSX({ nodes: node.children })}
+    </Link>
+  ),
   horizontalRule: () => <hr className="border-t border-[#e2e8f0] my-6" />,
   blocks: {
     banner: ({ node }) => <BannerBlock className="col-start-2 mb-4" {...node.fields} />,

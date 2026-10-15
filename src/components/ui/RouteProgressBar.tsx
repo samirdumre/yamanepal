@@ -1,67 +1,111 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback, Suspense } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
+import {
+  NAVIGATION_START,
+  NAVIGATION_END,
+  beginNavigation,
+  routeKey,
+  type NavigationProgressDetail,
+} from '@/utilities/navigationProgress'
 
-/**
- * Inner component that uses useSearchParams (must be inside Suspense).
- * Notifies the parent on every route change via a callback.
- */
-function RouteChangeDetector({ onChange }: { onChange: (key: string) => void }) {
+function RouteChangeDetector({ onCommit }: { onCommit: (key: string) => void }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-
   useEffect(() => {
-    onChange(`${pathname}?${searchParams.toString()}`)
-  }, [pathname, searchParams, onChange])
-
+    onCommit(`${pathname}${searchParams.size ? `?${searchParams.toString()}` : ''}`)
+  }, [pathname, searchParams, onCommit])
   return null
 }
 
 export function RouteProgressBar() {
+  const [progress, setProgress] = useState(0)
   const [state, setState] = useState<'idle' | 'loading' | 'complete'>('idle')
-  const prevKeyRef = useRef<string | null>(null)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const activeId = useRef<number | null>(null)
+  const committedKey = useRef<string | null>(null)
+  const trickle = useRef<ReturnType<typeof setInterval> | null>(null)
+  const dismiss = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const watchdog = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const handleRouteChange = useCallback((key: string) => {
-    // Skip the initial mount
-    if (prevKeyRef.current === null) {
-      prevKeyRef.current = key
-      return
-    }
-
-    // Same route — no action
-    if (prevKeyRef.current === key) return
-
-    prevKeyRef.current = key
-
-    // Route changed — animate
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-
-    // Show loading bar
-    setState('loading')
-
-    // After a brief delay, snap to complete then reset
-    timeoutRef.current = setTimeout(() => {
-      setState('complete')
-      timeoutRef.current = setTimeout(() => {
-        setState('idle')
-      }, 400)
-    }, 150)
+  const clearTimers = useCallback(() => {
+    if (trickle.current) clearInterval(trickle.current)
+    if (dismiss.current) clearTimeout(dismiss.current)
+    if (watchdog.current) clearTimeout(watchdog.current)
   }, [])
+
+  const finish = useCallback(() => {
+    if (activeId.current === null) return
+    activeId.current = null
+    clearTimers()
+    setProgress(1)
+    setState('complete')
+    dismiss.current = setTimeout(() => {
+      setState('idle')
+      setProgress(0)
+    }, 220)
+  }, [clearTimers])
+
+  const onCommit = useCallback(
+    (key: string) => {
+      const previous = committedKey.current
+      committedKey.current = key
+      if (previous !== null && previous !== key) finish()
+    },
+    [finish],
+  )
+
+  useEffect(() => {
+    const start = (event: Event) => {
+      clearTimers()
+      activeId.current = (event as CustomEvent<NavigationProgressDetail>).detail.id
+      setProgress(0.12)
+      setState('loading')
+      trickle.current = setInterval(
+        () => setProgress((value) => Math.min(0.92, value + (0.95 - value) * 0.12)),
+        250,
+      )
+      // An aborted/offline request may never commit. Reset without pretending
+      // that it completed, rather than leaving a stuck bar over later pages.
+      watchdog.current = setTimeout(() => {
+        activeId.current = null
+        clearTimers()
+        setState('idle')
+        setProgress(0)
+      }, 30000)
+    }
+    const end = (event: Event) => {
+      if ((event as CustomEvent<NavigationProgressDetail>).detail.id === activeId.current) finish()
+    }
+    const onPopState = () => {
+      if (routeKey(new URL(window.location.href)) !== committedKey.current) beginNavigation()
+    }
+    window.addEventListener(NAVIGATION_START, start)
+    window.addEventListener(NAVIGATION_END, end)
+    window.addEventListener('popstate', onPopState)
+    return () => {
+      clearTimers()
+      window.removeEventListener(NAVIGATION_START, start)
+      window.removeEventListener(NAVIGATION_END, end)
+      window.removeEventListener('popstate', onPopState)
+    }
+  }, [clearTimers, finish])
 
   return (
     <>
       <Suspense fallback={null}>
-        <RouteChangeDetector onChange={handleRouteChange} />
+        <RouteChangeDetector onCommit={onCommit} />
       </Suspense>
-
       {state !== 'idle' && (
-        <div className="route-progress" aria-hidden="true">
+        <div
+          className="route-progress"
+          data-route-progress={state}
+          role="progressbar"
+          aria-label="ページを読み込み中"
+        >
           <div
-            className={`route-progress__bar ${
-              state === 'complete' ? 'route-progress__bar--complete' : ''
-            }`}
+            className={`route-progress__bar ${state === 'complete' ? 'route-progress__bar--complete' : ''}`}
+            style={{ transform: `scaleX(${progress})` }}
           />
         </div>
       )}

@@ -1,6 +1,6 @@
+import { japaneseMetadata } from '@/utilities/seo'
 import { ChevronRight } from 'lucide-react'
 import { Metadata } from 'next'
-import { buildJapaneseAlternates } from '@/utilities/alternates'
 
 interface SectionProps {
   title: string
@@ -22,10 +22,11 @@ function Section({ title, paragraphs }: SectionProps) {
   )
 }
 
-export const metadata: Metadata = {
-  title: 'How to make payment to Yama Nepal Trek (ヤマ・ネパール・トレック)',
-  alternates: buildJapaneseAlternates('/how-to-make-payment'),
-}
+export const metadata: Metadata = japaneseMetadata(
+  '旅行代金のお支払い方法 | ヤマ・ネパール・トレック',
+  'ネパール旅行・トレッキングの旅行代金のお支払い方法をご案内。ご予約後のお支払いについてご確認ください。',
+  '/how-to-make-payment',
+)
 
 export default function HowToMakePayment() {
   const sections: SectionProps[] = [

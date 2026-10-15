@@ -1,3 +1,4 @@
+import { findPublicContent } from '@/utilities/getPublicContent'
 import type { Metadata } from 'next'
 
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
@@ -8,15 +9,16 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import { ChevronRight } from 'lucide-react'
 
 import type { Media } from '@/payload-types'
 
 import { generateMeta } from '@/utilities/generateMeta'
-import { buildJapaneseAlternates } from '@/utilities/alternates'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -50,7 +52,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = await queryPostBySlug(decodedSlug)
 
   if (!post) return <PayloadRedirects url={url} />
 
@@ -127,41 +129,30 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const { slug = '' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug })
+  const post = await queryPostBySlug(decodedSlug)
   const baseMeta = await generateMeta({ doc: post, pathname: `/posts/${decodedSlug}` })
 
-  const title = post?.title
-    ? `Yama Nepal Trek (ヤマ・ネパール・トレック) | ${post.title}`
-    : 'Yama Nepal Trek (ヤマ・ネパール・トレック)'
-
-  return {
-    ...baseMeta,
-    title,
-    alternates: buildJapaneseAlternates(`/posts/${decodedSlug}`),
-    openGraph: {
-      ...baseMeta.openGraph,
-      title,
-    },
-  }
+  return baseMeta
 }
 
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPostBySlug = cache(async (slug: string) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'posts',
-    draft,
+  const query = {
+    collection: 'posts' as const,
     limit: 1,
-    overrideAccess: draft,
     pagination: false,
     where: {
       slug: {
         equals: slug,
       },
     },
-  })
+  }
+  const result = draft
+    ? await payload.find({ ...query, draft: true, overrideAccess: true })
+    : await findPublicContent(query)
 
   return result.docs?.[0] || null
 })

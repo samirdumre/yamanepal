@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
+import Link from '@/components/ProgressLink'
 import { TalkToExpert } from './TalkToExpert'
 import { BookingFormModal } from './BookingFormModal'
 import type { Trek } from '@/payload-types'
